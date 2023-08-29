@@ -40,6 +40,28 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+      <nav className="bg-blue-500 p-4">
+        <div className="container mx-auto">
+          <h1 className="text-white text-xl font-semibold">Social Media App</h1>
+          <ul className="flex space-x-4 mt-2">
+            <li>
+              <Link to="/" className="text-white">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/login" className="text-white">
+                Login
+              </Link>
+            </li>
+            <li>
+              <Link to="/register" className="text-white">
+                Register
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </nav>
     </header>
   );
 };
