@@ -41,7 +41,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center py-6 px-10 container mx-auto">
         <div>
           <h1 className="text-2xl font-bold bg-gradient-to-tr from-indigo-600 to-green-600 bg-clip-text text-transparent hover:cursor-pointer">
-            Adsla
+            Codeconnect
           </h1>
         </div>
         <div>
@@ -62,7 +62,7 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="/"
+                  href="/Aboutus"
                   className="text-gray-700 hover:text-indigo-600 text-md "
                 >
                   About
@@ -70,23 +70,23 @@ const Navbar = () => {
               </li>
               <li>
                 <a
-                  href="/About"
+                  href="/Message"
                   className="text-gray-700 hover:text-indigo-600 text-md "
                 >
-                  Services
+                 Chats
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/Blog"
                   className="text-gray-700 hover:text-indigo-600 text-md "
                 >
-                  Products
+            Blog
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/Contactus"
                   className="text-gray-700 hover:text-indigo-600 text-md "
                 >
                   Contact
@@ -112,7 +112,7 @@ const Navbar = () => {
       <div className="bg-gray-100 sm:grid grid-cols-5  px-4  pb-5 space-y-2 sm:space-y-0 sm:gap-4">
         <div className="h-96 col-span-4 bg-gradient-to-tr from-indigo-800 to-indigo-500 rounded-md flex items-center">
           <div className="ml-20 w-80">
-            <h2 className="text-white text-4xl">Adsla</h2>
+            <h2 className="text-white text-4xl">Codeconnect</h2>
             <p className="text-indigo-100 mt-4 capitalize font-thin tracking-wider leading-7">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed,
               dolore?
@@ -150,36 +150,37 @@ const Navbar = () => {
             </span>
           </div>
           <div className="bg-white  rounded-md">
+            
             <h1 className="text-center text-xl my-4  bg-white py-2 rounded-md border-b-2 cursor-pointer  text-gray-600">
-              Service
+              Services
             </h1>
             <div className="bg-white rounded-md list-none  text-center ">
               <li className="py-3 border-b-2">
-                <a href="#" className="list-none  hover:text-indigo-600">
-                  Products
+                <a href="/Courses" className="list-none  hover:text-indigo-600">
+                  Courses
                 </a>
               </li>
               <li className="py-3 border-b-2">
-                <a href="#" className="list-none  hover:text-indigo-600">
-                  Models
+                <a href="/Dashboard" className="list-none  hover:text-indigo-600">
+               Dashbord
                 </a>
               </li>
               <li className="py-3 border-b-2">
-                <a href="#" className="list-none  hover:text-indigo-600">
-                  Pricing
+                <a href="/FAQ" className="list-none  hover:text-indigo-600">
+               FAQ
                 </a>
               </li>
               <li className="py-3 border-b-2">
-                <a href="#" className="list-none  hover:text-indigo-600">
+                <a href="/Jobportal" className="list-none  hover:text-indigo-600">
                   Hire
                 </a>
               </li>
               <li className="py-3 ">
                 <a
-                  href="#"
+                  href="/User"
                   className="list-none border-b-2 hover:text-indigo-600"
                 >
-                  Business
+                 USer ACCOUNT
                 </a>
               </li>
             </div>
