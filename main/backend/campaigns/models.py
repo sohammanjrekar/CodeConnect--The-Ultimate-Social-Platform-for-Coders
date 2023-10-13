@@ -7,7 +7,7 @@ from django.template.defaultfilters import slugify
 class Campaign(models.Model):
     title=models.CharField(max_length=200)
     description=models.TextField()
-    slug=models.SlugField(max_length=255)
+    slug=models.SlugField(max_length=255,null=True, blank=True)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     logo=CloudinaryField('Image',overwrite=True,format="jpg")
@@ -37,4 +37,4 @@ class Subscriber(models.Model):
         ordering = ('-created_at',)
     
     def __str__(self):
-        return self.title
+        return self.email

@@ -7,9 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import cloudinary
           
 cloudinary.config( 
-  cloud_name = os.environ.get('CLOUD_NAME'),
-  api_key = os.environ.get('API_KEY') ,
-  api_secret = os.environ.get('API_SECRET')
+  cloud_name = 'dp6odhftt',
+  api_key ='834371186813391',
+  api_secret = 'QPxYCBttNcO25u-vHVi6iOclkbw'
 )
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'campaigns'
+    'campaigns',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [

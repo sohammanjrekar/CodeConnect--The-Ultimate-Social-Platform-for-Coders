@@ -1,3 +1,15 @@
 from django.contrib import admin
+from .models import Campaign,Subscriber
+class CampaignModalAdmin(admin.ModelAdmin):
+    list_display=('title', 'created_at', 'updated_at')
+    search_fields=('title','description')
+    list_per_page=10
+admin.site.register(Campaign,CampaignModalAdmin)
 
-# Register your models here.
+
+
+class SubscriberModalAdmin(admin.ModelAdmin):
+    list_display=('email','campaign','created_at')
+    search_fields=('email','campaign__title','campaign__description','created_at')
+    list_per_page=10
+admin.site.register(Subscriber,SubscriberModalAdmin)
