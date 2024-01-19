@@ -1,9 +1,10 @@
 import React from 'react'
-import VideoCourse from './VideoCourse'
-import Course from './Course'
 import TutorialList from './TutorialList'
+import VideoCourse from './VideoCourse'
+import dynamic from 'next/dynamic';
+let done=false
+const CoursesMain = async () => {
 
-const CoursesMain = () => {
   return (
     <div>
       <>
@@ -178,7 +179,7 @@ const CoursesMain = () => {
                 <h3 className="text-indigo-50 font-semibold cursor-pointer">
                   Thomas Hope
                 </h3>
-                <p className="text-indigo-50 text-sm font-thin">
+              {}  <p className="text-indigo-50 text-sm font-thin">
                   53K views • 2 weeks ago
                 </p>
               </div>
@@ -187,90 +188,30 @@ const CoursesMain = () => {
         </div>
       </div>
       <div className="mx-6 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 mt-10">
-        <div className="shadow-lg rounded-t-md overflow-hidden ">
-          <div className="">
-            <img
-              className="w-sm"
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
-              alt=""
-            />
-            <div className="p-2 relative">
-              <p className="text-lg mt-6 font-semibold">
-                Basic how to ride your skateboard comfortly
-              </p>
-              <p>53K views • 2 weeks ago</p>
-              <img
-                className="h-12 w-12 rounded-full absolute -top-6 p-0.5 border-2 right-6"
-                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-        <div className="shadow-lg rounded-t-md overflow-hidden">
-          <div className="">
-            <img
-              className="w-sm"
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
-              alt=""
-            />
-            <div className="p-2 relative">
-              <p className="text-lg mt-6 font-semibold">
-                Basic how to ride your skateboard comfortly
-              </p>
-              <p>53K views • 2 weeks ago</p>
-              <img
-                className="h-12 w-12 rounded-full absolute -top-6 p-0.5 border-2 right-6"
-                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-        <div className="shadow-lg rounded-t-md overflow-hidden ">
-          <div className="">
-            <img
-              className="w-sm"
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
-              alt=""
-            />
-            <div className="p-2 relative">
-              <p className="text-lg mt-6 font-semibold">
-                Basic how to ride your skateboard comfortly
-              </p>
-              <p>53K views • 2 weeks ago</p>
-              <img
-                className="h-12 w-12 rounded-full absolute -top-6 p-0.5 border-2 right-6"
-                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-        <div className="shadow-lg rounded-t-md overflow-hidden ">
-          <div className="">
-            <img
-              className="w-sm"
-              src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
-              alt=""
-            />
-            <div className="p-2 relative">
-              <p className="text-lg mt-6 font-semibold">
-                Basic how to ride your skateboard comfortly
-              </p>
-              <p>53K views • 2 weeks ago</p>
-              <img
-                className="h-12 w-12 rounded-full absolute -top-6 p-0.5 border-2 right-6"
-                src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
+
+ <div  className="shadow-lg rounded-t-md overflow-hidden ">
+<div className="">
+  <img
+    className="w-sm"
+    src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
+    alt=""
+  />
+  <div className="p-2 relative">
+    <p className="text-lg mt-6 font-semibold">
+    bkb
+    </p>
+    <p>53K views • 2 weeks ago</p>
+    <img
+      className="h-12 w-12 rounded-full absolute -top-6 p-0.5 border-2 right-6"
+      src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+      alt=""
+    />
+  </div>
+</div>
+</div>
+       
       </div>
       <VideoCourse/>
-      <Course/>
-      <TutorialList/>
     </main>
   </div>
   

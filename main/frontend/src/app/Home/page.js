@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
 import { MdSettings, MdInsertPhoto, MdEmojiEmotions } from "react-icons/md";
 import { BsFillCameraVideoFill } from "react-icons/bs";
 import { useClickOutside } from "@mantine/hooks";
@@ -9,8 +11,11 @@ import Services from "../components/Services";
 import SubscriptionCard from "../components/SubscriptionCard";
 import Testinomial from "../components/Testinomial";
 import CTA from "../components/CTA";
-
+import { setCampaigns,deleteCampaign,addCampaign } from "@/redux/Slices/campaignslice";
 const Page = () => {
+   
+  const campaigns = useSelector((state) => state.campaign);
+  console.log(campaigns);
   const [isFocused, setIsFocused] = useState(false);
   const ref = useClickOutside(() => setIsFocused(false));
   return (
@@ -351,6 +356,7 @@ const Page = () => {
   <CTA/>
   <SubscriptionCard/>
   <Testinomial/>
+  {campaigns.map((campaign) => <div>{campaign.title}</div>)}
   <Footer/>
 </>
 
