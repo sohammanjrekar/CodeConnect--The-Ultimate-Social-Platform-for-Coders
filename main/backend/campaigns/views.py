@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics,response
 from .models import Campaign,Subscriber
 from .serializers import SubscriberSerializer,CampaignSerializer
+from rest_framework import status
 
 class CampaignListAPIView(generics.ListAPIView):
     serializer_class=CampaignSerializer
