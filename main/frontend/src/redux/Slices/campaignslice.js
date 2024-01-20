@@ -1,7 +1,7 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = [{
-    id:1,
+    id:0,
     title:"soham",
     description:"sohamdes",
     slug:"sohamslug",
@@ -16,16 +16,14 @@ const campaignSlice = createSlice({
     name: "campaign",
     initialState,
     reducers: {
-      addCampaign(state, action) {
-        const { title, description, logo } = action.payload;
-        state.push({ title, description, logo });
-      },
-      deleteCampaign(state, action) {
-        const { id } = action.payload;
-        return state.filter((campaign) => campaign.id !== id);
-      },
+     
       setCampaigns(state, action) {
-        return action.payload;
+        const newCampaigns = action.payload.filter(
+          (newCampaign) =>
+            !state.some((existingCampaign) => existingCampaign.id === newCampaign.id)
+        );
+  
+        return [...state, ...newCampaigns];
       },
     },
   });
