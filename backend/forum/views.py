@@ -1,31 +1,35 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import DiscussionTopic, DiscussionPost
-from .serializers import DiscussionTopicSerializer, DiscussionPostSerializer
+# forum/views.py
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .models import ForumTopic, ForumPost, ForumReply
+from .serializers import ForumTopicSerializer, ForumPostSerializer, ForumReplySerializer
 
-class DiscussionTopicAPI(APIView):
-    def get(self, request):
-        topics = DiscussionTopic.objects.all()
-        serializer = DiscussionTopicSerializer(topics, many=True)
-        return Response(serializer.data)
+class ForumTopicList(generics.ListCreateAPIView):
+    queryset = ForumTopic.objects.all()
+    serializer_class = ForumTopicSerializer
+    permission_classes = [IsAuthenticated]
 
-class DiscussionPostAPI(APIView):
-    def get(self, request, topic_id):
-        posts = DiscussionPost.objects.filter(topic_id=topic_id)
-        serializer = DiscussionPostSerializer(posts, many=True)
-        return Response(serializer.data)
-    
-    def post(self, request, topic_id):
-        user_id = request.user.id  # Assuming user authentication
-        content = request.data.get('content')
-        topic = DiscussionTopic.objects.get(id=topic_id)
-        
-        post = DiscussionPost.objects.create(
-            topic=topic,
-            user_id=user_id,
-            content=content
-        )
-        
-        serializer = DiscussionPostSerializer(post)
-        return Response(serializer.data)
+class ForumTopicDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ForumTopic.objects.all()
+    serializer_class = ForumTopicSerializer
+    permission_classes = [IsAuthenticated]
+
+class ForumPostList(generics.ListCreateAPIView):
+    queryset = ForumPost.objects.all()
+    serializer_class = ForumPostSerializer
+    permission_classes = [IsAuthenticated]
+
+class ForumPostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ForumPost.objects.all()
+    serializer_class = ForumPostSerializer
+    permission_classes = [IsAuthenticated]
+
+class ForumReplyList(generics.ListCreateAPIView):
+    queryset = ForumReply.objects.all()
+    serializer_class = ForumReplySerializer
+    permission_classes = [IsAuthenticated]
+
+class ForumReplyDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ForumReply.objects.all()
+    serializer_class = ForumReplySerializer
+    permission_classes = [IsAuthenticated]

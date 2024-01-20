@@ -1,27 +1,42 @@
-# views.py
-from rest_framework.views import APIView
+# codingchallenges/views.py
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import CodingChallenge, Submission
-from .serializers import CodingChallengeSerializer, SubmissionSerializer
+from .models import CodingChallenge, Tag, TestCase, Badge
+from .serializers import (
+    CodingChallengeSerializer, TagSerializer,
+    TestCaseSerializer, BadgeSerializer
+)
 
-class CodingChallengeAPI(APIView):
-    def get(self, request):
-        challenges = CodingChallenge.objects.all()
-        serializer = CodingChallengeSerializer(challenges, many=True)
-        return Response(serializer.data)
+class CodingChallengeList(generics.ListCreateAPIView):
+    queryset = CodingChallenge.objects.all()
+    serializer_class = CodingChallengeSerializer
+    permission_classes = [IsAuthenticated]
 
-class SubmissionAPI(APIView):
-    def post(self, request, challenge_id):
-        user_id = request.user.id  # Assuming user authentication
-        code = request.data.get('code')
-        challenge = CodingChallenge.objects.get(id=challenge_id)
-        
-        submission = Submission.objects.create(
-            challenge=challenge,
-            user_id=user_id,
-            code=code
-        )
-        
-        serializer = SubmissionSerializer(submission)
-        return Response(serializer.data)
+    def perform_create(self, serializer):
+        serializer.save()
+        challenge = serializer.instance
+        user = self.request.user
+        points_awarded = challenge.award_points(user)
+
+        return Response({
+            'message': f'Challenge created successfully. You earned {points_awarded} points!',
+            'challenge': serializer.data
+        }, status=status.HTTP_201_CREATED)
+
+class CodingChallengeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CodingChallenge.objects.all()
+    serializer_class = CodingChallengeSerializer
+    permission_classes = [IsAuthenticated]
+
+class TagList(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+class TestCaseList(generics.ListAPIView):
+    queryset = TestCase.objects.all()
+    serializer_class = TestCaseSerializer
+
+class BadgeList(generics.ListAPIView):
+    queryset = Badge.objects.all()
+    serializer_class = BadgeSerializer
