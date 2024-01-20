@@ -1,7 +1,7 @@
 
 import os
 from pathlib import Path
-
+from datetime import timedelta 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 import cloudinary
@@ -21,7 +21,23 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+AUTH__USER_MODEL="account.User"
+
 # Application definition
+
+SIMPLE_JWT = {  
+            'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+            'REFERESH_TOKEN_LIFETIME': timedelta(days=180),
+            'ROTATE_REFRESH_TOKENS': False,
+            }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',),
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,14 +47,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'campaigns',
-    'drf_yasg'
+    'drf_yasg',
+    'corsheaders',
+    'account',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-     'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -122,6 +141,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #cors
 CORS_ALLOWED_ORIGINS=[
+    'http://localhost:3000',
+    'http://localhost:8000'
+]
+CSRF_TRUSTED_ORIGINS=[
     'http://localhost:3000',
     'http://localhost:8000'
 ]

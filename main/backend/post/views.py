@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .models import User, Post, Comment
-from .serializers import UserSerializer, PostSerializer, CommentSerializer
+from ...main.backend.post.serializers import UserSerializer, PostSerializer, CommentSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
