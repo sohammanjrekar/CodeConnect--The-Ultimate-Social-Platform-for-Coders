@@ -1,12 +1,33 @@
 from rest_framework import serializers
-from .models import User, CodeArtwork
+from .models import Tag, DesignerProfile, Gallery, Image, Comment, ContactRequest
 
-class UserSerializer(serializers.ModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Tag
         fields = '__all__'
 
-class CodeArtworkSerializer(serializers.ModelSerializer):
+class DesignerProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CodeArtwork
+        model = DesignerProfile
         fields = '__all__'
+
+class GallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gallery
+        fields = '__all__'
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class ContactRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactRequest
+        fields = '__all__'
+

@@ -52,7 +52,22 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'account',
-    'forum'
+    'forum',
+    'portfolio',
+    'CodeStorytelling',
+    'codingchallenges',
+    'jobportal',
+    'LanguageExchange',
+    'learningresources',
+    'MentorshipMatching',
+    'PersonalizedFeed',
+    'search',
+    'notification',
+    'ArtGallery',
+    'blog',
+    'codereview',
+    'ProjectRecommendations',
+    
 ]
 
 MIDDLEWARE = [

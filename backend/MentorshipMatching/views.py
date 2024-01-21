@@ -1,24 +1,39 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import MentorshipProfile, MentorshipRequest
-from .serializers import MentorshipProfileSerializer, MentorshipRequestSerializer
+# MentorshipMatching/views.py
+from rest_framework import generics
+from .models import MentorshipProfile, SharedResource, ContactMethod, MentorComment
+from .serializers import (
+    MentorshipProfileSerializer, SharedResourceSerializer,
+    ContactMethodSerializer, MentorCommentSerializer
+)
 
-class MentorshipProfileAPI(APIView):
-    def get(self, request, user_id):
-        profile = MentorshipProfile.objects.get(user_id=user_id)
-        serializer = MentorshipProfileSerializer(profile)
-        return Response(serializer.data)
+class MentorshipProfileList(generics.ListCreateAPIView):
+    queryset = MentorshipProfile.objects.all()
+    serializer_class = MentorshipProfileSerializer
 
-class MentorshipRequestAPI(APIView):
-    def post(self, request):
-        mentee_id = request.user.id  # Assuming user authentication
-        mentor_id = request.data.get('mentor_id')
-        
-        request = MentorshipRequest.objects.create(
-            mentee_id=mentee_id,
-            mentor_id=mentor_id,
-            status='pending'
-        )
-        
-        serializer = MentorshipRequestSerializer(request)
-        return Response(serializer.data)
+class MentorshipProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MentorshipProfile.objects.all()
+    serializer_class = MentorshipProfileSerializer
+
+class SharedResourceList(generics.ListCreateAPIView):
+    queryset = SharedResource.objects.all()
+    serializer_class = SharedResourceSerializer
+
+class SharedResourceDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SharedResource.objects.all()
+    serializer_class = SharedResourceSerializer
+
+class ContactMethodList(generics.ListCreateAPIView):
+    queryset = ContactMethod.objects.all()
+    serializer_class = ContactMethodSerializer
+
+class ContactMethodDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ContactMethod.objects.all()
+    serializer_class = ContactMethodSerializer
+
+class MentorCommentList(generics.ListCreateAPIView):
+    queryset = MentorComment.objects.all()
+    serializer_class = MentorCommentSerializer
+
+class MentorCommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MentorComment.objects.all()
+    serializer_class = MentorCommentSerializer

@@ -1,12 +1,28 @@
+# codecollaboration/serializers.py
 from rest_framework import serializers
-from .models import CodeReview, UserPoints
+from .models import CodeSnippet, Tag, CodeReview, CodeAttachment, Comment
+
+class CodeSnippetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CodeSnippet
+        fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 class CodeReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = CodeReview
         fields = '__all__'
 
-class UserPointsSerializer(serializers.ModelSerializer):
+class CodeAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserPoints
+        model = CodeAttachment
+        fields = '__all__'
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
         fields = '__all__'

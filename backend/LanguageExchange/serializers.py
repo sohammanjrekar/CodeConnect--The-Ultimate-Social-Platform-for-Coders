@@ -1,7 +1,7 @@
 # LanguageExchange/serializers.py
 from rest_framework import serializers
 from .models import (
-    LanguageExchangeProfile, ProgrammingLanguage,
+    LanguageExchangeProfile, LanguageTeaching, ProgrammingLanguage,
     CommunicationMethod, AvailabilityTime,
     CollaborationInterest, CollaboratedProject,
     LanguageTeaching

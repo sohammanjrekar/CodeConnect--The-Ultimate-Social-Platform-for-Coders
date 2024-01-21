@@ -1,17 +1,19 @@
+# PersonalizedFeed/serializers.py
 from rest_framework import serializers
-from .models import Post, Connection, Notification
+from .models import FeedItem, UserFeedPreference, FeedComment
 
-class PostSerializer(serializers.ModelSerializer):
+class FeedItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Post
+        model = FeedItem
         fields = '__all__'
 
-class ConnectionSerializer(serializers.ModelSerializer):
+class UserFeedPreferenceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Connection
+        model = UserFeedPreference
         fields = '__all__'
 
-class NotificationSerializer(serializers.ModelSerializer):
+class FeedCommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Notification
+        model = FeedComment
         fields = '__all__'
+

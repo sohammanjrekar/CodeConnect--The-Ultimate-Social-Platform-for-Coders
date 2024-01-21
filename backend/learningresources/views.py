@@ -1,26 +1,27 @@
-# views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import LearningResource
-from .serializers import LearningResourceSerializer
+from rest_framework import generics
+from .models import LearningResource, Tag, Comment
+from .serializers import LearningResourceSerializer, TagSerializer, CommentSerializer
 
-class LearningResourceAPI(APIView):
-    def get(self, request):
-        resources = LearningResource.objects.all()
-        serializer = LearningResourceSerializer(resources, many=True)
-        return Response(serializer.data)
-    
-    def post(self, request):
-        user_id = request.user.id  # Assuming user authentication
-        title = request.data.get('title')
-        content = request.data.get('content')
-        
-        resource = LearningResource.objects.create(
-            title=title,
-            content=content,
-            contributor_id=user_id
-        )
-        
-        serializer = LearningResourceSerializer(resource)
-        return Response(serializer.data)
+class LearningResourceList(generics.ListCreateAPIView):
+    queryset = LearningResource.objects.all()
+    serializer_class = LearningResourceSerializer
+
+class LearningResourceDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LearningResource.objects.all()
+    serializer_class = LearningResourceSerializer
+
+class TagList(generics.ListCreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+class TagDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer

@@ -1,18 +1,23 @@
+# jobportal/serializers.py
 from rest_framework import serializers
-from .models import JobListing, InternshipListing
-from .models import JobOpening
+from .models import JobPosting, JobCategory, Skill, Benefit
 
-class JobOpeningSerializer(serializers.ModelSerializer):
+class JobPostingSerializer(serializers.ModelSerializer):
     class Meta:
-        model = JobOpening
-        fields = '__all__'
-        
-class JobListingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = JobListing
+        model = JobPosting
         fields = '__all__'
 
-class InternshipListingSerializer(serializers.ModelSerializer):
+class JobCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = InternshipListing
+        model = JobCategory
+        fields = '__all__'
+
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = '__all__'
+
+class BenefitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Benefit
         fields = '__all__'

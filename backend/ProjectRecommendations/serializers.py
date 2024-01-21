@@ -1,12 +1,23 @@
+# projectrecommendation/serializers.py
 from rest_framework import serializers
-from .models import TechStack, ProjectRecommendation
+from .models import Project, ProgrammingLanguage, Tool, Tag
 
-class TechStackSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TechStack
+        model = Project
         fields = '__all__'
 
-class ProjectRecommendationSerializer(serializers.ModelSerializer):
+class ProgrammingLanguageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProjectRecommendation
+        model = ProgrammingLanguage
+        fields = '__all__'
+
+class ToolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tool
+        fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
         fields = '__all__'

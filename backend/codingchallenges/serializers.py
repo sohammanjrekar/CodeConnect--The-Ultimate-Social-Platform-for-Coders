@@ -11,6 +11,7 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
+        ref_name = 'CodingChallengesTag'
 
 class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:

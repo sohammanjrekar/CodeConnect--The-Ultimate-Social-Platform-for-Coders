@@ -1,6 +1,9 @@
 # LanguageExchange/views.py
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from .models import (
     LanguageExchangeProfile, ProgrammingLanguage,
     CommunicationMethod, AvailabilityTime,
@@ -14,37 +17,34 @@ from .serializers import (
     LanguageTeachingSerializer
 )
 
-class LanguageExchangeProfileList(generics.ListCreateAPIView):
+class LanguageExchangeProfileList(ListAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
-    permission_classes = [IsAuthenticated]
 
-class LanguageExchangeProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+class LanguageExchangeProfileDetail(RetrieveAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
-    permission_classes = [IsAuthenticated]
 
-class ProgrammingLanguageList(generics.ListAPIView):
+class ProgrammingLanguageList(ListAPIView):
     queryset = ProgrammingLanguage.objects.all()
     serializer_class = ProgrammingLanguageSerializer
 
-class CommunicationMethodList(generics.ListAPIView):
+class CommunicationMethodList(ListAPIView):
     queryset = CommunicationMethod.objects.all()
     serializer_class = CommunicationMethodSerializer
 
-class AvailabilityTimeList(generics.ListAPIView):
+class AvailabilityTimeList(ListAPIView):
     queryset = AvailabilityTime.objects.all()
     serializer_class = AvailabilityTimeSerializer
 
-class CollaborationInterestList(generics.ListAPIView):
+class CollaborationInterestList(ListAPIView):
     queryset = CollaborationInterest.objects.all()
     serializer_class = CollaborationInterestSerializer
 
-class CollaboratedProjectList(generics.ListAPIView):
+class CollaboratedProjectList(ListAPIView):
     queryset = CollaboratedProject.objects.all()
     serializer_class = CollaboratedProjectSerializer
 
-class LanguageTeachingList(generics.ListCreateAPIView):
+class LanguageTeachingList(ListAPIView):
     queryset = LanguageTeaching.objects.all()
     serializer_class = LanguageTeachingSerializer
-    permission_classes = [IsAuthenticated]

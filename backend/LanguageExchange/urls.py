@@ -8,8 +8,8 @@ from .views import (
 )
 
 urlpatterns = [
-    path('profiles/', LanguageExchangeProfileList.as_view(), name='profile-list'),
-    path('profiles/<int:pk>/', LanguageExchangeProfileDetail.as_view(), name='profile-detail'),
+    path('profiles/', LanguageExchangeProfileList.as_view(), name='language-exchange-profile-list'),
+    path('profiles/<int:pk>/', LanguageExchangeProfileDetail.as_view(), name='language-exchange-profile-detail'),
     path('programming-languages/', ProgrammingLanguageList.as_view(), name='programming-language-list'),
     path('communication-methods/', CommunicationMethodList.as_view(), name='communication-method-list'),
     path('availability-times/', AvailabilityTimeList.as_view(), name='availability-time-list'),

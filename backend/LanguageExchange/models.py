@@ -12,21 +12,26 @@ class LanguageExchangeProfile(models.Model):
     availability_times = models.ManyToManyField('AvailabilityTime', related_name='language_exchange_profiles', blank=True)
     collaboration_interests = models.ManyToManyField('CollaborationInterest', related_name='language_exchange_profiles', blank=True)
     projects_collaborated = models.ManyToManyField('CollaboratedProject', related_name='language_exchange_profiles', blank=True)
-    teaching_languages = models.ManyToManyField('ProgrammingLanguage', through='LanguageTeaching', related_name='language_teachers', blank=True)
-    learning_languages = models.ManyToManyField('ProgrammingLanguage', through='LanguageTeaching', related_name='language_learners', blank=True)
-
+    learning_languages = models.ManyToManyField('ProgrammingLanguage', through='LanguageTeaching', related_name='learning_profiles', through_fields=('learner_profile', 'language'))
+    teaching_languages = models.ManyToManyField('ProgrammingLanguage', through='LanguageTeaching', related_name='teaching_profiles', through_fields=('teacher_profile', 'language'))
+   
     def __str__(self):
         return f"Language Exchange profile for {self.user.username}"
 
+# LanguageExchange/models.py
+# LanguageExchange/models.py
+
 class LanguageTeaching(models.Model):
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teaching_languages')
-    learner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='learning_languages')
+    teacher_profile = models.ForeignKey(LanguageExchangeProfile, on_delete=models.CASCADE, related_name='teaching_languages_as_teacher')
+    learner_profile = models.ForeignKey(LanguageExchangeProfile, on_delete=models.CASCADE, related_name='learning_languages_as_learner')
     language = models.ForeignKey('ProgrammingLanguage', on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.teacher.username} teaches {self.learner.username} {self.language.name}"
+        return f"{self.teacher_profile.user.username} teaches {self.learner_profile.user.username} {self.language.name}"
 
-# Existing models remain unchanged
+    class Meta:
+        unique_together = ('teacher_profile', 'learner_profile', 'language')
+
 
 class ProgrammingLanguage(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -57,7 +62,7 @@ class CollaborationInterest(models.Model):
 class CollaboratedProject(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    collaborators = models.ManyToManyField(User, related_name='collaborated_projects', blank=True)
-
+    collaborators = models.ManyToManyField(User, related_name='language_exchange_collaborated_projects')
+   
     def __str__(self):
         return self.name

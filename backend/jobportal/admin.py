@@ -1,3 +1,8 @@
+# jobportal/admin.py
 from django.contrib import admin
+from .models import JobPosting, JobCategory, Skill, Benefit
 
-# Register your models here.
+admin.site.register(JobPosting)
+admin.site.register(JobCategory)
+admin.site.register(Skill)
+admin.site.register(Benefit)
