@@ -10,7 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import JobPosting, Skill, ProgrammingLanguage, Keyword
+from .models import JobPosting, Skill
+from account.models import ProgrammingLanguage, Keyword
 from .ml import JobRecommendation
 
 class JobRecommendationView(APIView):

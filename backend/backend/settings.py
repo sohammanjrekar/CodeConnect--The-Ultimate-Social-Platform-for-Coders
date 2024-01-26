@@ -48,27 +48,27 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'campaigns',
     'drf_yasg',
     'corsheaders',
+]
+EXTERNAL_APPS = [
     'account',
     'forum',
     'portfolio',
-    'CodeStorytelling',
     'codingchallenges',
     'jobportal',
     'LanguageExchange',
     'learningresources',
     'MentorshipMatching',
-    'PersonalizedFeed',
     'search',
     'notification',
     'ArtGallery',
     'blog',
     'codereview',
     'ProjectRecommendations',
-    
 ]
+
+INSTALLED_APPS += EXTERNAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

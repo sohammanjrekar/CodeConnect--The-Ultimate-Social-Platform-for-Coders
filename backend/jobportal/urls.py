@@ -1,9 +1,6 @@
 # jobportal/urls.py
 from django.urls import path
-from .views import (
-    JobPostingList, JobPostingDetail,
-    JobCategoryList, SkillList, BenefitList
-)
+from .views import *
 
 urlpatterns = [
     path('job-postings/', JobPostingList.as_view(), name='job-posting-list'),

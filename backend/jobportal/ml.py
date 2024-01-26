@@ -1,7 +1,8 @@
 # ml.py
 from sklearn.feature_extraction.text import TfidfVectorizer
+from jobportal.models import JobPosting, Skill
 from sklearn.metrics.pairwise import linear_kernel
-from .models import JobPosting, Skill, ProgrammingLanguage, Keyword
+from account.models import  ProgrammingLanguage, Keyword
 import joblib
 import numpy as np
 

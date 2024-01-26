@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import User
+from account.models import User
 
 
 def activateemail(request):
