@@ -1,25 +1,49 @@
-# search/views.py
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-from .models import SearchResult, UserSearchHistory, SearchResultRating, UserSearchPreference
-from .serializers import SearchResultSerializer, UserSearchHistorySerializer, SearchResultRatingSerializer, UserSearchPreferenceSerializer
+# views.py
 
-class SearchResultList(generics.ListAPIView):
-    queryset = SearchResult.objects.all()
-    serializer_class = SearchResultSerializer
+from django.db.models import Q
+from search.models import *
+from search.ml import *
+from django.shortcuts import render
+def global_search(request):
+    query = request.GET.get('q', '')
+    user = request.user if request.user.is_authenticated else None
 
-class UserSearchHistoryList(generics.ListAPIView):
-    queryset = UserSearchHistory.objects.all()
-    serializer_class = UserSearchHistorySerializer
-    permission_classes = [IsAuthenticated]
+    # Update or create user search history
+    if user and query:
+        search_history, created = UserSearchHistory.objects.get_or_create(user=user, query=query)
+        if not created:
+            search_history.count += 1
+            search_history.save()
 
-class SearchResultRatingList(generics.ListCreateAPIView):
-    queryset = SearchResultRating.objects.all()
-    serializer_class = SearchResultRatingSerializer
-    permission_classes = [IsAuthenticated]
+    # Get the user's most frequent search query
+    most_frequent_query = UserSearchHistory.objects.filter(user=user).values('query').annotate(count=Count('query')).order_by('-count').first()
 
-class UserSearchPreferenceDetail(generics.RetrieveUpdateAPIView):
-    queryset = UserSearchPreference.objects.all()
-    serializer_class = UserSearchPreferenceSerializer
-    permission_classes = [IsAuthenticated]
+    # Perform search based on the most frequent query
+    recommended_results = generate_recommendations(query, UserSearchHistory.objects.filter(user=user))
 
+    # Rest of the search logic
+    blog_results = BlogPost.objects.filter(
+        Q(title__icontains=query) | Q(content__icontains=query),
+        is_published=True
+    )
+
+    job_results = JobPosting.objects.filter(
+        Q(title__icontains=query) | Q(description__icontains=query),
+        is_active=True
+    )
+
+    user_results = User.objects.filter(
+        Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query)
+    )
+
+    # ... Additional model results can be added as needed
+
+    context = {
+        'query': query,
+        'blog_results': blog_results,
+        'job_results': job_results,
+        'user_results': user_results,
+        'recommended_results': recommended_results,
+    }
+
+    return render(request, 'search_results.html', context)

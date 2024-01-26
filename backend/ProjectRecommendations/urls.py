@@ -1,9 +1,6 @@
 # projectrecommendation/urls.py
 from django.urls import path
-from .views import (
-    ProjectList, ProjectDetail,
-    ProgrammingLanguageList, ToolList, TagList
-)
+from .views import *
 
 urlpatterns = [
     path('projects/', ProjectList.as_view(), name='project-list'),
