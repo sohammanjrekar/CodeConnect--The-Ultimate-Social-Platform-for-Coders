@@ -3,6 +3,42 @@ from rest_framework import generics
 from .models import Category, Tag, BlogPost, Comment
 from .serializers import CategorySerializer, TagSerializer, BlogPostSerializer, CommentSerializer
 
+# views.py
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import BlogPost
+from .ml import BlogRecommendation
+
+class BlogRecommendationView(APIView):
+    def get(self, request, user_id):
+        blog_recommendation = BlogRecommendation()
+        recommended_posts = blog_recommendation.get_blog_recommendations(user_id)
+
+        serialized_posts = self.serialize_posts(recommended_posts)
+
+        return JsonResponse({'posts': serialized_posts})
+
+    def serialize_posts(self, posts):
+        serialized_posts = [
+            {
+                'id': post.id,
+                'title': post.title,
+                'author': post.author.username,
+                'content': post.content,
+                'created_at': post.created_at,
+                'likes_count': post.likes,
+                'is_published': post.is_published,
+                'slug': post.slug,
+            }
+            for post in posts
+        ]
+
+        return serialized_posts
+
+
+
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

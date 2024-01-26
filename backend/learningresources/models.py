@@ -2,11 +2,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class Category(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class LearningResource(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     url = models.URLField()
     file = models.FileField(upload_to='learning_resources/', blank=True, null=True)
+    categories = models.ManyToManyField(Category, related_name='learning_resources')
     tags = models.ManyToManyField('Tag', related_name='learning_resources')
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.PositiveIntegerField(default=0)
