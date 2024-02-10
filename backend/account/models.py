@@ -1,12 +1,7 @@
-
 from django.db import models
 import uuid
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,UserManager, Group, Permission
-from django.db import models
-from django.utils import timezone
-from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, Group, Permission
 from django.utils import timezone
 
 class BaseModel(models.Model):
@@ -37,23 +32,21 @@ class BaseModel(models.Model):
     def __str__(self):
         return f"{self.__class__.__name__} (ID: {self.id})"
 
-# Create your models here.
-
 class CustomUserManager(UserManager):
-    def _create_user(self,name,email,password,**extra_fields):
+    def _create_user(self, name, email, password, **extra_fields):
         if not email:
             raise ValueError("Email must be set")
-        email=self.normalize_email(email)
-        user=self.model(email=email,name=name,**extra_fields)
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self,name=None,email=None,password=None,**extra_fields):
-        extra_fields.setdefault("is_staff",False)
-        extra_fields.setdefault("is_superuser",False)
-        return self._create_user(name,email,password,**extra_fields)
-    
+    def create_user(self, name=None, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(name, email, password, **extra_fields)
+
     def create_superuser(self, name=None, email=None, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
@@ -64,13 +57,9 @@ class CustomUserManager(UserManager):
             raise ValueError("Superuser must have is_superuser=True")
 
         return self._create_user(name, email, password, **extra_fields)
-    
-class User(AbstractBaseUser,PermissionsMixin):
-    groups = models.ManyToManyField(Group, related_name='account_user_groups')
-    user_permissions = models.ManyToManyField(Permission, related_name='account_user_permissions')
 
-    id=models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    email=models.EmailField(unique=True)
+class User(AbstractBaseUser, PermissionsMixin, BaseModel):
+    email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=255, blank=True, default="")
     last_name = models.CharField(max_length=255, blank=True, default="")
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
@@ -80,32 +69,29 @@ class User(AbstractBaseUser,PermissionsMixin):
     ProgrammingLanguage = models.ManyToManyField('ProgrammingLanguage', related_name='users', blank=True)
     Friendship = models.ManyToManyField('self', symmetrical=False, related_name='user_friends', blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    tfidf_vectorizer = models.BinaryField(null=True, blank=True)
-    phone_number= models.CharField(max_length=10, blank=True)
-    Country_name= models.CharField(max_length=50, blank=True)
-    
-    
-    is_active=models.BooleanField(default=True)
-    is_superuser=models.BooleanField(default=False)
-    is_staff=models.BooleanField(default=False)
+    phone_number = models.CharField(max_length=10, blank=True)
+    Country_name = models.CharField(max_length=50, blank=True)
+
+    is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, related_name='account_user_groups')
     user_permissions = models.ManyToManyField(Permission, related_name='account_user_permissions')
 
-    objects=CustomUserManager()
-    admin_objects=models.Manager()
-    
-    USERNAME_FIELD="email"
-    EMAIL_FIELD="email"
-    REQUIRED_FIELDS=[]
-    
+    objects = CustomUserManager()
+    admin_objects = models.Manager()
+
+    USERNAME_FIELD = "email"
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = []
+
     def get_avatar(self):
         if self.avatar:
             return settings.WEBSITE_URL + self.avatar.url
         else:
             return 'https://picsum.photos/200/200'
-    
+
     def save(self, *args, **kwargs):
-        # Auto-generate a unique username based on first name, last name, and a random suffix
         if not self.username:
             base_username = f"{self.first_name.lower()}_{self.last_name.lower()}"
             random_suffix = uuid.uuid4().hex[:6]
@@ -117,14 +103,12 @@ class User(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         return self.email
 
-# Keyword model (please define its fields based on your requirements)
 class Keyword(BaseModel):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
 
-# ProgrammingLanguage model (please define its fields based on your requirements)
 class ProgrammingLanguage(BaseModel):
     name = models.CharField(max_length=50, unique=True)
 
@@ -147,3 +131,6 @@ class Friendship(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='created_friendshiprequests', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
+
+    def __str__(self):
+        return f"Friendship ({self.id})"

@@ -2,10 +2,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import Project, ProjectCategory, Technology, ProjectImage, Resume
-from .serializers import (
-    ProjectSerializer, ProjectCategorySerializer, TechnologySerializer,
-    ProjectImageSerializer, ResumeSerializer
-)
+from .serializers import *
 
 class ProjectList(generics.ListCreateAPIView):
     queryset = Project.objects.all()

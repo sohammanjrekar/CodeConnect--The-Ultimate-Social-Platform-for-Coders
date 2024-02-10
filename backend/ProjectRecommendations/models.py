@@ -17,7 +17,7 @@ class Project(models.Model):
         ('iot', 'Internet of Things'),
         ('other', 'Other'),
     ]
-
+    id = models.UUIDField(primary_key=True, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projectrecommendations_projects')
     title = models.CharField(max_length=255)
     description = models.TextField()

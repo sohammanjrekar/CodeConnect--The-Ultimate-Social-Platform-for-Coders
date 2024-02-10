@@ -65,6 +65,7 @@ EXTERNAL_APPS = [
     'ArtGallery',
     'blog',
     'codereview',
+    'post',
     'ProjectRecommendations',
 ]
 

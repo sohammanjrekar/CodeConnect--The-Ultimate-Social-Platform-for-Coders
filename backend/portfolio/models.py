@@ -43,6 +43,10 @@ class Resume(models.Model):
     work_experience = models.TextField(blank=True)
     skills = models.TextField(blank=True)
     contact_information = models.TextField(blank=True)
-
+    def update_resume_fields(self, education, work_experience):
+        self.education = education
+        self.work_experience = work_experience
+        # Update other fields as needed
+        self.save()
     def __str__(self):
         return f"Resume for {self.user.username}"
