@@ -5,11 +5,11 @@ import Footer from '../components/Footer'
 import Searchbar from '../components/Searchbar'
 import Addarticle from './Addarticle'
 import Link from 'next/link'
-
+import { UnsplashProvider, Unsplash } from 'react-unsplash-wrapper';
 
 const page = () => {
   const [posts, setPosts] = useState([]);
-
+  
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -69,10 +69,11 @@ max-w-7xl"
        
         <div className="w-full md:w-1/2">
           <div className="block">
-            <img
-              src=""
-              className="object-cover rounded-lg max-h-64 sm:max-h-96 btn- w-full h-full"
-            />
+          <img
+            src="https://web3.com.au/wp-content/uploads/2016/08/How-To-Write-Blog-Posts-that-Actually-Convert-Readers-into-Customers-featured-image.jpg"
+          
+            className="object-cover w-full mb-2 overflow-hidden rounded-lg shadow-sm max-h-56 btn-"
+          />
           </div>
         </div>
       </div>
@@ -83,7 +84,8 @@ max-w-7xl"
       {/* <Link href={`/Blog/${post.id}`} passHref> */}
         <a>
           <img
-            src={post.featured_image}
+            src="https://www.curvearro.com/wp-content/uploads/2020/07/business-blog_curvearro.jpg"
+          
             className="object-cover w-full mb-2 overflow-hidden rounded-lg shadow-sm max-h-56 btn-"
           />
         </a>
