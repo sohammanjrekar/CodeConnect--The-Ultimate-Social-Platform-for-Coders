@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 EXTERNAL_APPS = [
+    'botchats',
     'account',
     'forum',
     'portfolio',
@@ -67,6 +68,7 @@ EXTERNAL_APPS = [
     'codereview',
     'post',
     'ProjectRecommendations',
+    'chat'
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS

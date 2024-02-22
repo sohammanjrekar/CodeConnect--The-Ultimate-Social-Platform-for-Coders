@@ -32,5 +32,5 @@ urlpatterns = [
    path('MentorshipMatching/',include('MentorshipMatching.urls')),
    path('search/',include('search.urls')),
    path('notification/',include('notification.urls')),
-   
+   path('chats/',include('chat.urls')),
 ]

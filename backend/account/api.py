@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from notification.utils import create_notification
 
 from .forms import SignupForm, ProfileForm
-from .models import User, FriendshipRequest
+from account.models import User, FriendshipRequest
 from .serializers import UserSerializer, FriendshipRequestSerializer
 
 

@@ -12,6 +12,8 @@ import SubscriptionCard from "../components/SubscriptionCard";
 import Testinomial from "../components/Testinomial";
 import CTA from "../components/CTA";
 import { setCampaigns,deleteCampaign,addCampaign } from "@/redux/Slices/campaignslice";
+import Chatbox from "../chats/page";
+import IndexHeroNav from "../components/IndexHeroNav";
 const Page = () => {
    
   const campaigns = useSelector((state) => state.campaign);
@@ -22,7 +24,7 @@ const Page = () => {
     
       <>
       <Navbar/>
-      
+      <IndexHeroNav/>
       <>
   {/* component */}
   <div className="h-screen  bg-white mb-10">
@@ -358,6 +360,7 @@ const Page = () => {
   <Testinomial/>
   {campaigns.map((campaign) => <div>{campaign.title}</div>)}
   <Footer/>
+  <Chatbox/>
 </>
 
 </>
