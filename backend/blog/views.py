@@ -10,7 +10,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import BlogPost
 from .ml import BlogRecommendation
-
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
+@authentication_classes([])
+@permission_classes([AllowAny])
 class BlogRecommendationView(APIView):
     def get(self, request, user_id):
         blog_recommendation = BlogRecommendation()
@@ -38,35 +41,43 @@ class BlogRecommendationView(APIView):
         return serialized_posts
 
 
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class TagList(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class TagDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class BlogPostList(generics.ListCreateAPIView):
     queryset = BlogPost.objects.filter(is_published=True)
     serializer_class = BlogPostSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class BlogPostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = BlogPost.objects.filter(is_published=True)
     serializer_class = BlogPostSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer

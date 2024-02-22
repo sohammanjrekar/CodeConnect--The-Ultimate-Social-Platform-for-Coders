@@ -33,4 +33,6 @@ urlpatterns = [
    path('search/',include('search.urls')),
    path('notification/',include('notification.urls')),
    path('chats/',include('chat.urls')),
-]
+   path('botchats/',include('botchats.urls')),
+   path('blogs/',include('blog.urls')),
+   ]

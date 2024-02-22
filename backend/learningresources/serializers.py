@@ -12,7 +12,11 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = '__all__'
 
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+        # Set a unique ref_name for this serializer
+        ref_name = 'LearningResourceComment'
+

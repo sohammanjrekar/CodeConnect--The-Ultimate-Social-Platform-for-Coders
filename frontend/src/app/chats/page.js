@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { addBotChat } from '@/redux/Slices/botChatSlice'; // Adjust the import path based on your project structure
+import axios from 'axios';
 
 const Chatbox = () => {
+  const dispatch = useDispatch();
+
   const [isChatboxOpen, setIsChatboxOpen] = useState(true);
   const [userInput, setUserInput] = useState('');
   const chatboxRef = useRef(null);
@@ -18,6 +23,9 @@ const Chatbox = () => {
   };
 
   const addBotMessage = (message) => {
+    console.log("Bot Response:", message);
+    dispatch(addBotChat(message)); // Dispatch the addBotChat action
+
     const messageElement = document.createElement("div");
     messageElement.classList.add("mb-2");
     messageElement.innerHTML = `<p class="bg-gray-200 text-gray-700 rounded-lg py-2 px-4 inline-block">${message}</p>`;
@@ -25,11 +33,16 @@ const Chatbox = () => {
     chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
   };
 
-  const respondToUser = (userMessage) => {
-    // Replace this with your chatbot logic
-    setTimeout(() => {
-      addBotMessage("This is a response from the chatbot.");
-    }, 500);
+  const respondToUser = async (userMessage) => {
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/botchats/chats/', {
+        user_message: userMessage,
+      });
+      const botResponse = response.data.bot_response;
+      addBotMessage(botResponse);
+    } catch (error) {
+      console.error('Error sending user message:', error);
+    }
   };
 
   const handleSend = () => {
@@ -47,7 +60,6 @@ const Chatbox = () => {
   };
 
   useEffect(() => {
-    // Automatically open the chatbox on page load
     toggleChatbox();
   }, []);
 
@@ -59,20 +71,6 @@ const Chatbox = () => {
           className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex items-center"
           onClick={toggleChatbox}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            ></path>
-          </svg>
           Chat with Admin Bot
         </button>
       </div>
@@ -85,15 +83,7 @@ const Chatbox = () => {
               className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400"
               onClick={toggleChatbox}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
+              Close
             </button>
           </div>
           <div id="chatbox" ref={chatboxRef} className="p-4 h-80 overflow-y-auto">

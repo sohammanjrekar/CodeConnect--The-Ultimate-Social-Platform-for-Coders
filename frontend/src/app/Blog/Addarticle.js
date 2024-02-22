@@ -1,6 +1,74 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 
 const Addarticle = () => {
+  const [content, setContent] = useState('');
+  const [tags, setTags] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tagsResponse = await fetch('http://127.0.0.1:8000/blogs/tags/');
+        const categoriesResponse = await fetch('http://127.0.0.1:8000/blogs/categories/');
+
+        const tagsData = await tagsResponse.json();
+        const categoriesData = await categoriesResponse.json();
+
+        setTags(tagsData);
+        setCategories(categoriesData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleTagSelection = (tagId) => {
+    setSelectedTags((prevTags) =>
+      prevTags.includes(tagId) ? prevTags.filter((id) => id !== tagId) : [...prevTags, tagId]
+    );
+  };
+
+  const handleCategorySelection = (categoryId) => {
+    setSelectedCategory(categoryId);
+  };
+
+  const handlePublish = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/blogs/blog-posts/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: 'Your Title', // Replace with the actual title
+          content,
+          likes: 0,
+          dislikes: 0,
+          is_published: false,
+          author: 1, // Replace with the actual author ID
+          categories: [1], // Replace with the actual category ID(s)
+          tags: selectedTags,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Blog post created successfully!');
+        // Update UI optimistically if needed
+      } else {
+        console.error('Error creating blog post:', response.statusText);
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
   return (
     <div>
       <>
@@ -11,7 +79,7 @@ const Addarticle = () => {
   />
   {/* This is an example component */}
   <div className="max-w-3xl mx-auto">
-    <form>
+    <form onSubmit={(e) => e.preventDefault()}>
       <div className="mb-4 w-full bg-gray-50 rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600">
         <div className="flex justify-between items-center py-2 px-3 border-b dark:border-gray-600">
           <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x dark:divide-gray-600">
@@ -200,6 +268,10 @@ const Addarticle = () => {
             <div className="tooltip-arrow" data-popper-arrow="" />
           </div>
         </div>
+
+
+
+        
         <div className="py-2 px-4 bg-white rounded-b-lg dark:bg-gray-800">
           <label htmlFor="editor" className="sr-only">
             Publish post
@@ -211,17 +283,57 @@ const Addarticle = () => {
             placeholder="Write an article..."
             required=""
             defaultValue={""}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
         </div>
       </div>
       <button
         type="submit"
+        onClick={handlePublish}
         className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
       >
         Publish post
       </button>
     </form>
    
+
+    <div>
+          <div>
+            <h4>Select Tags:</h4>
+            {Array.isArray(tags) &&
+              tags.map((tag) => (
+                <button
+                  key={tag.id}
+                  className={`p-2 m-1 ${
+                    selectedTags.includes(tag.id) ? 'bg-blue-500 text-white' : 'bg-gray-300'
+                  }`}
+                  onClick={() => handleTagSelection(tag.id)}
+                >
+                  {tag.name}
+                </button>
+              ))}
+          </div>
+          <div>
+            <h4>Select Category:</h4>
+            {Array.isArray(categories) &&
+              categories.map((category) => (
+                <button
+                  key={category.id}
+                  className={`p-2 m-1 ${
+                    selectedCategory === category.id ? 'bg-blue-500 text-white' : 'bg-gray-300'
+                  }`}
+                  onClick={() => handleCategorySelection(category.id)}
+                >
+                  {category.name}
+                </button>
+              ))}
+          </div>
+        </div>
+
+
+
+
   </div>
 </>
 
