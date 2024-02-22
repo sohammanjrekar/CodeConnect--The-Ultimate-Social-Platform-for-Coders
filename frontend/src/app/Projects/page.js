@@ -1,17 +1,17 @@
 import React from 'react'
+import Projectcards from '../components/Projectcards'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const page = () => {
   return (
-    <div>
+    
       <>
+      <Navbar/>
   {/* component */}
-  <div className="bg-gray-100 p-4 flex items-center justify-center h-screen">
+  <Projectcards/>
     <div>
-      {/* Trigger button */}
-      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg  transition duration-300">
-        Create New Project
-      </button>
-      <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className=" inset-0 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 w-96 max-w-full shadow-lg transform transition-all duration-300">
           <div className="flex justify-between items-center border-b-2 border-gray-200 pb-4">
             <h2 className="text-2xl font-semibold">Create or Import Project</h2>
@@ -56,10 +56,10 @@ const page = () => {
         </div>
       </div>
     </div>
-  </div>
+  <Footer/>
 </>
 
-    </div>
+   
   )
 }
 

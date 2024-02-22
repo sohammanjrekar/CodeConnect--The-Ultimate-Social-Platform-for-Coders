@@ -5,7 +5,7 @@ const Projectcards = () => {
     <div>
       <>
   {/* component */}
-  <div className="bg-gradient-to-r from-violet-100 to-indigo-100 flex items-center justify-center h-screen">
+  <div className="bg-white flex items-center justify-center mb-5">
     <div className="w-11/12 sm:w-11/12 md:w-8/12 lg:w-6/12 backdrop-blur-sm bg-white/40 p-6 rounded-lg shadow-sm border-violet-200 border">
       <div className="w-full flex justify-between items-center p-3">
         <h2 className="text-xl font-semibold">My Project</h2>
@@ -60,6 +60,11 @@ const Projectcards = () => {
         {/* Card 1 */}
         <div className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-50 hover:border-violet-200 hover:border-2 transition-colors duration-300">
           <h2 className="text-xl font-semibold mb-4">Project 1</h2>
+          <img
+            src="https://i.ytimg.com/vi/CQZxeoQeo5c/maxresdefault.jpg"
+          
+            className="object-cover w-full mb-2 overflow-hidden rounded-lg shadow-sm max-h-56 btn-"
+          />
           <p className="text-gray-700">
             Description of Project 2 goes here. You can provide more details
             about the project.
@@ -102,6 +107,11 @@ const Projectcards = () => {
         {/* Card 2 */}
         <div className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-50 hover:border-violet-200 hover:border-2 transition-colors duration-300">
           <h2 className="text-xl font-semibold mb-4">Project 2</h2>
+          <img
+            src="https://s.tmimgcdn.com/scr/110900/110911-original.jpg"
+          
+            className="object-cover w-full mb-2 overflow-hidden rounded-lg shadow-sm max-h-56 btn-"
+          />
           <p className="text-gray-700">
             Description of Project 2 goes here. You can provide more details
             about the project.
@@ -144,6 +154,11 @@ const Projectcards = () => {
         {/* Card 3 */}
         <div className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-50 hover:border-violet-200 hover:border-2 transition-colors duration-300">
           <h2 className="text-xl font-semibold mb-4">Project 3</h2>
+          <img
+            src="https://img.freepik.com/free-vector/mathematics-tiny-persons-vector-illustration-landing-page-template-design_1995-410.jpg?size=626&ext=jpg"
+          
+            className="object-cover w-full mb-2 overflow-hidden rounded-lg shadow-sm max-h-56 btn-"
+          />
           <p className="text-gray-700">
             Description of Project 2 goes here. You can provide more details
             about the project.
@@ -186,6 +201,11 @@ const Projectcards = () => {
         {/* Card 4 */}
         <div className="backdrop-blur-sm bg-white/20 p-6 rounded-md shadow-sm cursor-pointer border-2 border-gray-50 hover:border-violet-200 hover:border-2 transition-colors duration-300">
           <h2 className="text-xl font-semibold mb-4">Project 4</h2>
+          <img
+            src="https://th.bing.com/th/id/OIP.17GxaszCqXO11i_92m1_gAHaEH?w=740&h=411&rs=1&pid=ImgDetMain"
+          
+            className="object-cover w-full mb-2 overflow-hidden rounded-lg shadow-sm max-h-56 btn-"
+          />
           <p className="text-gray-700">
             Description of Project 2 goes here. You can provide more details
             about the project.

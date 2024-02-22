@@ -86,6 +86,38 @@ const Navbar = () => {
               </li>
               <li>
                 <a
+                  href="/Codereview"
+                  className="text-gray-700 hover:text-indigo-600 text-md "
+                >
+                  Codereview
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/Contactus"
+                  className="text-gray-700 hover:text-indigo-600 text-md "
+                >
+                 Contact
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/Events"
+                  className="text-gray-700 hover:text-indigo-600 text-md "
+                >
+                 Events
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/Projects"
+                  className="text-gray-700 hover:text-indigo-600 text-md "
+                >
+                 projects
+                </a>
+              </li>
+              <li>
+                <a
                   href="/Message"
                   className="text-gray-700 hover:text-indigo-600 text-md "
                 >
@@ -98,6 +130,14 @@ const Navbar = () => {
                   className="text-gray-700 hover:text-indigo-600 text-md "
                 >
             Blog
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/Codechallenges"
+                  className="text-gray-700 hover:text-indigo-600 text-md "
+                >
+           Codechallenges
                 </a>
               </li>
               <li>
