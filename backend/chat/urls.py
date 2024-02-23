@@ -1,11 +1,11 @@
+# chats/urls.py
 from django.urls import path
-
-from . import api
-
+from .views import fetch_conversations, fetch_messages, create_conversation, send_message
 
 urlpatterns = [
-    path('', api.conversation_list, name='conversation_list'),
-    path('<uuid:pk>/', api.conversation_detail, name='conversation_detail'),
-    path('<uuid:pk>/send/', api.conversation_send_message, name='conversation_send_message'),
-    path('<uuid:user_pk>/get-or-create/', api.conversation_get_or_create, name='conversation_get_or_create'),
+    path('chats/', fetch_conversations, name='fetch_conversations'),
+    path('chats/<uuid:conversation_id>/', fetch_messages, name='fetch_messages'),
+    path('create_conversation/', create_conversation, name='create_conversation'),
+    path('chats/<uuid:conversation_id>/send/', send_message, name='send_message'),
+    # Add more URL patterns as needed
 ]
