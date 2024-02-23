@@ -1,9 +1,12 @@
 import React from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const page = () => {
   return (
     <div>
       <>
+      <Navbar/>
         {/* component */}
         <div className="min-h-screen bg-gray-50 pb-10">
           {/* Navigation */}
@@ -523,6 +526,7 @@ const page = () => {
             </main>
           </div>
         </div>
+        <Footer/>
       </>
     </div>
   );
