@@ -1,11 +1,8 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
 
 const About = () => {
   return (
     <div>
-      <Navbar/>
       <>
   {/* component */}
   <link
@@ -111,7 +108,6 @@ const About = () => {
     </div>
    
   </section>
-  <Footer/>
 </>
 
     </div>

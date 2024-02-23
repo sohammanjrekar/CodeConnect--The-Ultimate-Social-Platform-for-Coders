@@ -4,7 +4,6 @@ import Footer from '../components/Footer'
 import Searchbar from '../components/Searchbar'
 
 import Link from 'next/link'
-import Gallary2 from '../components/Gallary2'
 
 
 const page = () => {
@@ -111,7 +110,6 @@ const page = () => {
       </div>
     </div>
   </div>
-
 </>
 
   <Footer/>
