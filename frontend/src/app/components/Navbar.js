@@ -124,6 +124,16 @@ const Navbar = () => {
                  Chats
                 </a>
               </li>
+
+
+              <li>
+                <a
+                  href="/Artgallary"
+                  className="text-gray-700 hover:text-indigo-600 text-md "
+                >
+                Artgallary
+                </a>
+              </li>
               <li>
                 <a
                   href="/Blog"
