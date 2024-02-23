@@ -10,15 +10,20 @@ from rest_framework import generics
 from .models import LanguageExchangeProfile
 from .serializers import LanguageExchangeProfileSerializer
 from .ml import LanguageExchangeRecommendation
-
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LanguageExchangeProfileList(generics.ListCreateAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LanguageExchangeProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LanguageExchangeRecommendationView(generics.RetrieveAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
@@ -46,35 +51,44 @@ class LanguageExchangeRecommendationView(generics.RetrieveAPIView):
         top_recommendations = [username for username, _ in sorted_recommendations[:5]]
 
         return {'user': user.user.username, 'recommendations': top_recommendations}
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LanguageExchangeProfileList(ListAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LanguageExchangeProfileDetail(RetrieveAPIView):
     queryset = LanguageExchangeProfile.objects.all()
     serializer_class = LanguageExchangeProfileSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class ProgrammingLanguageList(ListAPIView):
     queryset = ProgrammingLanguage.objects.all()
     serializer_class = ProgrammingLanguageSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CommunicationMethodList(ListAPIView):
     queryset = CommunicationMethod.objects.all()
     serializer_class = CommunicationMethodSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class AvailabilityTimeList(ListAPIView):
     queryset = AvailabilityTime.objects.all()
     serializer_class = AvailabilityTimeSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CollaborationInterestList(ListAPIView):
     queryset = CollaborationInterest.objects.all()
     serializer_class = CollaborationInterestSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CollaboratedProjectList(ListAPIView):
     queryset = CollaboratedProject.objects.all()
     serializer_class = CollaboratedProjectSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LanguageTeachingList(ListAPIView):
     queryset = LanguageTeaching.objects.all()
     serializer_class = LanguageTeachingSerializer

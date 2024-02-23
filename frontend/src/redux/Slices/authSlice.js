@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Define the initial state
 const initialState = {
   token: typeof window !== 'undefined' ? localStorage.getItem('token') || null : null,
-  isAuthenticated: typeof window !== 'undefined' ? localStorage.getItem('token') ? true : false : false,
+  isAuthenticated: typeof window !== 'undefined' ? localStorage.getItem('token') ? true : false,
   status: 'idle', // idle, loading, succeeded, failed
   error: null,
 };

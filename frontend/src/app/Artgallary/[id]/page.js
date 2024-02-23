@@ -2,6 +2,8 @@ import React from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import Comments from '../../Comments/page'
+import RatingScore from '@/app/components/RatingScore'
+import Reviews from '@/app/components/Reviews'
 
 const page = () => {
   return (
@@ -43,8 +45,8 @@ const page = () => {
     </div>
   </div>
 </div>
-
-<Comments/>
+<Reviews/>
+<RatingScore/>
   <Footer/>
 </>
 

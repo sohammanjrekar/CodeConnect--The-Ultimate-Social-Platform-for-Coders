@@ -1,9 +1,12 @@
 import React from 'react'
 import ContactusHero from './ContactusHero'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const Contactus = () => {
   return (
     <div>
+      <Navbar/>
       <>
       <ContactusHero/>
   {/* component */}
@@ -57,6 +60,7 @@ const Contactus = () => {
       </div>
     </div>
   </div>
+  <Footer/>
 </>
 
     </div>
