@@ -35,12 +35,12 @@ const Page = () => {
             {/* Banner Profile */}
             <div className="relative">
               <img
-                src="https://placekitten.com/500/150"
+                src="https://truecontext.com/wp-content/uploads/2023/11/tile-image-drel-guide.jpg"
                 alt="Banner Profile"
                 className="w-full rounded-t-lg"
               />
               <img
-                src="https://placekitten.com/150/150"
+                src="https://iti-digital.com/wp-content/uploads/2020/07/AdobeStock_317917475-scaled.jpeg"
                 alt="Profile Picture"
                 className="absolute bottom-0 left-2/4 transform -translate-x-1/2 translate-y-1/2 w-24 h-24 rounded-full border-4 border-white"
               />
@@ -210,7 +210,7 @@ const Page = () => {
             {/* Image */}
             <div className="mb-4">
               <img
-                src="https://placekitten.com/400/300"
+                src="https://i.pinimg.com/originals/89/01/38/890138e1b3a70c44f8447099034fa87b.png"
                 alt="Post Image"
                 className="w-full h-48 object-cover rounded-md"
               />
@@ -306,7 +306,7 @@ const Page = () => {
             {/* Image */}
             <div className="mb-4">
               <img
-                src="https://placekitten.com/450/500"
+                src="https://graphicsfamily.com/wp-content/uploads/edd/2021/01/Free-Social-Media-Post-Design-for-Cosmetics-Business-Digital-Marketing-scaled.jpg"
                 alt="Post Image"
                 className="w-full h-48 object-cover rounded-md"
               />
