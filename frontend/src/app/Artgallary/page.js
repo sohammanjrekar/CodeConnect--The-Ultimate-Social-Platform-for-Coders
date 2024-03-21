@@ -20,44 +20,21 @@ const page = () => {
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://upload.wikimedia.org/wikipedia/commons/0/03/Kashi_Vishwanath_Temple_Banaras.jpg"
+            src="https://miro.medium.com/max/3200/1*8ifpC7J69gtWlx_-3uOoFA.png"
             alt=""
           />
         </div>
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://pbs.twimg.com/media/FGRnUzPVEAAbqM8?format=jpg&name=large"
+            src="https://www.codeglo.com/blog/wp-content/uploads/2021/06/image-14.jpg"
             alt=""
           />
         </div>
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://pbs.twimg.com/media/FGRnNpAVUAYqRYv?format=jpg&name=large"
-            alt=""
-          />
-        </div>
-      </div>
-      <div className="grid gap-4">
-        <div>
-          <img
-            className="h-auto max-w-full rounded-lg"
-            src="https://pbs.twimg.com/media/FGRnP_TUUAAttG3?format=jpg&name=large"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            className="h-auto max-w-full rounded-lg"
-            src="https://i.pinimg.com/originals/c0/7d/17/c07d17d7ca0b9f39f5aded4b6dca8f02.jpg"
-            alt=""
-          />
-        </div>
-        <div>
-          <img
-            className="h-auto max-w-full rounded-lg"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Benares-_The_Golden_Temple%2C_India%2C_ca._1915_%28IMP-CSCNWW33-OS14-66%29.jpg/1280px-Benares-_The_Golden_Temple%2C_India%2C_ca._1915_%28IMP-CSCNWW33-OS14-66%29.jpg"
+            src="https://agiletech.vn/wp-content/uploads/2020/02/1pNTivwRioxiS1VDPqnmynA.jpg"
             alt=""
           />
         </div>
@@ -66,21 +43,21 @@ const page = () => {
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://www.jagranimages.com/images/newimg/27072020/27_07_2020-shri-kashi-vishwanath-temple_20557350.jpg"
+            src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_opt_1/19cfa6118456891.6089761b94f99.png"
             alt=""
           />
         </div>
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://www.jansatta.com/wp-content/uploads/2021/12/Kashi-Vishwanath-Mandir.png?w=1024"
+            src="https://cdn.dribbble.com/users/594915/screenshots/2742859/dribbble_peview_3.jpg?resize=400x300&vertical=center"
             alt=""
           />
         </div>
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://staticimg.amarujala.com/assets/images/2021/11/07/750x506/kashi-vishwanath-dham_1636258507.jpeg?w=674&dpr=1.0"
+            src="https://cdn.dribbble.com/users/905066/screenshots/6800873/inspired_again__4x.png?compress=1&resize=400x300&vertical=center"
             alt=""
           />
         </div>
@@ -89,21 +66,44 @@ const page = () => {
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://staticimg.amarujala.com/assets/images/2020/01/13/750x506/kashi-vishwanath-mandir-varanasi_1578924152.png?w=700&dpr=2.0"
+            src="https://cdn.dribbble.com/users/6087158/screenshots/18563823/______________2022-06-23___16.09.48.png"
             alt=""
           />
         </div>
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Ahilya_Ghat_by_the_Ganges%2C_Varanasi.jpg/800px-Ahilya_Ghat_by_the_Ganges%2C_Varanasi.jpg"
+            src="https://s3-alpha.figma.com/hub/file/4178512570/8c0fd4ca-1588-4f76-96f6-017a05063c6f-cover.png"
             alt=""
           />
         </div>
         <div>
           <img
             className="h-auto max-w-full rounded-lg"
-            src="https://upload.wikimedia.org/wikipedia/commons/2/25/Chet_Singh_Ghat_in_Varanasi.jpg"
+            src="https://cdn.dribbble.com/users/1126935/screenshots/14889725/media/bd5c69d9fcc2da5716c344bf389b9cf2.png?compress=1&resize=1000x750&vertical=top"
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="grid gap-4">
+        <div>
+          <img
+            className="h-auto max-w-full rounded-lg"
+            src="https://cdn.dribbble.com/userupload/3146709/file/original-1c688e1e9cf259966d87ad9dd46f070e.png?resize=300x225"
+            alt=""
+          />
+        </div>
+        <div>
+          <img
+            className="h-auto max-w-full rounded-lg"
+            src="https://themeforest.img.customer.envatousercontent.com/files/340577357/cover.jpg?auto=compress%2Cformat&q=80&fit=crop&crop=top&max-h=5424&max-w=400&s=88edfcfe81a341005133211c6f8adcb2"
+            alt=""
+          />
+        </div>
+        <div>
+          <img
+            className="h-auto max-w-full rounded-lg"
+            src="https://cdn.dribbble.com/users/1627429/screenshots/10724776/carlos_preview.png"
             alt=""
           />
         </div>
