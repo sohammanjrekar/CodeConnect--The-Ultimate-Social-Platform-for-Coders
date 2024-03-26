@@ -2,10 +2,11 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.views import APIView
+from django.db import models
 from rest_framework.response import Response
 from .models import User, Post, Comment
-from .Scripts import fetch_posts_based_on_ml
-from ...main.backend.post.serializers import UserSerializer, PostSerializer, CommentSerializer
+from post.scripts import fetch_posts_based_on_ml
+from post.serializers import UserSerializer, PostSerializer, CommentSerializer
 from rest_framework import status
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -79,7 +80,7 @@ class CommentView(APIView):
 
 from rest_framework import status
 from rest_framework.decorators import action
-from .nlp_utils import extract_keywords_task
+from .nlp_utils import extract_keywords
 
 class LikeView(APIView):
     def post(self, request, post_id):

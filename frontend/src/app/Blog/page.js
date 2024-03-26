@@ -9,20 +9,49 @@ import { UnsplashProvider, Unsplash } from 'react-unsplash-wrapper';
 
 const page = () => {
   const [posts, setPosts] = useState([]);
-  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
-        const response = await fetch('http://127.0.0.1:8000/blogs/blog-posts/')
+        // Simulate fetching data from API
+        const response = await fetch(`http://localhost:8000/post/posts/?page=${page}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
         const data = await response.json();
-        setPosts(data);
+        setPosts(prevPosts => [...prevPosts, ...data]);
+        setLoading(false);
+        setPage(prevPage => prevPage + 1);
+        setHasMore(data.length > 0);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching posts:', error);
+        setError('Failed to fetch posts');
+        setLoading(false);
       }
     };
 
-    fetchPosts();
-  }, []);
+    if (hasMore) {
+      fetchPosts();
+    }
+  }, [page]); // Fetch new posts when page changes
+
+  const handleScroll = () => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 5 && !loading) {
+      setPage(prevPage => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []); // Add and remove scroll event listener
+
   return (
     <>
       <>

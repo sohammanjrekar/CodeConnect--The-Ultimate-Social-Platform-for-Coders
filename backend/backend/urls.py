@@ -35,4 +35,6 @@ urlpatterns = [
    path('chats/',include('chat.urls')),
    path('botchats/',include('botchats.urls')),
    path('blogs/',include('blog.urls')),
+   path('post/',include('post.urls')),
+   
    ]
