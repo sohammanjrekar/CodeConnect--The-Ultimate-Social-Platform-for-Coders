@@ -8,9 +8,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from notification.utils import create_notification
 
 from .forms import SignupForm, ProfileForm
-from account.models import User, FriendshipRequest
-from .serializers import UserSerializer, FriendshipRequestSerializer
-
+from account.models import User
+from .serializers import UserSerializer
 
 @api_view(['GET'])
 def me(request):
@@ -150,3 +149,18 @@ def handle_request(request, pk, status):
     notification = create_notification(request, 'accepted_friendrequest', friendrequest_id=friendship_request.id)
 
     return JsonResponse({'message': 'friendship request updated'})
+
+
+
+def get_user_data(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+        user_data = {
+            'id': user.id,
+            'username': user.username,
+            'avatar': user.avatar.url if user.avatar else None,  # Assuming 'avatar' is a FileField in your User model
+            # Add other fields as needed
+        }
+        return JsonResponse(user_data)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found'}, status=404)

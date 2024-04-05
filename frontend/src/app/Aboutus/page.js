@@ -1,10 +1,11 @@
 import React from 'react'
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar'
 
 const About = () => {
   return (
-    <div>
-      <>
-  {/* component */}
+    <>
+    <Navbar/>
   <link
     rel="stylesheet"
     href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css"
@@ -108,9 +109,9 @@ const About = () => {
     </div>
    
   </section>
+  <Footer/>
 </>
 
-    </div>
   )
 }
 

@@ -40,34 +40,40 @@ class User(BaseModel):
     
     def __str__(self):
         return self.username
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from django.db import models
+from rest_framework.response import Response
+from .models import User, Post, Comment
+from post.scripts import fetch_posts_based_on_ml
+from post.serializers import UserSerializer, PostSerializer, CommentSerializer
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
+
+@authentication_classes([])
+@permission_classes([AllowAny])
 class PostListView(APIView):
     def get(self, request):
-        # Assuming you have a logged-in user
-        user = request.user
-
-        # Assuming you have user preferences like languages, keywords, and friends
-        user_languages = ["Python", "JavaScript"]
-        user_keywords = ["web development", "machine learning"]
-        user_friends = ["friend1", "friend2"]
-
-        # Get or create the user profile
-        user_profile, created = User.objects.get_or_create(user=user)
-
-        # Fetch posts based on ML
-        ml_posts = user_profile.fetch_posts_based_on_ml(user_languages, user_keywords, user_friends)
-
-        # Serialize posts and comments
-        post_data = PostSerializer(ml_posts, many=True).data
-
-        # Add comment data to each post
-        for post in post_data:
-            post['comment_count'] = len(post['comments'])
-            post['comments'] = CommentSerializer(post['comments'], many=True).data
-
+        page = int(request.GET.get('page', 1))
+        per_page = 5
+        start_index = (page - 1) * per_page
+        end_index = page * per_page
+        
+        posts = Post.objects.all()[start_index:end_index]
+        post_data = PostSerializer(posts, many=True).data
+        
         response_data = {'posts': post_data}
-
+        
         return Response(response_data)
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CommentView(APIView):
     def post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
@@ -78,35 +84,35 @@ class CommentView(APIView):
         response_data = CommentSerializer(comment).data
         return Response(response_data)
 
-from rest_framework import status
-from rest_framework.decorators import action
-from .nlp_utils import extract_keywords
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class LikeView(APIView):
     def post(self, request, post_id):
         post = get_object_or_404(Post, id=post_id)
         post.likes += 1
         post.save()
 
-        # Trigger the background task for keyword extraction
-        extract_keywords_task.delay(post.content)
-
         response_data = {
             'likes': post.likes,
-            'message': 'Keyword extraction is in progress. Check back later for results.',
+            'message': 'Post liked successfully.',
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
 
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer

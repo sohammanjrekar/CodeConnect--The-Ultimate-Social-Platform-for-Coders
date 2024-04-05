@@ -1,4 +1,3 @@
-# Create your models here.
 import uuid
 from django.db import models
 from django.utils.timesince import timesince
@@ -6,12 +5,13 @@ from account.models import User
 
 class Conversation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    users = models.ManyToManyField(User, related_name='conversations')
+    users = models.ManyToManyField(User, related_name='conversation_participants')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     
     def modified_at_formatted(self):
         return timesince(self.modified_at)
+
 
 class ConversationMessage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -10,7 +10,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import MentorshipProfile, User
 from .ml import MentorMatching
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
 
+
+@authentication_classes([])
+@permission_classes([AllowAny])
 class MentorMatchingView(APIView):
     def get(self, request):
         mentors = MentorshipProfile.objects.all().exclude(user=request.user)
@@ -35,34 +40,50 @@ class MentorMatchingView(APIView):
 
         return serialized_matches
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class MentorshipProfileList(generics.ListCreateAPIView):
     queryset = MentorshipProfile.objects.all()
     serializer_class = MentorshipProfileSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class MentorshipProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MentorshipProfile.objects.all()
     serializer_class = MentorshipProfileSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class SharedResourceList(generics.ListCreateAPIView):
     queryset = SharedResource.objects.all()
     serializer_class = SharedResourceSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class SharedResourceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = SharedResource.objects.all()
     serializer_class = SharedResourceSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class ContactMethodList(generics.ListCreateAPIView):
     queryset = ContactMethod.objects.all()
     serializer_class = ContactMethodSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class ContactMethodDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = ContactMethod.objects.all()
     serializer_class = ContactMethodSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class MentorCommentList(generics.ListCreateAPIView):
     queryset = MentorComment.objects.all()
     serializer_class = MentorCommentSerializer
 
+@authentication_classes([])
+@permission_classes([AllowAny])
 class MentorCommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MentorComment.objects.all()
     serializer_class = MentorCommentSerializer

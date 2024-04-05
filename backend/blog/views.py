@@ -12,6 +12,42 @@ from .models import BlogPost
 from .ml import BlogRecommendation
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
+
+from rest_framework.pagination import PageNumberPagination
+class TagPagination(PageNumberPagination):
+    page_size = 10
+    page_query_param = 'page'
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class CategoryPagination(PageNumberPagination):
+    page_size = 10
+    page_query_param = 'page'
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+class BlogPostPagination(PageNumberPagination):
+    page_size = 12
+    page_query_param = 'page'
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+@authentication_classes([])
+@permission_classes([AllowAny])
+class TagList(generics.ListCreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    pagination_class = TagPagination
+
+@authentication_classes([])
+@permission_classes([AllowAny])
+class CategoryList(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    pagination_class = CategoryPagination
+
+
+
+
 @authentication_classes([])
 @permission_classes([AllowAny])
 class BlogRecommendationView(APIView):
@@ -43,19 +79,10 @@ class BlogRecommendationView(APIView):
 
 @authentication_classes([])
 @permission_classes([AllowAny])
-class CategoryList(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-@authentication_classes([])
-@permission_classes([AllowAny])
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-@authentication_classes([])
-@permission_classes([AllowAny])
-class TagList(generics.ListCreateAPIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+
 @authentication_classes([])
 @permission_classes([AllowAny])
 class TagDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -64,8 +91,9 @@ class TagDetail(generics.RetrieveUpdateDestroyAPIView):
 @authentication_classes([])
 @permission_classes([AllowAny])
 class BlogPostList(generics.ListCreateAPIView):
-    queryset = BlogPost.objects.filter(is_published=True)
+    queryset = BlogPost.objects.filter(is_published=True).order_by('-created_at')
     serializer_class = BlogPostSerializer
+    pagination_class = BlogPostPagination
 @authentication_classes([])
 @permission_classes([AllowAny])
 class BlogPostDetail(generics.RetrieveUpdateDestroyAPIView):

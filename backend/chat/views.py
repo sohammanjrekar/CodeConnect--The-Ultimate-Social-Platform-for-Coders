@@ -1,4 +1,3 @@
-# chats/views.py
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
@@ -36,14 +35,14 @@ def create_conversation(request):
 @api_view(['POST'])
 def send_message(request, conversation_id):
     conversation = get_object_or_404(Conversation, id=conversation_id)
-    sent_by_user = request.data.get('sent_by_user')
+    sent_by_user_id = request.data.get('sent_by_user')
     body = request.data.get('body')
     
-    if sent_by_user and body:
-        sent_by_user = get_object_or_404(User, id=sent_by_user)
+    if sent_by_user_id and body:
+        sent_by_user = get_object_or_404(User, id=sent_by_user_id)
         message = ConversationMessage.objects.create(conversation=conversation, body=body,
-                                                     sent_to=conversation.users.exclude(id=sent_by_user.id).first(),
-                                                     created_by=sent_by_user)
+                                                     recipient=conversation.users.exclude(id=sent_by_user_id).first(),
+                                                     sender=sent_by_user)
         serializer = ConversationMessageSerializer(message)
         return JsonResponse({'message': serializer.data}, status=201)
     

@@ -60,8 +60,12 @@ def generate_fake_resumes(num_resumes=10):
     users = User.objects.all()
     resumes = []
 
-    for _ in range(num_resumes):
-        user = fake.random_element(users)
+    for user in users:
+        resume = Resume.objects.filter(user=user).first()
+        if resume:
+            # Skip if a resume already exists for this user
+            continue
+        
         resume = Resume(
             user=user,
             resume_file=fake.file_path(extension='pdf'),
@@ -76,9 +80,9 @@ def generate_fake_resumes(num_resumes=10):
 
 # Function to generate fake data for the portfolio app
 def generate_fake_portfolio_data():
-    generate_fake_project_categories()
-    generate_fake_technologies()
-    generate_fake_projects()
+    # generate_fake_project_categories()
+    # generate_fake_technologies()
+    # generate_fake_projects()
     generate_fake_resumes()
 
 if __name__ == "__main__":

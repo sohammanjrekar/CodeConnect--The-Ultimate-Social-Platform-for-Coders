@@ -29,12 +29,15 @@ urlpatterns = [
    path('jobportal/',include('jobportal.urls')),
    path('LanguageExchange/',include('LanguageExchange.urls')),
    path('learningresources/',include('learningresources.urls')),
+
    path('MentorshipMatching/',include('MentorshipMatching.urls')),
+   
    path('search/',include('search.urls')),
    path('notification/',include('notification.urls')),
    path('chats/',include('chat.urls')),
    path('botchats/',include('botchats.urls')),
    path('blogs/',include('blog.urls')),
    path('post/',include('post.urls')),
-   
+   path('account/',include('account.urls')),
+   path('codereivew/',include('codereview.urls')),
    ]

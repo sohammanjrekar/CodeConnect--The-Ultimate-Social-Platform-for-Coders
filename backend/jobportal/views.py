@@ -13,7 +13,12 @@ from rest_framework.response import Response
 from .models import JobPosting, Skill
 from account.models import ProgrammingLanguage, Keyword
 from .ml import JobRecommendation
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
 
+
+@authentication_classes([])
+@permission_classes([AllowAny])
 class JobRecommendationView(APIView):
     def get(self, request, user_id):
         user_skills = Skill.objects.filter(users=user_id)
@@ -46,25 +51,30 @@ class JobRecommendationView(APIView):
 
         return serialized_jobs
 
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class JobPostingList(generics.ListCreateAPIView):
     queryset = JobPosting.objects.all()
     serializer_class = JobPostingSerializer
     permission_classes = [IsAuthenticated]
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class JobPostingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = JobPosting.objects.all()
     serializer_class = JobPostingSerializer
     permission_classes = [IsAuthenticated]
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class JobCategoryList(generics.ListAPIView):
     queryset = JobCategory.objects.all()
     serializer_class = JobCategorySerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class SkillList(generics.ListAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class BenefitList(generics.ListAPIView):
     queryset = Benefit.objects.all()
     serializer_class = BenefitSerializer

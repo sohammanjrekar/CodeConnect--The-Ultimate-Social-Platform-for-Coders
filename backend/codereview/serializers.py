@@ -11,6 +11,7 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
+        ref_name = 'CodeReviewTag'
 
 class CodeReviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,3 +27,4 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+        ref_name = 'CodeReviewComment'
