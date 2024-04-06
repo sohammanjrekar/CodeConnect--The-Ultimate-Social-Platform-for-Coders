@@ -1,7 +1,8 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-const Jobcard = ({ job }) => {
+import Link from 'next/link'; 
+const Jobcard = () => {
   const [jobPostings, setJobPostings] = useState([]);
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const Jobcard = ({ job }) => {
   return (
     <div>
        {jobPostings.map(job => (
+
       <div key={job.id}  className="rounded-md w-full bg-white px-4 py-4 shadow-md transition transform duration-500 cursor-pointer">
         <div className="flex flex-col justify-start">
           <div className="flex justify-between items-center w-96">
@@ -60,9 +62,12 @@ const Jobcard = ({ job }) => {
           </div>
           <div>
             <div className="mt-5">
+            <Link href={`/Jobportal/${job.id}`}>
+                
               <button className="mr-2 my-1 uppercase tracking-wider px-2 text-indigo-600 border-indigo-600 hover:bg-indigo-600 hover:text-white border text-sm font-semibold rounded py-1 transition transform duration-500 cursor-pointer">
                 Apply
               </button>
+              </Link>
             </div>
           </div>
         </div>

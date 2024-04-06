@@ -11,6 +11,7 @@ class Hashtag(BaseModel):
 class Post(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
+    attach_files = models.TextField()
     hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)
     likes = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
