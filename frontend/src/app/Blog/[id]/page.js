@@ -1,161 +1,205 @@
-import Footer from '@/app/components/Footer'
-import Navbar from '@/app/components/Navbar'
-import RatingScore from '@/app/components/RatingScore'
-import Reviews from '@/app/components/Reviews'
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react';
+import Navbar from '@/app/components/Navbar';
+import Footer from '@/app/components/Footer';
+import RatingScore from '@/app/components/RatingScore';
+import Reviews from '@/app/components/Reviews';
+import { useRouter } from 'next/router';
 
-const EachBlog = () => {
+const EachBlog = ({ params }) => {
+  const { id } = params;
+  const [blogData, setBlogData] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [commentContent, setCommentContent] = useState('');
+
+  const fetchBlogAndComments = async () => {
+    setLoading(true);
+    try {
+      // Fetch blog data
+      const blogResponse = await fetch(`http://127.0.0.1:8000/blogs/blog-posts/${id}/`, {
+        headers: {
+          'accept': 'application/json',
+          'X-CSRFToken': 'wVqNf0EzeNU9qe3vKta9TZMYZe9QLUj9qCDjMbrDBdQv1Q7lprDgSb7mgpEcbyQb'
+        }
+      });
+      if (!blogResponse.ok) {
+        throw new Error('Failed to fetch blog');
+      }
+      const blogData = await blogResponse.json();
+      setBlogData(blogData);
+
+      // Fetch comments for the blog post
+      const commentsResponse = await fetch(`http://127.0.0.1:8000/blogs/posts/${id}/comments/`, {
+        headers: {
+          'accept': 'application/json',
+          'X-CSRFToken': 'wVqNf0EzeNU9qe3vKta9TZMYZe9QLUj9qCDjMbrDBdQv1Q7lprDgSb7mgpEcbyQb'
+        }
+      });
+      if (!commentsResponse.ok) {
+        throw new Error('Failed to fetch comments');
+      }
+      const commentsData = await commentsResponse.json();
+
+      // Fetch user details for each comment
+      const commentsWithUserData = await Promise.all(commentsData.map(async (comment) => {
+        const userResponse = await fetch(`http://127.0.0.1:8000/account/users/${comment.user}/`);
+        if (!userResponse.ok) {
+          throw new Error(`Failed to fetch user data for comment ${comment.id}`);
+        }
+        const userData = await userResponse.json();
+        return { ...comment, userData };
+      }));
+
+      setComments(commentsWithUserData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError('Failed to fetch data');
+      setLoading(false);
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/blogs/posts/${id}/comments/create/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': 'wVqNf0EzeNU9qe3vKta9TZMYZe9QLUj9qCDjMbrDBdQv1Q7lprDgSb7mgpEcbyQb'
+        },
+        body: JSON.stringify({
+          
+          user: 1,
+          content: commentContent,
+          post: id
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to submit comment');
+      }
+      setCommentContent('');
+      setLoading(false);
+      fetchBlogAndComments();
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+      setError('Failed to submit comment');
+      setLoading(false);
+    }
+  };  
+  const handleLike = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/blogs/blog-posts/${id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': 'wVqNf0EzeNU9qe3vKta9TZMYZe9QLUj9qCDjMbrDBdQv1Q7lprDgSb7mgpEcbyQb'
+        },
+        body: JSON.stringify({
+          title: blogData.title,
+        content: blogData.content,
+        author: blogData.author, // Dummy author ID
+          likes: blogData.likes + 1, // Increment likes by 1
+          dislikes: blogData.dislikes // Keep dislikes the same
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to like the post');
+      }
+      const updatedBlogData = await response.json();
+      setBlogData(updatedBlogData); // Update local state with updated data
+      fetchBlogAndComments(); // Refresh comments after successful update
+    } catch (error) {
+      console.error('Error liking post:', error);
+      // Display a user-friendly error message or handle the error in another way
+    }
+  };
+  
+  const handleDislike = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/blogs/blog-posts/${id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': 'wVqNf0EzeNU9qe3vKta9TZMYZe9QLUj9qCDjMbrDBdQv1Q7lprDgSb7mgpEcbyQb'
+        },
+        body: JSON.stringify({
+          title: blogData.title,
+          content: blogData.content,
+          author: blogData.author,
+          likes: blogData.likes, // Keep likes the same
+          dislikes: blogData.dislikes + 1 // Increment dislikes by 1
+        })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to dislike the post');
+      }
+      const updatedBlogData = await response.json();
+      setBlogData(updatedBlogData); // Update local state with updated data
+      fetchBlogAndComments(); // Refresh comments after successful update
+    } catch (error) {
+      console.error('Error disliking post:', error);
+      // Display a user-friendly error message or handle the error in another way
+    }
+  };
+  
+  
+  useEffect(() => {
+    fetchBlogAndComments();
+  }, [id]);
+
+  
   return (
     <div>
-      
-  {/* component */}
-  <Navbar/>
-  
-  {/* component */}
-  <div className="max-w-screen-lg mx-auto">
-
-    {/* header ends here */}
-    <main className="mt-10">
-      <div className="mb-4 md:mb-0 w-full mx-auto relative">
-        <div className="px-4 lg:px-0">
-          <h2 className="text-4xl font-semibold text-gray-800 leading-tight">
-            Pellentesque a consectetur velit, ac molestie ipsum. Donec sodales,
-            massa et auctor.
-          </h2>
-          <a
-            href="#"
-            className="py-2 text-green-700 inline-flex items-center justify-center mb-2"
-          >
-            Cryptocurrency
-          </a>
-        </div>
-        <img
-          src="https://images.unsplash.com/photo-1587614387466-0a72ca909e16?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80"
-          className="w-full object-cover lg:rounded"
-          style={{ height: "28em" }}
-        />
-      </div>
-      <div className="flex flex-col lg:flex-row lg:space-x-12">
-        <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed w-full lg:w-3/4">
-          <p className="pb-6">
-            Advantage old had otherwise sincerity dependent additions. It in
-            adapted natural hastily is justice. Six draw you him full not mean
-            evil. Prepare garrets it expense windows shewing do an. She
-            projection advantages resolution son indulgence. Part sure on no
-            long life am at ever. In songs above he as drawn to. Gay was
-            outlived peculiar rendered led six.
-          </p>
-          <p className="pb-6">
-            Difficulty on insensible reasonable in. From as went he they.
-            Preference themselves me as thoroughly partiality considered on in
-            estimating. Middletons acceptance discovered projecting so is so or.
-            In or attachment inquietude remarkably comparison at an. Is
-            surrounded prosperous stimulated am me discretion expression. But
-            truth being state can she china widow. Occasional preference fat
-            remarkably now projecting uncommonly dissimilar. Sentiments
-            projection particular companions interested do at my delightful.
-            Listening newspaper in advantage frankness to concluded unwilling.
-          </p>
-          <p className="pb-6">
-            Adieus except say barton put feebly favour him. Entreaties
-            unpleasant sufficient few pianoforte discovered uncommonly ask.
-            Morning cousins amongst in mr weather do neither. Warmth object
-            matter course active law spring six. Pursuit showing tedious unknown
-            winding see had man add. And park eyes too more him. Simple excuse
-            active had son wholly coming number add. Though all excuse ladies
-            rather regard assure yet. If feelings so prospect no as raptures
-            quitting.
-          </p>
-          <div className="border-l-4 border-gray-500 pl-4 mb-6 italic rounded">
-            Sportsman do offending supported extremity breakfast by listening.
-            Decisively advantages nor expression unpleasing she led met. Estate
-            was tended ten boy nearer seemed. As so seeing latter he should
-            thirty whence. Steepest speaking up attended it as. Made neat an on
-            be gave show snug tore.
-          </div>
-          <p className="pb-6">
-            Exquisite cordially mr happiness of neglected distrusts. Boisterous
-            impossible unaffected he me everything. Is fine loud deal an rent
-            open give. Find upon and sent spot song son eyes. Do endeavor he
-            differed carriage is learning my graceful. Feel plan know is he like
-            on pure. See burst found sir met think hopes are marry among.
-            Delightful remarkably new assistance saw literature mrs favourable.
-          </p>
-          <h2 className="text-2xl text-gray-800 font-semibold mb-4 mt-4">
-            Uneasy barton seeing remark happen his has
-          </h2>
-          <p className="pb-6">
-            Guest it he tears aware as. Make my no cold of need. He been past in
-            by my hard. Warmly thrown oh he common future. Otherwise concealed
-            favourite frankness on be at dashwoods defective at. Sympathize
-            interested simplicity at do projecting increasing terminated. As
-            edward settle limits at in.
-          </p>
-          <p className="pb-6">
-            Dashwood contempt on mr unlocked resolved provided of of. Stanhill
-            wondered it it welcomed oh. Hundred no prudent he however smiling at
-            an offence. If earnestly extremity he he propriety something
-            admitting convinced ye. Pleasant in to although as if differed
-            horrible. Mirth his quick its set front enjoy hoped had there. Who
-            connection imprudence middletons too but increasing celebrated
-            principles joy. Herself too improve gay winding ask expense are
-            compact. New all paid few hard pure she.
-          </p>
-          <p className="pb-6">
-            Breakfast agreeable incommode departure it an. By ignorant at on
-            wondered relation. Enough at tastes really so cousin am of.
-            Extensive therefore supported by extremity of contented. Is pursuit
-            compact demesne invited elderly be. View him she roof tell her case
-            has sigh. Moreover is possible he admitted sociable concerns. By in
-            cold no less been sent hard hill.
-          </p>
-          <p className="pb-6">
-            Detract yet delight written farther his general. If in so bred at
-            dare rose lose good. Feel and make two real miss use easy.
-            Celebrated delightful an especially increasing instrument am.
-            Indulgence contrasted sufficient to unpleasant in in insensible
-            favourable. Latter remark hunted enough vulgar say man. Sitting
-            hearted on it without me.
-          </p>
-        </div>
-        <div className="w-full lg:w-1/4 m-auto mt-12 max-w-screen-sm">
-          <div className="p-4 border-t border-b md:border md:rounded">
-            <div className="flex py-2">
-              <img
-                src="https://randomuser.me/api/portraits/men/97.jpg"
-                className="h-10 w-10 rounded-full mr-2 object-cover"
-              />
-              <div>
-                <p className="font-semibold text-gray-700 text-sm">
-                  {" "}
-                  Mike Sullivan{" "}
-                </p>
-                <p className="font-semibold text-gray-600 text-xs"> Editor </p>
+      <Navbar />
+      <div className="max-w-screen-lg mx-auto">
+        <main className="mt-10">
+          {loading && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+          {blogData && (
+            <>
+              <div className="mb-4 md:mb-0 w-full mx-auto relative">
+                <div className="px-4 lg:px-0">
+                  <h2 className="text-4xl font-semibold text-gray-800 leading-tight">
+                    {blogData.title}
+                  </h2>
+                </div>
+                <img
+                  src={blogData.featured_image}
+                  className="w-full object-cover lg:rounded"
+                  style={{ height: "28em" }}
+                  alt=""
+                />
               </div>
-            </div>
-            <p className="text-gray-700 py-3">
-              Mike writes about technology Yourself required no at thoughts
-              delicate landlord it be. Branched dashwood do is whatever it.
-            </p>
-            <button className="px-2 py-1 text-gray-100 bg-green-700 flex w-full items-center justify-center rounded">
-              Follow
-              <i className="bx bx-user-plus ml-2" />
-            </button>
-          </div>
-        </div>
+              <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed">
+                <p className="pb-6">{blogData.content}</p>
+                {/* Render other blog details as needed */}
+              </div>
+            </>
+          )}
+        </main>
       </div>
-    </main>
-    {/* main ends here */}
-   
+    
+      <Reviews
+                comments={comments}
+                loading={loading}
+                error={error}
+                commentContent={commentContent}
+                setCommentContent={setCommentContent} 
+                handleCommentSubmit={handleCommentSubmit}
+            />
+       {blogData && (
+        <RatingScore
+          blogData={blogData}
+          handleLike={() => handleLike(blogData.id)}
+          handleDislike={() => handleDislike(blogData.id)}
+        />
+      )}
+    <Footer />
   </div>
-<Reviews/>
-<RatingScore/>
+);
+};
 
-  <Footer/>
-
-
-    </div>
-  )
-}
-
-export default EachBlog
+export default EachBlog;

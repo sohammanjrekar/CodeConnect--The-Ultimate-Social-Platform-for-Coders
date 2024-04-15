@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Searchbar from '../components/Searchbar';
 import Addarticle from './Addarticle';
+import Link from 'next/link';
 
 const Page = () => {
   const [posts, setPosts] = useState([]);
@@ -11,6 +12,8 @@ const Page = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const postsPerPage = 12;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -21,11 +24,7 @@ const Page = () => {
           throw new Error('Failed to fetch');
         }
         const data = await response.json();
-        if (page === 1) {
-          setPosts(data.results); // Set posts only if it's the first page
-        } else {
-          setPosts(prevPosts => [...prevPosts, ...data.results]); // Append posts for subsequent pages
-        }
+        setPosts(prevPosts => [...prevPosts, ...data.results]);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -37,25 +36,53 @@ const Page = () => {
     fetchPosts();
   }, [page]);
 
+  useEffect(() => {
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const apiUrl = `http://127.0.0.1:8000/blogs/search/?query=${searchQuery}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+      setLoading(false);
+      setPage(1); // Reset page number to 1 after search
+    } catch (error) {
+      console.error('Error searching blogs:', error);
+      setError('Failed to search blogs');
+      setLoading(false);
+    }
+  };
+
+  if (searchQuery.trim() !== '') {
+    setSearchResults([]); // Clear previous search results
+    handleSearch();
+  }
+}, [searchQuery]);
+
+
   const renderPosts = () => {
-    return posts.map(post => (
+    const postsToRender = searchQuery.trim() !== '' ? searchResults : posts;
+    return postsToRender.map(post => (
       <div key={post.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4">
-        <div className="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow my-4">
-          <img
-            src="https://clickfirstmarketing.com/wp-content/uploads/Purpose-of-Blogging.jpeg"
-            className="aspect-video w-full object-cover"
-            alt=""
-          />
-          <div className="p-4">
-            <h2 className="text-xl font-medium text-gray-900">{post.title}</h2>
-            <ul className="mt-2">
-              {post.content.slice(1, -1).split("', '").map((item, index) => (
-                <li key={index} className="mb-1">{item}</li>
-              ))}
-            </ul>
-            <p className="text-sm text-gray-500 mt-4">Published on: {post.created_at}</p>
+        <Link href={`/Blog/${post.id}`}>
+          <div className="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow my-4">
+            <img
+              src="https://clickfirstmarketing.com/wp-content/uploads/Purpose-of-Blogging.jpeg"
+              className="aspect-video w-full object-cover"
+              alt=""
+            />
+            <div className="p-4">
+              <h2 className="text-xl font-medium text-gray-900">{post.title}</h2>
+              <ul className="mt-2">
+              {post.content.slice(1, 90)}...
+              </ul>
+              <p className="text-sm text-gray-500 mt-4">Published on: {post.created_at}</p>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
     ));
   };
@@ -67,7 +94,8 @@ const Page = () => {
   return (
     <>
       <Navbar />
-      <Searchbar />
+      <Searchbar setSearchQuery={setSearchQuery}  />
+
       <div className="text-gray-900 pt-12 pr-0 pb-14 pl-0 bg-white">
         <div className="w-full pt-4 pr-5 pb-6 pl-5 mt-0 mr-auto mb-0 ml-auto space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 max-w-7xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -80,10 +108,6 @@ const Page = () => {
       </div>
       <Addarticle />
       <Footer />
-      {/* UI Component */}
-      <div className="text-gray-900 pt-12 pr-0 pb-14 pl-0 bg-white">
-        {/* Your UI component HTML goes here */}
-      </div>
     </>
   );
 };

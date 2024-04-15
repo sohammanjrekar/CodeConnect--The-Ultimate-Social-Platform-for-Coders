@@ -62,8 +62,8 @@ const FetchTags = () => {
     href="https://unpkg.com/flowbite@1.4.4/dist/flowbite.min.css"
   />
  
-    <div>
-            <h4>Select Tags:</h4>
+ <div className="max-w-5xl mx-auto my-3">
+            <h4 className='text-white'>Select Tags:</h4>
             {tags.map((tag) => (
               <button
                 key={tag.id}
@@ -74,8 +74,8 @@ const FetchTags = () => {
               </button>
             ))}
           </div>
-          <div>
-            <h4>Select Category:</h4>
+          <div className="max-w-5xl mx-auto">
+            <h4 className='text-white'>Select Category:</h4>
             {categories.map((category) => (
               <button
                 key={category.id}

@@ -2,23 +2,37 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link'; 
+
 const Jobcard = () => {
   const [jobPostings, setJobPostings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch job postings data
     axios.get('http://127.0.0.1:8000/jobportal/job-postings/')
       .then(response => {
         setJobPostings(response.data);
+        setLoading(false);
       })
       .catch(error => {
         console.error('Error fetching job postings:', error);
+        setError(error);
+        setLoading(false);
       });
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div>
-       {jobPostings.map(job => (
+      {jobPostings.map(job => (
 
       <div key={job.id}  className="rounded-md w-full bg-white px-4 py-4 shadow-md transition transform duration-500 cursor-pointer">
         <div className="flex flex-col justify-start">

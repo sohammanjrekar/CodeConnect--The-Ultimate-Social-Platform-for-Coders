@@ -150,8 +150,6 @@ def handle_request(request, pk, status):
 
     return JsonResponse({'message': 'friendship request updated'})
 
-
-
 def get_user_data(request, pk):
     try:
         user = User.objects.get(pk=pk)

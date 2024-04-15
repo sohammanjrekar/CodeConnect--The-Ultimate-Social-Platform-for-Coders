@@ -2,7 +2,8 @@
 from rest_framework import generics
 from .models import Category, Tag, BlogPost, Comment
 from .serializers import CategorySerializer, TagSerializer, BlogPostSerializer, CommentSerializer
-
+from rest_framework import status
+from django.db.models import Q
 # views.py
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -75,7 +76,19 @@ class BlogRecommendationView(APIView):
         ]
 
         return serialized_posts
+from rest_framework.generics import ListAPIView
+@authentication_classes([])
+@permission_classes([AllowAny])
+class SearchBlogPosts(ListAPIView):
+    serializer_class = BlogPostSerializer
 
+    def get_queryset(self):
+        queryset = BlogPost.objects.all()
+        search_query = self.request.GET.get('query')
+        if search_query:
+            # Make the search case-insensitive by using case-insensitive filter
+            queryset = queryset.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+        return queryset
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -109,3 +122,40 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+from .serializers import CommentSerializer
+
+@authentication_classes([])
+@permission_classes([AllowAny])
+class CommentListByPost(APIView):
+    serializer_class = CommentSerializer
+
+    def get(self, request, post_id):
+        # Fetch all comments for the specified post_id
+        comments = Comment.objects.filter(post=post_id)
+        serializer = self.serializer_class(comments, many=True)
+        return Response(serializer.data)
+    
+@authentication_classes([])
+@permission_classes([AllowAny])
+class CommentCreate(APIView):
+    serializer_class = CommentSerializer
+
+    def post(self, request, post_id):
+        try:
+            # Check if the blog post exists
+            blog_post = BlogPost.objects.get(pk=post_id)
+        except BlogPost.DoesNotExist:
+            return Response({"error": "Blog post not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Create a new comment instance with the request data
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # Assign the blog post to the comment
+            serializer.validated_data['post'] = blog_post
+            # Save the comment
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+

@@ -1,8 +1,9 @@
 # blog/models.py
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils.text import slugify
+from account.models import User
 from django.urls import reverse
+from django.utils.text import slugify
+from django.db import IntegrityError
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -10,6 +11,12 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        # Check for duplicate slug and append a unique suffix if necessary
+        if Category.objects.filter(slug=self.slug).exclude(id=self.id).exists():
+            suffix = 1
+            while Category.objects.filter(slug=self.slug + f'-{suffix}').exists():
+                suffix += 1
+            self.slug = f"{self.slug}-{suffix}"
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -21,10 +28,17 @@ class Tag(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        # Check for duplicate slug and append a unique suffix if necessary
+        if Tag.objects.filter(slug=self.slug).exclude(id=self.id).exists():
+            suffix = 1
+            while Tag.objects.filter(slug=self.slug + f'-{suffix}').exists():
+                suffix += 1
+            self.slug = f"{self.slug}-{suffix}"
         super(Tag, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
+
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=255)
@@ -49,6 +63,7 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+    
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_comments')
@@ -57,4 +72,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Comment by {self.user.username} on {self.post.title}"
+        return f"Comment by {self.user.username} on {self.blog.title}"
+
+from django.db import models
+
