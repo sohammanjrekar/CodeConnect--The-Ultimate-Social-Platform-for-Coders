@@ -1,49 +1,52 @@
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-
+from .models import Conversation, Message
+from .serializers import MessageSerializer
 from account.models import User
-from .models import Conversation, ConversationMessage
-from .serializers import ConversationSerializer, ConversationMessageSerializer
-
-@api_view(['GET'])
-def fetch_conversations(request):
-    conversations = Conversation.objects.all()
-    serializer = ConversationSerializer(conversations, many=True)
-    return JsonResponse({'conversations': serializer.data}, status=200)
-
-@api_view(['GET'])
-def fetch_messages(request, conversation_id):
-    conversation = get_object_or_404(Conversation, id=conversation_id)
-    messages = conversation.messages.order_by('created_at')
-    serializer = ConversationMessageSerializer(messages, many=True)
-    return JsonResponse({'messages': serializer.data}, status=200)
-
-@api_view(['POST'])
-def create_conversation(request):
-    user_ids = request.data.get('user_ids', [])
-    users = User.objects.filter(id__in=user_ids)
-    if len(users) == len(user_ids):
-        conversation = Conversation.objects.create()
-        conversation.users.set(users)
-        serializer = ConversationSerializer(conversation)
-        return JsonResponse({'conversation': serializer.data}, status=201)
-    return JsonResponse({'error': 'Invalid user IDs'}, status=400)
 
 @api_view(['POST'])
 def send_message(request, conversation_id):
     conversation = get_object_or_404(Conversation, id=conversation_id)
-    sent_by_user_id = request.data.get('sent_by_user')
+    sender = request.user
     body = request.data.get('body')
     
-    if sent_by_user_id and body:
-        sent_by_user = get_object_or_404(User, id=sent_by_user_id)
-        message = ConversationMessage.objects.create(conversation=conversation, body=body,
-                                                     recipient=conversation.users.exclude(id=sent_by_user_id).first(),
-                                                     sender=sent_by_user)
-        serializer = ConversationMessageSerializer(message)
-        return JsonResponse({'message': serializer.data}, status=201)
+    if body:
+        message = Message.objects.create(conversation=conversation, sender=sender, body=body)
+        serializer = MessageSerializer(message)
+        return JsonResponse(serializer.data, status=201)
     
-    return JsonResponse({'error': 'Invalid data'}, status=400)
+    return JsonResponse({'error': 'Message body cannot be empty'}, status=400)
+
+@api_view(['GET'])
+def get_messages(request, conversation_id):
+    conversation = get_object_or_404(Conversation, id=conversation_id)
+    messages = conversation.messages.all()
+    serializer = MessageSerializer(messages, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+def search_users(request):
+    username = request.GET.get('username', '')
+    if username:
+        users = User.objects.filter(username__icontains=username)
+        data = [{'id': user.id, 'username': user.username} for user in users]
+        return JsonResponse({'users': data})
+    else:
+        return JsonResponse({'error': 'No username provided'})
+
+def previously_connected_users(request):
+    user_id = request.GET.get('user_id', '')
+    if user_id:
+        user = User.objects.get(id=user_id)
+        conversations = Conversation.objects.filter(participants=user)
+        connected_users = []
+        for conversation in conversations:
+            other_users = conversation.participants.exclude(id=user_id)
+            for other_user in other_users:
+                if other_user not in connected_users:
+                    connected_users.append(other_user)
+        data = [{'id': user.id, 'username': user.username} for user in connected_users]
+        return JsonResponse({'connected_users': data})
+    else:
+        return JsonResponse({'error': 'No user ID provided'})

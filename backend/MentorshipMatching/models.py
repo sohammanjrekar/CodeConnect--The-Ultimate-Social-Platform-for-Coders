@@ -1,6 +1,6 @@
 # MentorshipMatching/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
 
 class MentorshipProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -23,6 +23,7 @@ class MentorshipProfile(models.Model):
     def __str__(self):
         return f"Mentorship profile for {self.user.username}"
 
+
 class SharedResource(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
@@ -32,6 +33,14 @@ class SharedResource(models.Model):
 
     def __str__(self):
         return f"Shared Resource: {self.title} ({self.sender.username} to {self.receiver.username})"
+
+class ResourceFile(models.Model):
+    resource = models.ForeignKey(SharedResource, on_delete=models.CASCADE, related_name='files')
+    file = models.FileField(upload_to='shared_resources_files')
+
+    def __str__(self):
+        return f"File for Shared Resource: {self.resource.title}"
+
 
 class ContactMethod(models.Model):
     method = models.CharField(max_length=50, choices=[

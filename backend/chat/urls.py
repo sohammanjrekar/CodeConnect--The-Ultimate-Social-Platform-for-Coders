@@ -1,10 +1,10 @@
 from django.urls import path
-from .views import fetch_conversations, fetch_messages, create_conversation, send_message
+from chat.views import previously_connected_users, search_users, send_message, get_messages
 
 urlpatterns = [
-    path('conversations/', fetch_conversations, name='fetch_conversations'),
-    path('conversations/<uuid:conversation_id>/', fetch_messages, name='fetch_messages'),
-    path('conversations/create/', create_conversation, name='create_conversation'),
     path('conversations/<uuid:conversation_id>/send/', send_message, name='send_message'),
-    # Add more URL patterns as needed
+    path('conversations/<uuid:conversation_id>/messages/', get_messages, name='get_messages'),
+    path('search/', search_users, name='search_users'),
+    path('previously-connected/', previously_connected_users, name='previously_connected_users'),
+
 ]
