@@ -1,9 +1,8 @@
-import uuid
+# models.py
 from django.db import models
 from account.models import User
 
 class Conversation(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     participants = models.ManyToManyField(User, related_name='conversations')
 
 class Message(models.Model):

@@ -1,209 +1,169 @@
+import Footer from '@/app/components/Footer'
+import Navbar from '@/app/components/Navbar'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>
+    <>
+<Navbar/>
 
-<>
-  {/* component */}
-  <link
-    rel="stylesheet"
-    href="https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/css/main.ad49aa9b.css"
-  />
-  <div className="flex flex-col justify-center items-center h-[100vh]">
-    <div className="relative flex flex-col items-center rounded-[20px] w-[700px] max-w-[95%] mx-auto bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:!shadow-none p-3">
-      <div className="mt-2 mb-8 w-full">
-        <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
-          General Information
-        </h4>
-        <p className="mt-2 px-2 text-base text-gray-600">
-          As we live, our hearts turn colder. Cause pain is what we go through
-          as we become older. We get insulted by others, lose trust for those
-          others. We get back stabbed by friends. It becomes harder for us to
-          give others a hand. We get our heart broken by people we love, even
-          that we give them all...
-        </p>
-      </div>
-      <div className="grid grid-cols-2 gap-4 px-2 w-full">
-        <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Education</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            Stanford University
-          </p>
-        </div>
-        <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Languages</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            English, Spanish, Italian
-          </p>
-        </div>
-        <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Department</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            Product Design
-          </p>
-        </div>
-        <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Work History</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            English, Spanish, Italian
-          </p>
-        </div>
-        <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Organization</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            Simmmple Web LLC
-          </p>
-        </div>
-        <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="text-sm text-gray-600">Birthday</p>
-          <p className="text-base font-medium text-navy-700 dark:text-white">
-            20 July 1986
-          </p>
-        </div>
-      </div>
-    </div>
-    <p className="font-normal text-navy-700 mt-20 mx-auto w-max">
-      Profile Card component from{" "}
-      <a
-        href="https://horizon-ui.com?ref=tailwindcomponents.com"
-        target="_blank"
-        className="text-brand-500 font-bold"
-      >
-        Horizon UI Tailwind React
-      </a>
-    </p>
-  </div>
-  <>
-  {/* component */}
-  <div className="bg-white relative   flex items-center  n justify-center overflow-hidden z-50 ">
-    <div className="relative mx-auto h-full px-4  pb-20   md:pb-10 sm:max-w-xl md:max-w-full md:px-24 lg:max-w-screen-xl lg:px-8">
-      <div className="flex flex-col items-center justify-between lg:flex-row py-16">
-        <div className=" relative ">
-          <div className=" absolute top-0 -left-48 z-0  opacity-50 ">
+      {/* component */}
+      <link
+        rel="stylesheet"
+        href="https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/css/main.ad49aa9b.css"
+      />
+      <div className="flex flex-col justify-center items-center h-[100vh]">
+        <div className="relative flex flex-col items-center rounded-[20px] w-[700px] max-w-[95%] mx-auto bg-white bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:!shadow-none p-3">
+          <div className=" mx-auto my-10 bg-white rounded-lg shadow-md p-5">
             <img
-              src="https://placehold.co/200x100"
-              className="w-36 z-0  h-full    object-fill fill-y text-y   "
+              className="w-32 h-32 rounded-full mx-auto"
+              src="https://picsum.photos/200"
+              alt="Profile picture"
             />
+            <h2 className="text-center text-2xl font-semibold mt-3">John Doe</h2>
+            <p className="text-center text-gray-600 mt-1">Software Engineer</p>
+            <div className="flex justify-center mt-5">
+              <a href="#" className="text-blue-500 hover:text-blue-700 mx-3">
+                Twitter
+              </a>
+              <a href="#" className="text-blue-500 hover:text-blue-700 mx-3">
+                LinkedIn
+              </a>
+              <a href="#" className="text-blue-500 hover:text-blue-700 mx-3">
+                GitHub
+              </a>
+            </div>
+            <div className="mt-5">
+              <h3 className="text-xl font-semibold">Bio</h3>
+              <p className="text-gray-600 mt-2">
+                John is a software engineer with over 10 years of experience in developing
+                web and mobile applications. He is skilled in JavaScript, React, and
+                Node.js.
+              </p>
+            </div>
           </div>
-          <div className="lg:max-w-xl lg:pr-5 relative z-40">
-            <p className="flex text-sm uppercase text-g1  ">About Us</p>
-            <h2 className="mb-6 max-w-lg text-5xl font-light leading-snug tracking-tight text-g1 sm:text-7xl sm:leading-snug">
-              We make you look
-              <span className="my-1 inline-block border-b-8 border-g4 bg-white px-4 font-bold text-g4 animate__animated animate__flash">
-                different
-              </span>
-            </h2>
-            <p className="text-base text-gray-700">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque it.
+
+          <div className="mt-2 mb-8 w-full">
+            <h4 className="px-2 text-xl font-bold text-navy-700 dark:text-white">
+              General Information
+            </h4>
+            <p className="mt-2 px-2 text-base text-gray-600">
+              As we live, our hearts turn colder. Cause pain is what we go through
+              as we become older. We get insulted by others, lose trust for those
+              others. We get back stabbed by friends. It becomes harder for us to
+              give others a hand. We get our heart broken by people we love, even
+              that we give them all...
             </p>
-            <div className="mt-10 flex flex-col items-center md:flex-row">
-              <a
-                href="/"
-                className="mb-3 inline-flex h-12 w-full items-center justify-center rounded bg-green-600 px-6 font-medium tracking-wide text-white shadow-md transition hover:bg-blue-800 focus:outline-none md:mr-4 md:mb-0 md:w-auto"
-              >
-                View More
-              </a>
-              <a
-                href="/"
-                aria-label=""
-                className="group inline-flex items-center font-semibold text-g1"
-              >
-                Watch how it works
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="ml-4 h-6 w-6 transition-transform group-hover:translate-x-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </a>
+          </div>
+          <div className="grid grid-cols-2 gap-4 px-2 w-full">
+            <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600">Education</p>
+              <p className="text-base font-medium text-navy-700 dark:text-white">
+                Stanford University
+              </p>
+            </div>
+            <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600">Languages</p>
+              <p className="text-base font-medium text-navy-700 dark:text-white">
+                English, Spanish, Italian
+              </p>
+            </div>
+            <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600">Department</p>
+              <p className="text-base font-medium text-navy-700 dark:text-white">
+                Product Design
+              </p>
+            </div>
+            <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600">Work History</p>
+              <p className="text-base font-medium text-navy-700 dark:text-white">
+                English, Spanish, Italian
+              </p>
+            </div>
+            <div className="flex flex-col items-start justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600">Organization</p>
+              <p className="text-base font-medium text-navy-700 dark:text-white">
+                Simmmple Web LLC
+              </p>
+            </div>
+            <div className="flex flex-col justify-center rounded-2xl bg-white bg-clip-border px-3 py-4 shadow-3xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+              <p className="text-sm text-gray-600">Birthday</p>
+              <p className="text-base font-medium text-navy-700 dark:text-white">
+                20 July 1986
+              </p>
             </div>
           </div>
         </div>
-        <div className="relative hidden lg:ml-32 lg:block lg:w-1/2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="my-6 mx-auto h-10 w-10 animate-bounce rounded-full bg-white p-2 lg:hidden"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16 17l-4 4m0 0l-4-4m4 4V3"
+       
+      </div>
+
+
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
+        <div className="md:flex">
+          <div className="md:flex-shrink-0">
+            <img
+              className="h-48 w-full object-cover md:w-48"
+              src="https://randomuser.me/api/portraits/men/75.jpg"
+              alt="Doctor's image"
             />
-          </svg>
-          <div className="abg-orange-400 mx-auto w-fit overflow-hidden rounded-[6rem] rounded-br-none rounded-tl-none">
-            <img src="https://placehold.co/400x400" />
+          </div>
+          <div className="p-8">
+            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
+              Dr. John Doe
+            </div>
+            <p className="block mt-1 text-lg leading-tight font-medium text-black">
+              Specialty: Cardiology
+            </p>
+            <p className="mt-2 text-gray-500">Available Time Slots:</p>
+            <ul className="list-disc unlisted list-inside flex gap-3">
+              <li>10:00 - 11:00</li>
+              <li>13:00 - 14:00</li>
+              <li>16:00 - 17:00</li>
+            </ul>
+            <button className="mt-5 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              Book Appointment
+            </button>
           </div>
         </div>
       </div>
-    </div>
-    <div className="hidden text-9xl varien absolute top-6 left-1/4 text-g/10 z-40    ">
-      About Us
-    </div>
-    <div className=" absolute -bottom-24 left-10 z-0  opacity-10 ">
-      <svg
-        width="800px"
-        height="800px"
-        viewBox="0 0 24 24"
-        className="w-96 z-0  h-full    object-fill fill-gray-300 text-gray-300"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M12 6C12 5.44772 11.5523 5 11 5C10.4477 5 10 5.44772 10 6V16C10 16.5523 10.4477 17 11 17C11.5523 17 12 16.5523 12 16V6ZM9 9C9 8.44772 8.55228 8 8 8C7.44772 8 7 8.44772 7 9V16C7 16.5523 7.44772 17 8 17C8.55228 17 9 16.5523 9 16V9ZM15 9C15 8.44772 14.5523 8 14 8C13.4477 8 13 8.44772 13 9V16C13 16.5523 13.4477 17 14 17C14.5523 17 15 16.5523 15 16V9ZM18 13C18 12.4477 17.5523 12 17 12C16.4477 12 16 12.4477 16 13V16C16 16.5523 16.4477 17 17 17C17.5523 17 18 16.5523 18 16V13ZM6 15C6 14.4477 5.55228 14 5 14C4.44772 14 4 14.4477 4 15V16C4 16.5523 4.44772 17 5 17C5.55228 17 6 16.5523 6 16V15ZM21 15C21 14.4477 20.5523 14 20 14C19.4477 14 19 14.4477 19 15V16C19 16.5523 19.4477 17 20 17C20.5523 17 21 16.5523 21 16V15ZM4 18C3.44772 18 3 18.4477 3 19C3 19.5523 3.44772 20 4 20H21C21.5523 20 22 19.5523 22 19C22 18.4477 21.5523 18 21 18H4Z"
-        />
-      </svg>
-    </div>
-    <div className=" absolute -bottom-0 left-3/4 z-0  opacity-10 ">
-      <svg
-        width="800px"
-        height="800px"
-        viewBox="0 0 256 256"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-48 z-0  h-full -rotate-90   object-fill fill-red-300 text-red-300"
-      >
-        <path
-          d="M32 225h12.993A4.004 4.004 0 0 0 49 220.997V138.01c0-4.976.724-5.04 1.614-.16l12.167 66.708c.397 2.177 2.516 3.942 4.713 3.942h8.512a3.937 3.937 0 0 0 3.947-4S79 127.5 80 129s14.488 52.67 14.488 52.67c.559 2.115 2.8 3.83 5.008 3.83h8.008a3.993 3.993 0 0 0 3.996-3.995v-43.506c0-4.97 1.82-5.412 4.079-.965l10.608 20.895c1.001 1.972 3.604 3.571 5.806 3.571h9.514a3.999 3.999 0 0 0 3.993-4.001v-19.49c0-4.975 2.751-6.074 6.155-2.443l6.111 6.518c1.51 1.61 4.528 2.916 6.734 2.916h7c2.21 0 5.567-.855 7.52-1.92l9.46-5.16c1.944-1.06 5.309-1.92 7.524-1.92h23.992a4.002 4.002 0 0 0 4.004-3.992v-7.516a3.996 3.996 0 0 0-4.004-3.992h-23.992c-2.211 0-5.601.823-7.564 1.834l-4.932 2.54c-4.423 2.279-12.028 3.858-16.993 3.527l2.97.198c-4.962-.33-10.942-4.12-13.356-8.467l-11.19-20.14c-1.07-1.929-3.733-3.492-5.939-3.492h-7c-2.21 0-4 1.794-4 4.001v19.49c0 4.975-1.14 5.138-2.542.382l-12.827-43.535c-.625-2.12-2.92-3.838-5.127-3.838h-8.008c-2.207 0-3.916 1.784-3.817 4.005l1.92 42.998c.221 4.969-.489 5.068-1.585.224l-15.13-66.825c-.488-2.155-2.681-3.902-4.878-3.902h-8.512a3.937 3.937 0 0 0-3.947 4s.953 77-.047 75.5-13.937-92.072-13.937-92.072C49.252 34.758 47.21 33 45 33H31.999"
-          fillRule="evenodd"
-        />
-      </svg>
-    </div>
-    <div className=" absolute top-10 left-3/4 z-0  opacity-10 ">
-      <svg
-        fill="#000000"
-        width="800px"
-        height="800px"
-        viewBox="0 0 256 256"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-96 z-0  h-full    object-fill fill-blue-300 text-blue-300"
-      >
-        <path
-          d="M230.704 99.2a4.004 4.004 0 0 0-4.01-3.995h-50.981c-2.215 0-5.212-1.327-6.693-2.964L155.289 77.08c-17.795-19.65-41.628-16.256-53.234 7.58l-38.736 79.557C60.42 170.172 52.705 175 46.077 175H29.359a3.996 3.996 0 0 0-3.994 3.995v10.01A4 4 0 0 0 29.372 193h24.7c8.835 0 19.208-6.395 23.174-14.293l43.645-86.914c3.964-7.894 12.233-9.228 18.473-2.974l17.184 17.219c3.123 3.13 9.242 5.667 13.647 5.667H226.7a4.005 4.005 0 0 0 4.004-3.994v-8.512z"
-          fillRule="evenodd"
-        />
-      </svg>
-    </div>
-  </div>
-</>
+      <div class="container flex flex-col items-center gap-16 mx-auto my-32">
+                    <div class="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                        <div class="flex flex-col items-center gap-3 px-8 py-10 bg-white rounded-3xl shadow-main">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                            <path d="M31.9904 13.965L22.4166 4.40166C21.6057 3.60976 20.5294 3.16817 19.4104 3.16817C18.2914 3.16817 17.2151 3.60976 16.4041 4.40166L6.8304 13.9017C6.40502 14.283 6.0629 14.7524 5.82645 15.279C5.58999 15.8056 5.46454 16.3776 5.45831 16.9575V30.5425C5.47456 31.6946 5.93476 32.793 6.73808 33.5973C7.5414 34.4016 8.62236 34.846 9.74415 34.8333H28.9225C30.0443 34.846 31.1252 34.4016 31.9285 33.5973C32.7319 32.793 33.1921 31.6946 33.2083 30.5425V16.9575C33.2071 16.4009 33.0989 15.85 32.8899 15.3365C32.6809 14.823 32.3752 14.3569 31.9904 13.965ZM18.47 6.68166C18.7058 6.46025 19.0138 6.33747 19.3333 6.33747C19.6528 6.33747 19.9608 6.46025 20.1966 6.68166L28.5833 15.0417L20.1504 23.4017C19.9146 23.6231 19.6066 23.7459 19.2871 23.7459C18.9675 23.7459 18.6596 23.6231 18.4237 23.4017L10.0833 15.0417L18.47 6.68166ZM30.125 30.5425C30.1052 30.8533 29.9688 31.144 29.7445 31.3537C29.5203 31.5633 29.2256 31.6755 28.9225 31.6667H9.74415C9.44102 31.6755 9.14636 31.5633 8.9221 31.3537C8.69785 31.144 8.56147 30.8533 8.54165 30.5425V17.9708L14.7854 24.1458L12.2262 26.6792C11.9391 26.9758 11.7779 27.3771 11.7779 27.7954C11.7779 28.2137 11.9391 28.615 12.2262 28.9117C12.3695 29.066 12.5417 29.1891 12.7324 29.2734C12.9232 29.3578 13.1286 29.4017 13.3362 29.4025C13.7332 29.4009 14.1142 29.2421 14.4 28.9592L17.1287 26.2675C17.8065 26.6928 18.5853 26.9179 19.3796 26.9179C20.1738 26.9179 20.9527 26.6928 21.6304 26.2675L24.3591 28.9592C24.6449 29.2421 25.026 29.4009 25.4229 29.4025C25.6306 29.4017 25.8359 29.3578 26.0267 29.2734C26.2174 29.1891 26.3896 29.066 26.5329 28.9117C26.82 28.615 26.9812 28.2137 26.9812 27.7954C26.9812 27.3771 26.82 26.9758 26.5329 26.6792L23.9583 24.1458L30.125 17.9708V30.5425Z" fill="#581ff8"/>
+                            </svg>
+                        </span>
+                        <p class="text-2xl font-extrabold text-dark-grey-900">Email</p>
+                        <p class="text-base leading-7 text-dark-grey-600">Contact us at</p>
+                        <a class="text-lg font-bold text-purple-blue-500" href = "mailto: hello@loopple.com">hello@loopple.com</a>
+                        </div>
+                        <div class="flex flex-col items-center gap-3 px-8 py-10 bg-white rounded-3xl shadow-main">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                            <path d="M30.4237 20.5833C30.0846 20.5833 29.73 20.4725 29.3908 20.3933C28.7045 20.2357 28.0297 20.0294 27.3712 19.7758C26.656 19.5086 25.8699 19.5225 25.164 19.8148C24.4582 20.1071 23.8826 20.6572 23.5479 21.3592L23.2087 22.0875C21.7115 21.2154 20.3283 20.1513 19.0925 18.9208C17.8944 17.6516 16.8583 16.231 16.0092 14.6933L16.7183 14.3608C17.4018 14.0171 17.9374 13.4259 18.222 12.701C18.5067 11.9761 18.5202 11.1687 18.26 10.4342C18.0151 9.7518 17.8143 9.05363 17.6587 8.34417C17.5817 7.99584 17.52 7.63167 17.4737 7.28334C17.2865 6.16807 16.7177 5.1581 15.8698 4.4353C15.0219 3.7125 13.9506 3.32439 12.8487 3.34084H8.20832C7.55657 3.33996 6.91201 3.48056 6.31687 3.75343C5.72174 4.02629 5.18948 4.42526 4.75498 4.92417C4.31148 5.43662 3.98125 6.04161 3.78698 6.69756C3.59271 7.35351 3.53901 8.04489 3.62957 8.72417C4.4676 15.3142 7.39927 21.4362 11.97 26.1408C16.5508 30.8351 22.5117 33.846 28.9283 34.7067C29.1284 34.7224 29.3294 34.7224 29.5296 34.7067C30.6664 34.7084 31.7641 34.28 32.6129 33.5033C33.0987 33.0571 33.4871 32.5105 33.7528 31.8992C34.0185 31.288 34.1554 30.626 34.1546 29.9567V25.2067C34.1463 24.1126 33.7705 23.0551 33.0907 22.2127C32.411 21.3704 31.4689 20.7948 30.4237 20.5833ZM31.1791 30.0833C31.1786 30.3043 31.1331 30.5227 31.0455 30.7245C30.9579 30.9263 30.8301 31.107 30.6704 31.255C30.5014 31.4131 30.3004 31.5306 30.0817 31.5991C29.8631 31.6676 29.6323 31.6852 29.4062 31.6508C23.6532 30.8792 18.3066 28.1865 14.19 23.9875C10.0698 19.756 7.4252 14.2458 6.66665 8.31251C6.63316 8.08028 6.65037 7.84332 6.71702 7.61877C6.78368 7.39422 6.89813 7.1877 7.05207 7.01417C7.19794 6.84816 7.3764 6.71577 7.57569 6.62571C7.77499 6.53565 7.99059 6.48997 8.20832 6.49167H12.8333C13.1897 6.48273 13.5381 6.6009 13.8192 6.82607C14.1002 7.05124 14.2967 7.3695 14.375 7.72667C14.375 8.15417 14.5137 8.59751 14.6062 9.025C14.7844 9.85446 15.0214 10.6694 15.3154 11.4633L13.1571 12.5083C12.7861 12.6832 12.4978 13.0021 12.3554 13.395C12.2012 13.7805 12.2012 14.2129 12.3554 14.5983C14.5742 19.4794 18.3945 23.4029 23.1471 25.6817C23.5224 25.84 23.9434 25.84 24.3187 25.6817C24.7013 25.5354 25.0118 25.2393 25.1821 24.8583L26.1533 22.6417C26.9487 22.9395 27.7624 23.1828 28.5891 23.37C28.99 23.465 29.4217 23.5442 29.8379 23.6075C30.1857 23.6879 30.4956 23.8897 30.7148 24.1784C30.934 24.467 31.0491 24.8248 31.0404 25.1908L31.1791 30.0833ZM22.0833 3.16667C21.7287 3.16667 21.3587 3.16667 21.0042 3.16667C20.5953 3.20237 20.217 3.40341 19.9524 3.72558C19.6879 4.04776 19.5588 4.46466 19.5935 4.88459C19.6283 5.30451 19.824 5.69306 20.1377 5.96476C20.4514 6.23645 20.8574 6.36903 21.2662 6.33334H22.0833C24.5366 6.33334 26.8893 7.33423 28.6241 9.11582C30.3588 10.8974 31.3333 13.3138 31.3333 15.8333C31.3333 16.1183 31.3333 16.3875 31.3333 16.6725C31.2991 17.0902 31.4276 17.5048 31.6906 17.8253C31.9536 18.1459 32.3296 18.3463 32.7362 18.3825H32.8596C33.2455 18.3841 33.618 18.237 33.9034 17.9702C34.1889 17.7035 34.3665 17.3364 34.4012 16.9417C34.4012 16.5775 34.4012 16.1975 34.4012 15.8333C34.4012 12.4767 33.104 9.25725 30.7943 6.88225C28.4847 4.50724 25.3516 3.17087 22.0833 3.16667ZM25.1667 15.8333C25.1667 16.2533 25.3291 16.656 25.6182 16.9529C25.9073 17.2499 26.2994 17.4167 26.7083 17.4167C27.1172 17.4167 27.5093 17.2499 27.7984 16.9529C28.0876 16.656 28.25 16.2533 28.25 15.8333C28.25 14.1536 27.6003 12.5427 26.4438 11.355C25.2873 10.1673 23.7188 9.50001 22.0833 9.50001C21.6744 9.50001 21.2823 9.66682 20.9932 9.96375C20.7041 10.2607 20.5417 10.6634 20.5417 11.0833C20.5417 11.5033 20.7041 11.906 20.9932 12.2029C21.2823 12.4999 21.6744 12.6667 22.0833 12.6667C22.9011 12.6667 23.6853 13.0003 24.2636 13.5942C24.8418 14.188 25.1667 14.9935 25.1667 15.8333Z" fill="#581ff8"/>
+                            </svg>
+                        </span>
+                        <p class="text-2xl font-extrabold text-dark-grey-900">Phone</p>
+                        <p class="text-base leading-7 text-dark-grey-600">Reach out to us by phone</p>
+                        <a class="text-lg font-bold text-purple-blue-500" href="tel:+516-486-5135">+516-486-5135</a>
+                        </div>
+                        <div class="flex flex-col items-center gap-3 px-8 py-10 bg-white rounded-3xl shadow-main">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                            <path d="M31.7091 15.2475C31.4927 12.9341 30.6966 10.7177 29.3984 8.81412C28.1003 6.91054 26.3443 5.38464 24.3014 4.38503C22.2585 3.38541 19.9984 2.94614 17.7412 3.10998C15.4839 3.27383 13.3065 4.03522 11.4208 5.32C9.8008 6.43252 8.44083 7.89972 7.43858 9.6162C6.43633 11.3327 5.81667 13.2558 5.62413 15.2475C5.43524 17.2261 5.67758 19.2231 6.33355 21.0936C6.98953 22.9641 8.04269 24.6611 9.41663 26.0617L17.5875 34.4692C17.7308 34.6176 17.9013 34.7354 18.0892 34.8157C18.277 34.8961 18.4785 34.9375 18.682 34.9375C18.8856 34.9375 19.0871 34.8961 19.2749 34.8157C19.4628 34.7354 19.6333 34.6176 19.7766 34.4692L27.9166 26.0617C29.2906 24.6611 30.3437 22.9641 30.9997 21.0936C31.6557 19.2231 31.898 17.2261 31.7091 15.2475ZM25.7583 23.8292L18.6666 31.1125L11.575 23.8292C10.5298 22.7557 9.72928 21.4578 9.23081 20.0288C8.73233 18.5997 8.54834 17.075 8.69204 15.5642C8.83668 14.0301 9.31143 12.5482 10.082 11.2256C10.8525 9.90299 11.8996 8.77278 13.1475 7.91666C14.7831 6.80079 16.703 6.20555 18.6666 6.20555C20.6302 6.20555 22.5502 6.80079 24.1858 7.91666C25.4299 8.76947 26.4747 9.89469 27.245 11.2115C28.0154 12.5283 28.4922 14.0039 28.6412 15.5325C28.7896 17.0484 28.6079 18.5793 28.1093 20.0142C27.6107 21.4491 26.8076 22.7522 25.7583 23.8292ZM18.6666 9.5C17.2945 9.5 15.9532 9.91787 14.8124 10.7008C13.6715 11.4837 12.7823 12.5965 12.2572 13.8984C11.7321 15.2003 11.5947 16.6329 11.8624 18.015C12.1301 19.3971 12.7908 20.6667 13.7611 21.6631C14.7313 22.6596 15.9674 23.3382 17.3132 23.6131C18.6589 23.888 20.0538 23.7469 21.3215 23.2076C22.5892 22.6684 23.6726 21.7551 24.4349 20.5834C25.1972 19.4117 25.6041 18.0342 25.6041 16.625C25.6001 14.7366 24.8678 12.9268 23.5677 11.5915C22.2675 10.2562 20.5053 9.50418 18.6666 9.5ZM18.6666 20.5833C17.9043 20.5833 17.1592 20.3512 16.5254 19.9162C15.8916 19.4813 15.3976 18.8631 15.1058 18.1398C14.8141 17.4165 14.7378 16.6206 14.8865 15.8528C15.0352 15.0849 15.4023 14.3796 15.9413 13.826C16.4803 13.2724 17.1671 12.8955 17.9147 12.7427C18.6623 12.59 19.4373 12.6684 20.1416 12.968C20.8458 13.2676 21.4477 13.7749 21.8712 14.4259C22.2947 15.0768 22.5208 15.8421 22.5208 16.625C22.5208 17.6748 22.1147 18.6816 21.3919 19.424C20.6691 20.1663 19.6888 20.5833 18.6666 20.5833Z" fill="#581ff8"/>
+                            </svg>
+                        </span>
+                        <p class="text-2xl font-extrabold text-dark-grey-900">Location</p>
+                        <p class="text-base leading-7 text-dark-grey-600">Find us at our office</p>
+                        <a class="text-lg font-bold text-purple-blue-500" target="_blank" href="https://goo.gl/maps/QcWzYETAh4FS3KTD7">10924 Urna Convallis</a>
+                        </div>
+                    </div>
+                </div>
+      <Footer/>
+    </>
 
-</>
-
-    </div>
+    
   )
 }
 

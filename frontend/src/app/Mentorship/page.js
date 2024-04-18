@@ -96,10 +96,7 @@ const page = () => {
                   </div>
                 </div>
                 <div className="mb-6 my-5 rounded-lg bg-white p-6 grid sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-3 ">
-                {/* <MentorCard/>
-                <MentorCard/>
-                <MentorCard/>
-                <MentorCard/> */}
+             
 
                 <div className="mb-5 relative justify-center items-center">
                 <AddMentor/>

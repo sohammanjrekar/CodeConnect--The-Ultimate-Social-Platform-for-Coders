@@ -177,12 +177,4 @@ CORS_ALLOWED_WHITELIST=[
     'http://localhost:3000',
     'http://localhost:8000'
 ]
-import pusher
 
-pusher_client = pusher.Pusher(
-  app_id='1789204',
-  key='c1da8ffce378b321fdd3',
-  secret='2a65418ddb3ecbd2f166',
-  cluster='ap2',
-  ssl=True
-)

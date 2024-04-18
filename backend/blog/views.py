@@ -77,6 +77,10 @@ class BlogRecommendationView(APIView):
 
         return serialized_posts
 from rest_framework.generics import ListAPIView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from rest_framework.response import Response
+@method_decorator(never_cache, name='dispatch')
 @authentication_classes([])
 @permission_classes([AllowAny])
 class SearchBlogPosts(ListAPIView):
@@ -85,10 +89,33 @@ class SearchBlogPosts(ListAPIView):
     def get_queryset(self):
         queryset = BlogPost.objects.all()
         search_query = self.request.GET.get('query')
+        
         if search_query:
-            # Make the search case-insensitive by using case-insensitive filter
-            queryset = queryset.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+            # Split the search query into individual keywords
+            keywords = search_query.split()
+            
+            # Create a Q object to build the query dynamically
+            query = Q()
+            for keyword in keywords:
+                query |= Q(title__icontains=keyword) | Q(content__icontains=keyword)
+            
+            # Filter queryset based on the dynamic query
+            queryset = queryset.filter(query)
+            
         return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        
+        # Send the total count of search results along with the response
+        count = queryset.count()
+        
+        return Response({
+            'count': count,
+            'results': serializer.data
+        })
+
 
 @authentication_classes([])
 @permission_classes([AllowAny])

@@ -4,7 +4,7 @@ from .views import (
     MentorshipProfileList, MentorshipProfileDetail,
     SharedResourceList, SharedResourceDetail,
     ContactMethodList, ContactMethodDetail,
-    MentorCommentList, MentorCommentDetail
+    MentorCommentList, MentorCommentDetail,SearchMentorshipProfiles
 )
 
 urlpatterns = [
@@ -16,4 +16,6 @@ urlpatterns = [
     path('contact-methods/<int:pk>/', ContactMethodDetail.as_view(), name='contact-method-detail'),
     path('mentor-comments/', MentorCommentList.as_view(), name='mentor-comment-list'),
     path('mentor-comments/<int:pk>/', MentorCommentDetail.as_view(), name='mentor-comment-detail'),
+    path('search/', SearchMentorshipProfiles.as_view(), name='search_blog_posts'),
+
 ]

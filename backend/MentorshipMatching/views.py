@@ -12,7 +12,13 @@ from .models import MentorshipProfile, User
 from .ml import MentorMatching
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.pagination import PageNumberPagination
 
+class StandardPagination(PageNumberPagination):
+    page_size = 9
+    page_query_param = 'page'
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -45,6 +51,8 @@ class MentorMatchingView(APIView):
 class MentorshipProfileList(generics.ListCreateAPIView):
     queryset = MentorshipProfile.objects.all()
     serializer_class = MentorshipProfileSerializer
+    pagination_class = StandardPagination
+
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -87,3 +95,47 @@ class MentorCommentList(generics.ListCreateAPIView):
 class MentorCommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = MentorComment.objects.all()
     serializer_class = MentorCommentSerializer
+
+
+from django.db.models import Q
+from rest_framework.generics import ListAPIView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from rest_framework.response import Response
+
+@method_decorator(never_cache, name='dispatch')
+@authentication_classes([])
+@permission_classes([AllowAny])
+class SearchMentorshipProfiles(ListAPIView):
+    serializer_class = MentorshipProfileSerializer
+
+    def get_queryset(self):
+        queryset = MentorshipProfile.objects.all()
+        search_query = self.request.GET.get('query')
+
+        if search_query:
+            # Split the search query into individual keywords
+            keywords = search_query.split()
+
+            # Create a Q object to build the query dynamically
+            query = Q()
+            for keyword in keywords:
+                # Search by username, expertise, and availability
+                query |= Q(user__username__icontains=keyword) | Q(expertise__icontains=keyword) | Q(availability__icontains=keyword)
+
+            # Filter queryset based on the dynamic query
+            queryset = queryset.filter(query)
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+
+        # Send the total count of search results along with the response
+        count = queryset.count()
+
+        return Response({
+            'count': count,
+            'results': serializer.data
+        })
