@@ -1,8 +1,62 @@
+"use client"
+"use client"
 import Footer from '@/app/components/Footer'
 import Navbar from '@/app/components/Navbar'
-import React from 'react'
+import Reviews from '@/app/components/Reviews'
+import React, { useState, useEffect } from 'react'
 
-const page = () => {
+const Page = ({ params }) => {
+  const { id } = params;
+
+  // State variables to store mentorship profile data, comments, contact methods, and shared resources
+  const [mentorshipData, setMentorshipData] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [contactMethods, setContactMethods] = useState([]);
+  const [sharedResources, setSharedResources] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [commentContent, setCommentContent] = useState('');
+
+  useEffect(() => {
+    // Fetch mentorship profile data
+    fetch(`/MentorshipMatching/mentorship-profiles/${id}/`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Set mentorship profile data
+        setMentorshipData(data);
+        setLoading(false);
+
+        // Extract comment IDs, contact IDs, and resource IDs from profile response
+        const { comments, contact_methods, shared_resources } = data;
+
+        // Fetch comments
+        Promise.all(comments.map(commentId =>
+          fetch(`/MentorshipMatching/mentor-comments/${commentId}/`).then(response => response.json())
+        ))
+        .then(commentData => setComments(commentData))
+        .catch(error => setError(error));
+
+        // Fetch contact methods
+        Promise.all(contact_methods.map(contactId =>
+          fetch(`/MentorshipMatching/contact-methods/${contactId}/`).then(response => response.json())
+        ))
+        .then(contactData => setContactMethods(contactData))
+        .catch(error => setError(error));
+
+        // Fetch shared resources
+        Promise.all(shared_resources.map(resourceId =>
+          fetch(`/MentorshipMatching/shared-resources/${resourceId}/`).then(response => response.json())
+        ))
+        .then(resourceData => setSharedResources(resourceData))
+        .catch(error => setError(error));
+      })
+      .catch(error => setError(error));
+  }, [id]);
   return (
     <>
 <Navbar/>
@@ -160,6 +214,15 @@ const page = () => {
                         </div>
                     </div>
                 </div>
+                 <Reviews
+                comments={comments}
+                loading={loading}
+                error={error}
+                commentContent={commentContent}
+                setCommentContent={setCommentContent} 
+                handleCommentSubmit={handleCommentSubmit}
+            />
+       
       <Footer/>
     </>
 
