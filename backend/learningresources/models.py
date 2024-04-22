@@ -1,6 +1,7 @@
 # LearningResources/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -29,7 +30,7 @@ class Tag(models.Model):
         return self.name
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='learningresource_comments')
     resource = models.ForeignKey(LearningResource, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

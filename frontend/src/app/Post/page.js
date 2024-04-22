@@ -91,7 +91,7 @@ const Post = () => {
             </div>
             <p className="text-gray-800 mb-4">{post.content}</p>
             <img
-              src={post.image ? post.image : 'https://codeop.tech/wp-content/uploads/2022/09/women-in-coding-e1664430458975.jpg'}
+              src={post.image ?'https://source.unsplash.com/random?code,programmer,java,php,js,databse' : 'https://codeop.tech/wp-content/uploads/2022/09/women-in-coding-e1664430458975.jpg'}
               alt="Post Image"
               className="w-full h-48 object-cover rounded-md mb-4"
             />

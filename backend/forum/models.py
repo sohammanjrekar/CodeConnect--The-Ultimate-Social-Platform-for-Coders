@@ -1,6 +1,7 @@
 # forum/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
+
 from django.utils import timezone
 
 class ForumTag(models.Model):
@@ -11,6 +12,7 @@ class ForumTag(models.Model):
 
 class ForumTopic(models.Model):
     title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
     tags = models.ManyToManyField(ForumTag, related_name='topics')

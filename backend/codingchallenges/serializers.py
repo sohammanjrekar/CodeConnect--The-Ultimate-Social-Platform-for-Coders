@@ -1,6 +1,6 @@
 # codingchallenges/serializers.py
 from rest_framework import serializers
-from .models import CodingChallenge, Tag, TestCase, Badge
+from .models import *
 
 class CodingChallengeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,7 +18,9 @@ class TestCaseSerializer(serializers.ModelSerializer):
         model = TestCase
         fields = '__all__'
 
-class BadgeSerializer(serializers.ModelSerializer):
+class solutionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Badge
+        model = Solution
         fields = '__all__'
+
+

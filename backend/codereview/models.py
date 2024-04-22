@@ -1,6 +1,6 @@
 # codecollaboration/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
 
 class CodeSnippet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

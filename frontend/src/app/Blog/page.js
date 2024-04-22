@@ -99,11 +99,14 @@ const Page = () => {
       <div key={post.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4">
         <Link href={`/Blog/${post.id}`}>
           <div className="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow my-4">
-            <img
-              src="https://clickfirstmarketing.com/wp-content/uploads/Purpose-of-Blogging.jpeg"
-              className="aspect-video w-full object-cover"
-              alt=""
-            />
+         
+          <img
+  src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713679707/Blogs/${post.featured_image}`}
+  className="aspect-video w-full object-cover"
+  alt={post.featured_image}
+/>
+
+
             <div className="p-4">
               <h2 className="text-xl font-medium text-gray-900">{post.title}</h2>
               <ul className="mt-2">

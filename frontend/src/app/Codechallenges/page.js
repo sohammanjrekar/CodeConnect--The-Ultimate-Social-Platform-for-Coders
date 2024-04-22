@@ -10,7 +10,7 @@ const Page = () => {
     <div className="min-h-screen flex flex-col ">
       <Navbar />
       <div className="flex flex-row mx-auto">
-        <LCard />
+        <LCard userId={71}/>
         <Calender />
       </div>
       <ListOfChallenge />

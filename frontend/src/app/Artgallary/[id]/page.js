@@ -1,55 +1,67 @@
-import React from 'react'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import Comments from '../../Comments/page'
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import Searchbar from "../../components/Searchbar";
+import Link from "next/link";
 
-const page = () => {
+const GalleryImagesPage = ({ params }) => {
+  const { id } = params;
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/artgallery/galleries/${id}/images/`
+        );
+        setImages(response.data);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  }, [id]); // Fetch images whenever the ID changes
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
   return (
     <>
-      <>
-      <Navbar/>
-      <div className="w-full p-6 mx-auto">
-  <div className="shadow-md rounded bg-white overflow-hidden relative">
-    <div className="grid grid-cols-2 h-64">
-      <div className="h-64 overflow-hidden">
-        <img
-          className="object-cover h-64 w-full"
-          src="https://images.freeimages.com/images/small-previews/20c/my-puppy-maggie-1362787.jpg"
-        />
-      </div>
-      <div className="h-64 overflow-hidden">
-        <img
-          className="object-cover h-32 w-full"
-          src="https://images.freeimages.com/images/small-previews/e71/frog-1371919.jpg"
-        />
-        <img
-          className="object-cover h-32 w-full"
-          src="https://img.freepik.com/free-photo/beautiful-endangered-american-jaguar-nature-habitat-panthera-onca-wild-brasil-brasilian-wildlife-pantanal-green-jungle-big-cats_475641-2191.jpg?w=1380&t=st=1659969671~exp=1659970271~hmac=09544e5c9ac070a09c464342394c6657fafdd87b4c9772f2d5679a70e20a68e0"
-        />
-      </div>
-    </div>
-    <div className="p-3">
-      <div className="block md:flex justify-between">
-        <div>
-          <h3 className="font-medium">Card Title</h3>
-          <span className="text-sm text-gray-500">
-            Author Name • author@email.com
-          </span>
-        </div>
-        <div>
-          <span className="text-sm text-gray-500">01-20-2020 12:30</span>
+      <Navbar />
+      {/* <Searchbar /> */}
+      <div className="container mx-auto p-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {images.map((image) => (
+            <div key={image.id}>
+              <Link href={`/Artgallary/${id}/${image.id}`}>
+                <div class="group relative m-0 flex  rounded-xl shadow-xl ring-gray-900/5 sm:mx-auto sm:max-w-lg">
+                  <div class="z-10 h-full w-full overflow-hidden rounded-xl border border-gray-200 opacity-80 transition duration-300 ease-in-out group-hover:opacity-100 dark:border-gray-700 dark:opacity-70">
+                    <img
+                      src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713680848/Gallery/${image.image}`}
+                      class="animate-fade-in block h-full w-full scale-100 transform object-cover object-center opacity-100 transition duration-300 group-hover:scale-110"
+                      alt={image.description}
+                    />
+                  </div>
+                  <div class="absolute bottom-0 z-20 m-0 pb-4 ps-4 transition duration-300 ease-in-out group-hover:-translate-y-1 group-hover:translate-x-3 group-hover:scale-110">
+                    <h1 class="text-sm font-light text-blue-900 shadow-xl">
+                      <p>Uploaded at: {formatDate(image.uploaded_at)}</p>
+                    </h1>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<Comments/>
-  <Footer/>
-</>
-
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default page
+export default GalleryImagesPage;

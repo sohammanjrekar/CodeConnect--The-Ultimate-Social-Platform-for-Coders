@@ -25,7 +25,7 @@ urlpatterns = [
    path('admin/', admin.site.urls),
    # path('forum/', include('forum.urls')),
    # path('portfolio/',include('portfolio.urls')),
-   # path('codingchallenges/',include('codingchallenges.urls')),
+   path('codingchallenges/',include('codingchallenges.urls')),
    path('jobportal/',include('jobportal.urls')),
    # path('LanguageExchange/',include('LanguageExchange.urls')),
    # path('learningresources/',include('learningresources.urls')),
@@ -36,6 +36,7 @@ urlpatterns = [
    # path('botchats/',include('botchats.urls')),
    path('blogs/',include('blog.urls')),
    path('post/',include('post.urls')),
+   path('artgallery/',include('ArtGallery.urls')),
    path('account/',include('account.urls')),
-   # path('codereivew/',include('codereview.urls')),
+   path('codereivew/',include('codereview.urls')),
    ]

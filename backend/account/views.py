@@ -17,12 +17,14 @@ def activateemail(request):
     else:
         return HttpResponse('The parameters is not valid!')
 from django.http import JsonResponse
+from django.core import serializers
+
 def get_user_by_username(request):
     username = request.GET.get('username', '')
 
     if username:
         users = User.objects.filter(username__icontains=username)
-        users_data = [{'id': user.id, 'username': user.username} for user in users]
+        users_data = serializers.serialize('json', users)
         return JsonResponse({'users': users_data})
     else:
-        return JsonResponse({'error': 'No username provided'})
+        return JsonResponse({'error': 'No username provided'})  

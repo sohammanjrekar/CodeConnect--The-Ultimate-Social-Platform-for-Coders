@@ -16,7 +16,7 @@ from .ml import JobRecommendation
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.pagination import PageNumberPagination
+
 
 class NineResultsSetPagination(PageNumberPagination):
     page_size = 9

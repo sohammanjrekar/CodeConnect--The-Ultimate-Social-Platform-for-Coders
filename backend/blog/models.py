@@ -51,7 +51,7 @@ class BlogPost(models.Model):
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
     is_published = models.BooleanField(default=False)
-    featured_image = models.ImageField(upload_to='blog_featured_images/', blank=True, null=True)
+    featured_image = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField(unique=True, editable=False)
 
     def save(self, *args, **kwargs):

@@ -116,6 +116,9 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': 'localhost',  # Or your MySQL server IP address
         'PORT': '3306',       # MySQL default port
+         'OPTIONS': {
+            'sql_mode': 'STRICT_TRANS_TABLES',  # Enable Strict Mode
+        },
     }
 }
 

@@ -1,64 +1,79 @@
-# artgallery/views.py
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 from .models import Tag, DesignerProfile, Gallery, Image, Comment, ContactRequest
 from .serializers import TagSerializer, DesignerProfileSerializer, GallerySerializer, ImageSerializer, CommentSerializer, ContactRequestSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import authentication_classes, permission_classes
 
-
-
-# views.py
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import DesignerProfile
-from .ml import ArtGalleryRecommendation
-
-class ArtGalleryRecommendationView(APIView):
-    def get(self, request, user_id):
-        gallery_recommendation = ArtGalleryRecommendation()
-        recommended_galleries = gallery_recommendation.get_gallery_recommendations(user_id)
-
-        serialized_galleries = self.serialize_galleries(recommended_galleries)
-
-        return JsonResponse({'galleries': serialized_galleries})
-
-    def serialize_galleries(self, galleries):
-        serialized_galleries = [
-            {
-                'id': gallery.id,
-                'title': gallery.title,
-                'description': gallery.description,
-                'tags': [tag.name for tag in gallery.tags.all()],
-                'created_at': gallery.created_at,
-                'designer': gallery.designer.user.username,
-            }
-            for gallery in galleries
-        ]
-
-        return serialized_galleries
-
-
+@authentication_classes([])
+@permission_classes([AllowAny])
 class TagList(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
+class TagDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
 class DesignerProfileList(generics.ListCreateAPIView):
     queryset = DesignerProfile.objects.all()
     serializer_class = DesignerProfileSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
+class DesignerProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DesignerProfile.objects.all()
+    serializer_class = DesignerProfileSerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
 class GalleryList(generics.ListCreateAPIView):
     queryset = Gallery.objects.all()
     serializer_class = GallerySerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
+class GalleryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Gallery.objects.all()
+    serializer_class = GallerySerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
+class GalleryImagesList(generics.ListAPIView):
+    serializer_class = ImageSerializer
 
+    def get_queryset(self):
+        # Get the gallery_id from the URL parameters
+        gallery_id = self.kwargs.get('gallery_id')
+        
+        # Filter images by the given gallery_id
+        queryset = Image.objects.filter(gallery_id=gallery_id)
+        
+        return queryset
+
+@authentication_classes([])
+@permission_classes([AllowAny])
 class ImageList(generics.ListCreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
 
+
+@authentication_classes([])
+@permission_classes([AllowAny])
+class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-
+@authentication_classes([])
+@permission_classes([AllowAny])
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
 class ContactRequestList(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
@@ -66,4 +81,9 @@ class ContactRequestList(generics.ListCreateAPIView):
         user = self.request.user
         return ContactRequest.objects.filter(sender=user)
 
+    serializer_class = ContactRequestSerializer
+@authentication_classes([])
+@permission_classes([AllowAny])
+class ContactRequestDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ContactRequest.objects.all()
     serializer_class = ContactRequestSerializer

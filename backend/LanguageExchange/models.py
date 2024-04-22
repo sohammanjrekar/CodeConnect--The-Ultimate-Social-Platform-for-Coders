@@ -1,6 +1,7 @@
 # LanguageExchange/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
+
 
 class LanguageExchangeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -39,11 +40,19 @@ class ProgrammingLanguage(models.Model):
     def __str__(self):
         return self.name
 
-class CommunicationMethod(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+class CommunicationPlatform(models.Model):
+    name = models.CharField(max_length=100, unique=True,default="")
 
     def __str__(self):
         return self.name
+class CommunicationMethod(models.Model):
+    platform = models.ForeignKey(CommunicationPlatform, on_delete=models.CASCADE,default="")
+    user_profile = models.ForeignKey(User, on_delete=models.CASCADE,default="")
+    detail = models.CharField(max_length=255 ,default="")
+    is_primary = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user_profile.name}: {self.platform.name} - {self.detail}"
 
 class AvailabilityTime(models.Model):
     day = models.CharField(max_length=20)
@@ -62,7 +71,9 @@ class CollaborationInterest(models.Model):
 class CollaboratedProject(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    githublink = models.TextField(default="")
     collaborators = models.ManyToManyField(User, related_name='language_exchange_collaborated_projects')
+    
    
     def __str__(self):
         return self.name

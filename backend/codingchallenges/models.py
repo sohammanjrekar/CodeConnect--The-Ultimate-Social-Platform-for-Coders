@@ -1,6 +1,6 @@
 # codingchallenges/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -11,16 +11,11 @@ class Tag(models.Model):
 class TestCase(models.Model):
     input_data = models.TextField()
     expected_output = models.TextField()
+    
 
     def __str__(self):
         return f"Input: {self.input_data}, Expected Output: {self.expected_output}"
 
-class Badge(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    points_required = models.PositiveIntegerField()
-
-    def __str__(self):
-        return self.name
 
 class CodingChallenge(models.Model):
     title = models.CharField(max_length=255)
@@ -32,47 +27,60 @@ class CodingChallenge(models.Model):
         ('hard', 'Hard'),
     ]
     difficulty = models.CharField(max_length=10, choices=difficulty_choices)
-    language = models.CharField(max_length=50)
     tags = models.ManyToManyField(Tag, related_name='coding_challenges', blank=True)
     test_cases = models.ManyToManyField(TestCase, related_name='coding_challenge', blank=True)
-    solution = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     points = models.PositiveIntegerField()
     winners = models.ManyToManyField(User, related_name='won_coding_challenges', blank=True)
-    badges = models.ManyToManyField(Badge, related_name='coding_challenges', blank=True)
 
     def __str__(self):
         return self.title
 
-    def award_points(self, user):
-        # Award points based on difficulty
-        if self.difficulty == 'easy':
-            points_awarded = 5
-        elif self.difficulty == 'medium':
-            points_awarded = 10
-        elif self.difficulty == 'hard':
-            points_awarded = 20
+    def save_top_three_winners(self):
+        # Get all solutions associated with this coding challenge
+        solutions = self.solutions.all()
 
-        # Increase user's points and check for rank upgrade
-        user_profile = user.profile  # Assuming you have a user profile model
-        user_profile.points += points_awarded
-        user_profile.save()
+        # Calculate the difference between likes and dislikes for each solution
+        solutions_diff = []
+        for solution in solutions:
+            diff = solution.likes - solution.dislikes
+            solutions_diff.append((solution, diff))
 
-        # Check for rank upgrade and award badges
-        self.check_rank_and_badges(user_profile)
+        # Sort solutions based on the difference
+        sorted_solutions = sorted(solutions_diff, key=lambda x: x[1], reverse=True)
 
-        return points_awarded
+        # Save the top three winners with their ranks
+        top_three_winners = sorted_solutions[:3]
+        for index, (solution, _) in enumerate(top_three_winners):
+            rank = index + 1  # Ranks start from 1
+            if rank == 1:
+                self.winners.add(solution.user, through_defaults={'rank': '1st'})
+            elif rank == 2:
+                self.winners.add(solution.user, through_defaults={'rank': '2nd'})
+            elif rank == 3:
+                self.winners.add(solution.user, through_defaults={'rank': '3rd'})
 
-    def check_rank_and_badges(self, user_profile):
-        # Check for rank upgrade
-        if user_profile.points >= 200:
-            user_profile.rank = 'gold'
-        elif user_profile.points >= 100:
-            user_profile.rank = 'silver'
-        elif user_profile.points >= 50:
-            user_profile.rank = 'bronze'
+        # Save the coding challenge instance
+        self.save()
 
-        # Check for badge awards
-        for badge in Badge.objects.all():
-            if user_profile.points >= badge.points_required and badge not in user_profile.badges.all():
-                user_profile.badges.add(badge)
+
+    def award_points_and_badges(self, user):
+        # Increase user's points based on the challenge points
+        user.points += self.points
+        user.User_points += self.points  # Update the challenge points
+        user.save()
+
+        return self.points
+
+
+class Solution(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    allsolution = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
+    language = models.CharField(max_length=50,default="")
+    challenge= models.ManyToManyField(CodingChallenge, related_name='codingchallenges', blank=True)
+
+    def __str__(self):
+        return f"Solution by {self.user.username}"

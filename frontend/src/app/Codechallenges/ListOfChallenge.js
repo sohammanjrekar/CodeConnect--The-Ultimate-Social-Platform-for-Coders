@@ -1,6 +1,23 @@
-import React from 'react'
+"use client"
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
 
 const ListOfChallenge = () => {
+  const [challenges, setChallenges] = useState([]);
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/codingchallenges/coding-challenges/');
+        const data = await response.json();
+        setChallenges(data);
+      } catch (error) {
+        console.error('Error fetching challenges:', error);
+      }
+    };
+
+    fetchChallenges();
+  }, []);
   return (
     <div>
       <>
@@ -11,6 +28,9 @@ const ListOfChallenge = () => {
         <h2 className="text-gray-600 font-semibold">Challenges List</h2>
         <span className="text-xs">All challenge items</span>
       </div>
+
+
+
       <div className="flex items-center justify-between">
         <div className="flex bg-gray-50 items-center p-2 rounded-md">
           <svg
@@ -44,6 +64,7 @@ const ListOfChallenge = () => {
       </div>
     </div>
     <div>
+
       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
           <table className="min-w-full leading-normal">
@@ -62,24 +83,26 @@ const ListOfChallenge = () => {
                   Submissions
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Status
+                  Language
                 </th>
               </tr>
             </thead>
             <tbody>
-              {/* Replace the sample data below with your actual challenge data */}
+            {challenges.map((challenge) => (
               <tr>
+                <Link href={`/Codechallenges/${challenge.id}`}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    Two Sum
+                  {challenge.title}
                   </p>
                 </td>
+                </Link>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">Easy</p>
+                  <p className="text-gray-900 whitespace-no-wrap">{challenge.difficulty}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
-                    Jan 21, 2020
+                  {challenge.created_at}
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -91,11 +114,11 @@ const ListOfChallenge = () => {
                       aria-hidden=""
                       className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
                     />
-                    <span className="relative">Active</span>
+                    <span className="relative">{challenge.language}</span>
                   </span>
                 </td>
               </tr>
-              {/* Add more rows for additional challenges */}
+            ))};
             </tbody>
           </table>
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">

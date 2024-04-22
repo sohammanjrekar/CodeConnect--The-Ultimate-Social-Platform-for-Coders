@@ -25,9 +25,11 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
+        ref_name = 'GalleryComment'
 
 class ContactRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactRequest
         fields = '__all__'
+        ref_name = 'GalleryComment'
 

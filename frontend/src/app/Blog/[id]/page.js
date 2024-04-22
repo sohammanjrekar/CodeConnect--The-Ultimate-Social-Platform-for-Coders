@@ -167,10 +167,10 @@ const EachBlog = ({ params }) => {
                   </h2>
                 </div>
                 <img
-                  src={blogData.featured_image}
+                  src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713679707/Blogs/${blogData.featured_image}`}
                   className="w-full object-cover lg:rounded"
                   style={{ height: "28em" }}
-                  alt=""
+                  alt={blogData.featured_image}
                 />
               </div>
               <div className="px-4 lg:px-0 mt-12 text-gray-700 text-lg leading-relaxed">

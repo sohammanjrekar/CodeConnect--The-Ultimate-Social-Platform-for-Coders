@@ -1,6 +1,7 @@
 # projectrecommendation/models.py
 from django.db import models
-from django.contrib.auth.models import User
+from account.models import User
+
 
 class Project(models.Model):
     DIFFICULTY_CHOICES = [
@@ -17,7 +18,7 @@ class Project(models.Model):
         ('iot', 'Internet of Things'),
         ('other', 'Other'),
     ]
-    id = models.UUIDField(primary_key=True, editable=False)
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projectrecommendations_projects')
     title = models.CharField(max_length=255)
     description = models.TextField()
