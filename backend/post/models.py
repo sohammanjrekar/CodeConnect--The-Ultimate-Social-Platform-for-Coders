@@ -9,9 +9,9 @@ class Hashtag(BaseModel):
         return self.name
 
 class Post(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='post_user')
     content = models.TextField()
-    attach_files = models.TextField()
+    attach_files = models.TextField(blank=True,null=True)
     hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)
     likes = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
@@ -26,12 +26,12 @@ class Post(BaseModel):
 
 
 class Comment(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_user')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comment_post')
     content = models.TextField()
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
-    hashtags = models.ManyToManyField(Hashtag, related_name='comments', blank=True)
+    
 
     def __str__(self):
         return f"Comment by {self.user.username} on Post {self.post.id} (ID: {self.id})"

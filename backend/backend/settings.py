@@ -61,14 +61,14 @@ EXTERNAL_APPS = [
     'LanguageExchange',
     'learningresources',
     'MentorshipMatching',
-    'search',
     'notification',
     'ArtGallery',
     'blog',
     'codereview',
     'post',
     'ProjectRecommendations',
-    'chat'
+    'chat',
+    'events'
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS
