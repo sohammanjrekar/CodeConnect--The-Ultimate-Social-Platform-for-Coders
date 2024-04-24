@@ -16,6 +16,7 @@ urlpatterns = [
     path('contact-requests/', ContactRequestList.as_view(), name='contact-request-list'),
     path('contact-requests/<int:pk>/', ContactRequestDetail.as_view(), name='contact-request-detail'),
     path('galleries/<int:gallery_id>/images/', GalleryImagesList.as_view(), name='gallery-images-list'),
+    path('search/', SearchArt.as_view(), name='search_art'),
 
 ]
 

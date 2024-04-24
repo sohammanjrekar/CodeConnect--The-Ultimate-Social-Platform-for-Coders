@@ -18,7 +18,7 @@ const Searchbar = ({ setSearchQuery }) => {
   }, [query, setSearchQuery]);
 
   return (
-    <div style={{ maxWidth: 700, margin: "100px auto" }}>
+    <div style={{ maxWidth: 700, margin: "10px auto" }}>
       <form className="flex items-center" onSubmit={handleSubmit}>
         <label htmlFor="voice-search" className="sr-only">
           Search

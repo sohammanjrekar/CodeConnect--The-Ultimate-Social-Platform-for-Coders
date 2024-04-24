@@ -1,308 +1,154 @@
-import React from 'react'
-import Eventscard from './Eventscard'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+"use client"
+import React, { useState, useEffect } from 'react';
+import Footer from '../components/Footer';
+import Navbar from '../components/Navbar';
+import Searchbar from '../components/Searchbar';
+import Link from 'next/link';
 
-const page = () => {
+
+const Page = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const postsPerPage = 12;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [totalCounts, setTotalCounts] = useState({
+    totalPosts: 0,
+    totalSearchResults: 0,
+  });
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/events/events/?page=${page}&limit=${postsPerPage}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch');
+        }
+        const data = await response.json();
+        setPosts(prevPosts => [...prevPosts, ...data]);
+        setTotalCounts(prevCounts => ({
+          ...prevCounts,
+          totalPosts: data.length,
+        }));
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+        setError('Failed to fetch posts');
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [page]);
+
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const apiUrl = `http://127.0.0.1:8000/events/events/?search=${searchQuery}`;
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+      setTotalCounts(prevCounts => ({
+        ...prevCounts,
+        totalSearchResults: data.length,
+      }));
+      setLoading(false);
+      setPage(1); // Reset page number to 1 after search
+    } catch (error) {
+      console.error('Error searching events:', error);
+      setError('Failed to search events');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchQuery.trim() !== '') {
+        setSearchResults([]); // Clear previous search results
+        handleSearch();
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  const renderPosts = () => {
+    // Determine the array to render based on whether there are search results or not
+    const eventsToRender = searchQuery.trim() !== '' ? searchResults : posts;
+
+    return eventsToRender.map(event => (
+      <div className="flex flex-col w-full bg-white rounded shadow-lg  md:w-7/2 lg:w-100 my-3 ,x-2" key={event.id}>
+        <Link href={`Events/${event.id}`}>
+        <div
+          className="w-full h-64 bg-top bg-cover rounded-t"
+          style={{
+            backgroundImage: `url('https://res.cloudinary.com/dp6odhftt/image/upload/v1713866701/Events/${event.image}')`
+          }}
+        />
+        <div className="flex flex-col w-full md:flex-row">
+          <div className="flex flex-row justify-around p-4 font-bold leading-none text-gray-800 uppercase bg-gray-400 rounded md:flex-col md:items-center md:justify-center md:w-1/5">
+            <div className="md:text-3xl">{new Date(event.start_date).toLocaleString('default', { month: 'short' })}</div>
+            <div className="md:text-6xl">{new Date(event.start_date).getDate()}</div>
+            <div className="md:text-xl">{new Date(event.start_date).toLocaleString('default', { hour: 'numeric', minute: 'numeric', hour12: true })}</div>
+          </div>
+          <div className="p-4 font-normal text-gray-800 md:w-3/4">
+            <h1 className="mb-4 text-4xl font-bold leading-none tracking-tight text-gray-800">
+              {event.title}
+            </h1>
+            <p className="leading-normal">{event.description}</p>
+            <div className="flex flex-row items-center mt-4 text-gray-700">
+              <div className="w-1/2">{event.location}</div>
+              <div className="w-1/2 flex justify-end">
+                {/* Here you can place an image related to the event */}
+              </div>
+            </div>
+          </div>
+        </div>
+        </Link>
+      </div>
+    ));
+  };
+
+  const handleNextPage = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  const handleSearchButtonClick = () => {
+    if (searchQuery.trim() !== '') {
+      setSearchResults([]); // Clear previous search results
+      handleSearch();
+    }
+  };
+
   return (
-    <div>
-      <>
-      <Navbar/>
-  {/* component */}
-  <>
-  {/* component */}
-  <div className="px-4 py-2 text-gray-800">
-    <div className="hidden xl:flex flex-row justify-between shadow-md border rounded-md">
-      <div className="flex flex-col items-center justify-between w-1/4 px-4 py-2 bg-white border-r-2 border-gray-500 border-dashed rounded-l-md">
-        <div className="flex-col">
-          <img src="https://store-images.s-microsoft.com/image/apps.33967.13510798887182917.246b0a3d-c3cc-46fc-9cea-021069d15c09.392bf5f5-ade4-4b36-aa63-bb15d5c3817a" />
-          <p className="my-2 text-xs italic font-light text-gray-500">
-            Scan here to check in!
-          </p>
-          <div className="text-xs mb-2 text-gray-600">
-            <span className="text-gray-500">Valid until :</span>
-            <br />
-            Monday, 28 September 2020 18:30:23
-          </div>
-        </div>
-        <div className="text-left">
-          <p className="pb-2 text-xs italic">Powered By</p>
-          <img src="https://ad-venture.org.uk/wp-content/uploads/2017/05/logo-placeholder.png" />
-        </div>
-      </div>
-      <div className="relative flex flex-col w-3/4">
-        <img src="https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder-1024x512.png" />
-        <div className="absolute p-1 bottom-24">
-          <div className="flex flex-row px-4 py-2 text-xs font-bold text-red-800 bg-white rounded-md ">
-            <span className="mr-2 font-normal text-gray-500">Organizer :</span>
-            <p className="font-semibold text-red-800">Banua Coder</p>
-          </div>
-        </div>
-        <div className="absolute self-end mr-1 mt-1">
-          <p className="px-4 py-2 text-xs font-bold text-red-800 bg-white rounded-md ">
-            <span className="font-normal text-gray-500">Ticket Number :</span>
-            12
-          </p>
-        </div>
-        <div className="absolute bottom-0 flex flex-col w-full h-24">
-          <div className="w-full h-full bg-white opacity-75 rounded-br-md" />
-          <div className="absolute flex flex-row p-2 text-gray-800 opacity-100">
-            <div className="flex flex-col">
-              <div className="flex flex-col">
-                <p className="mb-1 text-xs text-gray-500">Start Date :</p>
-                <p className="text-xs font-semibold text-red-800">
-                  Monday, 28 September 2020 09:00
-                </p>
-              </div>
-              <div className="hidden md:flex flex-col mt-1">
-                <p className="mb-1 text-xs text-gray-500">End Date :</p>
-                <p className="text-xs font-semibold text-red-800">
-                  Monday, 28 September 2020 19:00
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col ml-4">
-              <div className="hidden md:flex flex-col">
-                <p className="mb-1 text-xs text-gray-500">Type of event :</p>
-                <p className="text-xs font-semibold text-red-800">Seminar</p>
-              </div>
-              <div className="flex flex-col mt-1">
-                <p className="mb-1 text-xs text-gray-500">Location :</p>
-                <p className="text-xs font-semibold text-red-800">
-                  Banua Coder Coworking Space, Palu Timur, Kota Palu, Sulawesi
-                  Tengah
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col ml-4">
-              <div className="flex flex-col">
-                <p className="mb-1 text-xs text-gray-500">Ticket Owner :</p>
-                <p className="text-xs font-semibold text-red-800">
-                  Fajrian Aidil Pratama
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="xl:hidden flex flex-col bg-white border rounded-md shadow-md">
-      <div className="py-2 px-4 flex-col flex text-center">
-        <img
-          className="mx-auto"
-          src="https://store-images.s-microsoft.com/image/apps.33967.13510798887182917.246b0a3d-c3cc-46fc-9cea-021069d15c09.392bf5f5-ade4-4b36-aa63-bb15d5c3817a"
-        />
-        <p className="font-bold text-lg md:text-3xl">Scan here to check in!</p>
-      </div>
-      <hr className="border-dashed border-2 border-gray-400" />
-      <img src="https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder-1024x512.png" />
-      <div className="py-2 px-4 flex flex-col text-sm md:text-2xl">
-        <p className="self-start font-bold text-gray-500">Mulai</p>
-        <div className="flex text-sm justify-between my-2 md:text-xl">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          <p className="font-bold text-red-800">Senin, 29 September 2020</p>
-        </div>
-        <div className="flex text-sm justify-between my-2 md:text-xl">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <p className="font-bold text-red-800">10:30</p>
-        </div>
-      </div>
-      <div className="py-2 px-4 flex flex-col text-sm md:text-2xl">
-        <p className="self-start font-bold text-gray-500">Selesai</p>
-        <div className="flex text-sm md:text-xl justify-between my-2">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          <p className="font-bold text-red-800">Senin, 29 September 2020</p>
-        </div>
-        <div className="flex text-sm md:text-xl justify-between my-2">
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <p className="font-bold text-red-800">15:30</p>
-        </div>
-      </div>
-      <div className="py-2 px-4 flex flex-col text-sm md:text-2xl">
-        <p className="self-start font-bold text-gray-500">Lokasi</p>
-        <div className="flex text-sm md:text-xl justify-between my-2">
-          <svg
-            className="w-6 h-6 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
-          <p className="font-bold text-red-800">
-            Banua Coder Coworking Space, Palu, Sulawesi Tengah, Indonesia
-          </p>
-        </div>
-      </div>
-      <hr className="border-gray-400" />
-      <div className="py-2 px-4 flex flex-col text-sm md:text-2xl">
-        <p className="self-start font-bold text-gray-500">Powered By</p>
-        <img
-          className="mx-auto my-2"
-          src="https://ad-venture.org.uk/wp-content/uploads/2017/05/logo-placeholder.png"
-        />
-      </div>
-    </div>
-  </div>
-</>
+    <>
+      <Navbar />
+      <Searchbar setSearchQuery={setSearchQuery} handleSearch={handleSearchButtonClick} />
 
-  <Eventscard/>
-  <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5">
-    <div className="md:flex">
-      <div className="md:flex-shrink-0">
-        <img
-          className="h-48 w-full object-cover md:w-48"
-          src="https://randomuser.me/api/portraits/men/1.jpg"
-          alt="Event image"
-        />
-      </div>
-      <div className="p-8">
-        <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-          Event Name
+      <div className="text-gray-900 pt-12 pr-0 pb-14 pl-0 bg-white">
+        <div className="w-full pt-4 pr-5 pb-6 pl-5 mt-0 mr-auto mb-0 ml-auto space-y-5 sm:py-8 md:py-12 sm:space-y-8 md:space-y-16 max-w-7xl">
+          <div className="mb-4">
+            <p>Total Posts: {totalCounts.totalPosts}</p>
+            <p>Total Search Results: {totalCounts.totalSearchResults}</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2">
+            {renderPosts()}
+          </div>
+          {loading && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+          <button onClick={handleNextPage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Load More</button>
         </div>
-        <p className="block mt-1 text-lg leading-tight font-medium text-black">
-          Event Description
-        </p>
-        <p className="mt-2 text-gray-500">Event Details...</p>
       </div>
-    </div>
-  </div>
-  <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-5">
-    <div className="p-8">
-      <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-        Event Name
-      </div>
-      <p className="block mt-1 text-lg leading-tight font-medium text-black">
-        Event Date
-      </p>
-      <p className="mt-2 text-gray-500">Event Description</p>
-      <p className="mt-2 text-gray-500">Event Details...</p>
-    </div>
-  </div>
-  
-  <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
-    <div className="p-4 flex items-center">
-      <div className="pr-4 bg-blue-500 p-2 rounded-lg text-center">
-        <p className="text-4xl font-bold text-white">18th</p>
-        <p className="text-sm text-white">November, 2023</p>
-      </div>
-      <div className="ml-4">
-        <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-          9:20 AM - 9:40 AM
-        </div>
-        <p className="mt-2 text-gray-500">Event Details...</p>
-      </div>
-    </div>
-  </div>
-  
-  <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
-    <div className="md:flex">
-      <div className="p-8">
-        <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-       Username
-        </div>
-        <p className="block mt-1 text-lg leading-tight font-medium text-black">
-          Appointment Time: 13:00 - 14:00
-        </p>
-        <p className="mt-2 text-gray-500">Speaker: John Doe</p>
-        <div className="mt-5 relative flex">
-          <img
-            className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
-            src="https://randomuser.me/api/portraits/men/75.jpg"
-            alt="Avatar 1"
-          />
-          <img
-            className="inline-block h-10 w-10 rounded-full ring-2 ring-white -ml-4"
-            src="https://randomuser.me/api/portraits/women/74.jpg"
-            alt="Avatar 2"
-          />
-          <img
-            className="inline-block h-10 w-10 rounded-full ring-2 ring-white -ml-4"
-            src="https://randomuser.me/api/portraits/men/76.jpg"
-            alt="Avatar 3"
-          />
-          <span className="inline-block h-10 w-10 rounded-full ring-2 ring-white -ml-4 bg-indigo-500 text-white flex items-center justify-center">
-            +3
-          </span>
-        </div>
-        <button className="mt-5 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-          View Details
-        </button>
-        <button className="mt-5 ml-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-          Cancel Appointment
-        </button>
-      </div>
-    </div>
-  </div>
-  <Footer/>
-</>
+     
+      <Footer />
+    </>
+  );
+};
 
-    </div>
-  )
-}
-
-export default page
+export default Page;

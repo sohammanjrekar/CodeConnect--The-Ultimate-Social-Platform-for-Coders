@@ -2,6 +2,7 @@
 from django.db import models
 from account.models import User
 
+
 class Conversation(models.Model):
     participants = models.ManyToManyField(User, related_name='conversations')
 

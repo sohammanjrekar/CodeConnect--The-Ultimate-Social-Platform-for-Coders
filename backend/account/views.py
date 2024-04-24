@@ -18,13 +18,23 @@ def activateemail(request):
         return HttpResponse('The parameters is not valid!')
 from django.http import JsonResponse
 from django.core import serializers
-
+from django.db.models import Q
 def get_user_by_username(request):
-    username = request.GET.get('username', '')
+    query = request.GET.get('username', '')
 
-    if username:
-        users = User.objects.filter(username__icontains=username)
-        users_data = serializers.serialize('json', users)
-        return JsonResponse({'users': users_data})
+    if query:
+        # Filter users whose first name or last name contains the query
+        users = User.objects.filter(Q(first_name__icontains=query) | Q(last_name__icontains=query))
+        users_data = [
+            {
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'avatar': user.avatar.url if user.avatar else '',  # Assuming 'avatar' is a FileField
+                # Add other fields as needed
+            }
+            for user in users
+        ]
+        return JsonResponse({'users': users_data})  # Return JSON response with 'users' key
     else:
-        return JsonResponse({'error': 'No username provided'})  
+        return JsonResponse({'error': 'Query parameter is required'})

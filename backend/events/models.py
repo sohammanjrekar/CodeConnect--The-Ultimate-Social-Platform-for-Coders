@@ -12,6 +12,7 @@ class Event(models.Model):
     end_date = models.DateTimeField()
     location = models.CharField(max_length=255)
     qr_code = models.CharField(max_length=255,null=True, blank=True)
+    image = models.CharField(max_length=255, blank=True, null=True)
     gapy_number = models.CharField(max_length=20, null=True, blank=True)
     VIRTUAL = 'virtual'
     REAL = 'real'
