@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addBotChat } from '@/redux/Slices/botChatSlice'; // Adjust the import path based on your project structure

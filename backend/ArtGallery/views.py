@@ -5,6 +5,21 @@ from .models import Tag, DesignerProfile, Gallery, Image, Comment, ContactReques
 from .serializers import TagSerializer, DesignerProfileSerializer, GallerySerializer, ImageSerializer, CommentSerializer, ContactRequestSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+import cloudinary
+          
+cloudinary.config( 
+  cloud_name = "dp6odhftt", 
+  api_key = "834371186813391", 
+  api_secret = "QPxYCBttNcO25u-vHVi6iOclkbw" 
+)
+
+import cloudinary.uploader
+  
+
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -49,6 +64,8 @@ class GalleryImagesList(generics.ListAPIView):
         queryset = Image.objects.filter(gallery_id=gallery_id)
         
         return queryset
+    
+ 
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -56,6 +73,66 @@ class ImageList(generics.ListCreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
 
+    def post(self, request, *args, **kwargs):
+        # Assuming 'image' is the key for the image file in the request data
+        image_file = request.data.get('image')
+
+        # Check if an image file is provided
+        if not image_file:
+            print("No image file provided")
+            return Response({"error": "Please provide an image file."}, status=status.HTTP_400_BAD_REQUEST)
+
+        print("Request body:", request.data)
+
+        try:
+            if isinstance(image_file, str):
+                # If 'image' is a string, assume it's a Cloudinary URL
+                image_url = image_file
+            else:
+                # Otherwise, it's an image file, upload it to Cloudinary
+                # Print information about the image
+                print("Image info:")
+                print("File name:", image_file.name)
+                print("File size:", image_file.size)
+
+                # Upload the image to Cloudinary
+                print("Uploading image to Cloudinary...")
+                cloudinary_response = cloudinary_response = cloudinary.uploader.upload(
+        image_file,
+        folder="Gallery",  # Specify the folder name here
+    )
+
+                # Check if the upload was successful
+                if cloudinary_response['secure_url']:
+                    image_url = cloudinary_response['secure_url']
+                else:
+                    print("Failed to upload image to Cloudinary")
+                    return Response({"error": "Failed to upload image to Cloudinary."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Get the gallery and designer IDs from the request data
+            gallery_id = request.data.get('gallery', 1)  # Default to ID 1 if not provided
+            designer_id = request.data.get('designer', 1)  # Default to ID 1 if not provided
+
+            # Save the Cloudinary URL and other data to your database
+            image_data = {
+                'image': image_url,
+                'description': request.data.get('description', ''),
+                'likes': request.data.get('likes', 0),
+                'dislikes': request.data.get('dislikes', 0),
+                'gallery': gallery_id,
+                'designer': designer_id
+            }
+            serializer = self.get_serializer(data=image_data)
+            if serializer.is_valid():
+                serializer.save()
+                print("Image data saved successfully")
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                print("Invalid serializer data:", serializer.errors)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print("An error occurred:", str(e))
+            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -131,3 +208,38 @@ class SearchArt(ListAPIView):
             'count': count,
             'results': serializer.data
         })
+    
+
+
+
+@authentication_classes([])
+@permission_classes([AllowAny])
+class CommentListByPost(APIView):
+    serializer_class = CommentSerializer
+
+    def get(self, request, image_id):  # Update parameter name to image_id
+        # Fetch all comments for the specified image_id
+        comments = Comment.objects.filter(image=image_id)
+        serializer = self.serializer_class(comments, many=True)
+        return Response(serializer.data)
+@authentication_classes([])
+@permission_classes([AllowAny])
+class CommentCreate(APIView):
+    serializer_class = CommentSerializer
+
+    def post(self, request, image_id):  # Update parameter name to image_id
+        try:
+            # Check if the image exists
+            image = Image.objects.get(pk=image_id)
+        except Image.DoesNotExist:
+            return Response({"error": "Image not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Create a new comment instance with the request data
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # Assign the image to the comment
+            serializer.validated_data['image'] = image
+            # Save the comment
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

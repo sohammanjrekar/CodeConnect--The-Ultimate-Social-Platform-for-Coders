@@ -88,6 +88,8 @@ class JobPosting(models.Model):
     salary_max = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     is_featured = models.BooleanField(default=False)
     application_tracking_link = models.URLField(blank=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     persons = models.ManyToManyField(Person, related_name='job_postings', blank=True)
 
     def __str__(self):

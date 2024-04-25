@@ -26,6 +26,8 @@ class Project(models.Model):
     technologies_used = models.ManyToManyField(Technology, related_name='projects', blank=True)
     categories = models.ManyToManyField(ProjectCategory, related_name='projects', blank=True)
     project_images = models.ManyToManyField('ProjectImage', related_name='projects', blank=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -43,6 +45,8 @@ class Resume(models.Model):
     education = models.TextField(blank=True)
     work_experience = models.TextField(blank=True)
     skills = models.TextField(blank=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     contact_information = models.TextField(blank=True)
     def update_resume_fields(self, education, work_experience):
         self.education = education

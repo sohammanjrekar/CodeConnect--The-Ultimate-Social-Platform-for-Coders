@@ -1,11 +1,6 @@
 # blog/urls.py
 from django.urls import path
-from .views import (
-    CategoryList, CategoryDetail,
-    TagList, TagDetail,
-    BlogPostList, BlogPostDetail,
-    CommentList, CommentDetail,CommentListByPost,CommentCreate,SearchBlogPosts
-)
+from .views import *
 
 urlpatterns = [
     path('search/', SearchBlogPosts.as_view(), name='search_blog_posts'),

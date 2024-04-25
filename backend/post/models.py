@@ -14,6 +14,7 @@ class Post(BaseModel):
     attach_files = models.TextField(blank=True,null=True)
     hashtags = models.ManyToManyField(Hashtag, related_name='posts', blank=True)
     likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
     comment_count = models.PositiveIntegerField(default=0)  # New field for comment count
 

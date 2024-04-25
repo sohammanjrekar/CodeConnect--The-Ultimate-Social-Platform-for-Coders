@@ -6,6 +6,8 @@ from account.models import User
 class LanguageExchangeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     location = models.CharField(max_length=100, blank=True)
     is_available = models.BooleanField(default=True)
     programming_languages = models.ManyToManyField('ProgrammingLanguage', related_name='language_exchange_profiles', blank=True)

@@ -21,11 +21,6 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = '__all__'
 
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-        ref_name = 'GalleryComment'
 
 class ContactRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,3 +28,9 @@ class ContactRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
         ref_name = 'GalleryComment'
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        ref_name = 'GalleryComment'

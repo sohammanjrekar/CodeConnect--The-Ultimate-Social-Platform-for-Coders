@@ -14,6 +14,7 @@ const RatingScore = ({ blogData, handleLike, handleDislike }) => {
       handleDislike();
     }
   };
+  console.log(blogData);
   return (
    
   <div className="md:w-3/5 w-3/4 px-10 flex flex-col gap-2 p-5  mx-auto">

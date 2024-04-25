@@ -1,75 +1,75 @@
 import React, { useState } from 'react';
-import FetchTags from './FetchTags';
 
 const AddArticle = ({ galleryId }) => {
-  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [error, setError] = useState(null);
+  const [imageFile, setImageFile] = useState(null); // State to store uploaded image file
+  const [imageUrl, setImageUrl] = useState(null); // State to store uploaded image URL
+  const [error, setError] = useState(null); // State to store error messages
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [showError, setShowError] = useState(false); // State to manage the visibility of error message
 
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
-  
+    event.preventDefault(); // Prevent default form submission
+
+    // Check if an image file is selected
     if (!imageFile) {
       setError('Please select an image file.');
       return;
     }
-  
+
     try {
       const formData = new FormData();
-      formData.append('featured_image', imageFile); // Change key to 'featured_image'
-  
-      const imageUploadResponse = await fetch('http://localhost:8000/blogs/blog-posts/', {
+      formData.append('image', imageFile); // Append the file object to the FormData
+      console.log(formData)
+     
+      // Upload the image to the backend
+      const imageUploadResponse = await fetch('http://localhost:8000/artgallery/images/', {
         method: 'POST',
         body: formData,
       });
-  
+
+      // Check if the image upload was successful
       if (!imageUploadResponse.ok) {
         setError('Failed to upload image: ' + imageUploadResponse.statusText);
         return;
       }
-  
+
       const imageUploadData = await imageUploadResponse.json();
-      setImageUrl(imageUploadData.featured_image);
-  
+      setImageUrl(imageUploadData.image); // Set the uploaded image URL
+
+      // Send other data along with the image URL to your backend API
       const articleData = {
-        title: title,
-        content: content,
+        image: imageUploadData.image,
+        description: content,
         likes: 0,
         dislikes: 0,
-        is_published: true,
-        featured_image: imageUploadData.featured_image,
-        categories: selectedCategories,
-        tags: selectedTags,
+        gallery:1,
+        designer: 18,
       };
-  
-      const publishResponse = await fetch('http://localhost:8000/blogs/blog-posts/', {
+      console.log(JSON.stringify(articleData))
+      const publishResponse = await fetch('http://localhost:8000/artgallery/images/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(articleData),
       });
-  
+
       if (publishResponse.ok) {
-        setShowSuccess(true);
-        setTitle('');
+        console.log('Data sent successfully!', publishResponse);
         setContent('');
         setImageUrl(null);
+        setShowSuccess(true); // Show success message
         setTimeout(() => {
-          setShowSuccess(false);
+          setShowSuccess(false); // Hide success message after 0.5 seconds
         }, 500);
       } else {
         setError('Error sending data to backend: ' + publishResponse.statusText);
-        setShowError(true);
+        setShowError(true); // Show error message
         setTimeout(() => {
-          setShowError(false);
+          setShowError(false); // Hide error message after 0.5 seconds
         }, 500);
+
         console.error('Error sending data to backend:', publishResponse.statusText);
       }
     } catch (error) {
@@ -77,13 +77,12 @@ const AddArticle = ({ galleryId }) => {
       console.error('An error occurred:', error);
     }
   };
-  
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    setImageFile(file);
+    setImageFile(file); // Store the file object in state
     setError(null); 
     // Display image preview
     const reader = new FileReader();
@@ -96,34 +95,21 @@ const AddArticle = ({ galleryId }) => {
   return (
     <div className="max-w-5xl mx-auto dark:bg-gray-800 rounded-t-lg">
       <form onSubmit={handleFormSubmit}>
-        <div className="mb-4 p-6 w-full dark:bg-gray-800 rounded-lg border  dark:border-gray-600">
-          <h1 className="text-center text-white text-2xl">Add Blog Post</h1>
-          <div className="py-2 px-4 dark:bg-gray-800">
-            <label htmlFor="title" className="sr-only">Title</label>
-            <input
-              id="title"
-              type="text"
-              className="block px-0 w-full text-sm text-white  border-0 bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-              placeholder="Enter title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-          </div>
-          <div className="py-2 px-4  dark:bg-gray-800">
-            <label htmlFor="editor" className="sr-only">Content</label>
+        <div className="mb-4 p-6 w-full dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+          <h1 className="text-center text-white text-2xl">Add UI Design</h1>
+          <div className="py-2 px-4 bg-white dark:bg-gray-800">
+            <label htmlFor="editor" className="sr-only">Publish post</label>
             <textarea
               id="editor"
               rows={8}
-              className="block px-0 w-full text-sm text-white  border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-              placeholder="Write content..."
+              className="block px-0 w-full text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              placeholder="Write an article..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
             />
           </div>
-          {/* Image upload */}
-          <div className="py-2 px-4  dark:bg-gray-800">
+          <div className="py-2 px-4 bg-white dark:bg-gray-800">
             <input
               type="file"
               accept="image/*"
@@ -133,7 +119,7 @@ const AddArticle = ({ galleryId }) => {
             />
             <label
               htmlFor="file-upload"
-              className="w-full flex justify-center items-center px-4 py-6  text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white"
+              className="w-full flex justify-center items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue hover:text-white"
             >
               <svg
                 className="w-8 h-8"
@@ -145,23 +131,20 @@ const AddArticle = ({ galleryId }) => {
               </svg>
               <span className="mt-2 text-base leading-normal">Select a file</span>
             </label>
-            {/* Display image preview */}
             {imageUrl && (
               <div className="mt-4">
                 <img src={imageUrl} alt="Uploaded Image Preview" className="w-64 h-64 object-cover" />
               </div>
             )}
           </div>
-          <FetchTags
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
-            />
+          <div>
+            {error && <p className="text-red-500">{error}</p>} {/* Display error message */}
+          </div>
           <div className="py-2 px-4 rounded-b-lg">
             <button
               type="submit"
               className="inline-flex items-center my-5 px-8 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+              // disabled={!imageUrl}
             >
               Publish post
             </button>
@@ -170,7 +153,7 @@ const AddArticle = ({ galleryId }) => {
       </form>
       {showSuccess && (
         <div className="bg-green-200 text-green-800 py-2 text-center">
-          <p>Blog post published successfully!</p>
+          <p>Art published successfully!</p>
         </div>
       )}
       {showError && (

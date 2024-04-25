@@ -5,6 +5,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import Searchbar from "../../components/Searchbar";
 import Link from "next/link";
+import Addarticle from "./Addarticle";
 
 const GalleryImagesPage = ({ params }) => {
   const { id } = params;
@@ -99,7 +100,7 @@ const GalleryImagesPage = ({ params }) => {
                 <div className="group relative m-0 flex  rounded-xl shadow-xl ring-gray-900/5 sm:mx-auto sm:max-w-lg">
                   <div className="z-10 h-full w-full overflow-hidden rounded-xl border border-gray-200 opacity-80 transition duration-300 ease-in-out group-hover:opacity-100 dark:border-gray-700 dark:opacity-70">
                     <img
-                      src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713680848/Gallery/${image.image}`}
+                      src={image.image}
                       className="animate-fade-in block h-full w-full scale-100 transform object-cover object-center opacity-100 transition duration-300 group-hover:scale-110"
                       alt={image.description}
                     />
@@ -143,6 +144,7 @@ const GalleryImagesPage = ({ params }) => {
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
       </div>
+      <Addarticle galleryId={id}/>
       <Footer />
     </>
   );

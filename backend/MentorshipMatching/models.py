@@ -14,6 +14,8 @@ class MentorshipProfile(models.Model):
     comments = models.ManyToManyField('MentorComment', related_name='mentorship_profiles', blank=True)
     total_stars = models.PositiveIntegerField(default=0)
     total_ratings = models.PositiveIntegerField(default=0)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
 
     def average_rating(self):
         if self.total_ratings == 0:

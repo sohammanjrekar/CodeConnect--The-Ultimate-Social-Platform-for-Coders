@@ -10,6 +10,8 @@ class Event(models.Model):
     organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organized_events')
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     location = models.CharField(max_length=255)
     qr_code = models.CharField(max_length=255,null=True, blank=True)
     image = models.CharField(max_length=255, blank=True, null=True)

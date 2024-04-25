@@ -13,6 +13,11 @@ urlpatterns = [
     path('images/<int:pk>/', ImageDetail.as_view(), name='image-detail'),
     path('comments/', CommentList.as_view(), name='comment-list'),
     path('comments/<int:pk>/', CommentDetail.as_view(), name='comment-detail'),
+    path('posts/<int:image_id>/comments/', CommentListByPost.as_view(), name='comments-by-post'),
+    path('posts/<int:image_id>/comments/create/', CommentCreate.as_view(), name='create-comment'),
+
+
+
     path('contact-requests/', ContactRequestList.as_view(), name='contact-request-list'),
     path('contact-requests/<int:pk>/', ContactRequestDetail.as_view(), name='contact-request-detail'),
     path('galleries/<int:gallery_id>/images/', GalleryImagesList.as_view(), name='gallery-images-list'),

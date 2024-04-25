@@ -14,6 +14,16 @@ from .ml import BlogRecommendation
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
 
+import cloudinary
+          
+cloudinary.config( 
+  cloud_name = "dp6odhftt", 
+  api_key = "834371186813391", 
+  api_secret = "QPxYCBttNcO25u-vHVi6iOclkbw" 
+)
+
+import cloudinary.uploader
+  
 from rest_framework.pagination import PageNumberPagination
 class TagPagination(PageNumberPagination):
     page_size = 10
@@ -134,11 +144,69 @@ class BlogPostList(generics.ListCreateAPIView):
     queryset = BlogPost.objects.filter(is_published=True).order_by('-created_at')
     serializer_class = BlogPostSerializer
     pagination_class = BlogPostPagination
+
+    def post(self, request, *args, **kwargs):
+        image_file = request.data.get('featured_image')
+        print(image_file)
+
+        if not image_file:
+            return Response({"error": "Please provide a featured image."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            print("Request body:", request.data)  # Print request body
+            print("Image file name:", image_file.name)  # Print image file name
+
+            # Assuming 'featured_image' is the key for the image file in the request data
+            if isinstance(image_file, str):
+                # If 'featured_image' is a string, assume it's a URL
+                featured_image_url = image_file
+            else:
+                # Otherwise, it's an image file, upload it
+                # You can handle image upload to cloud storage like Cloudinary here
+                # Example code:
+                cloudinary_response = cloudinary.uploader.upload(
+                    image_file,
+                    folder="BlogPosts",
+                )
+                if cloudinary_response['secure_url']:
+                    featured_image_url = cloudinary_response['secure_url']
+                else:
+                    return Response({"error": "Failed to upload image."}, status=status.HTTP_400_BAD_REQUEST)
+
+            print("Uploaded image URL:", featured_image_url)  # Print uploaded image URL
+
+            # Assuming you have implemented the BlogPost model
+            blog_post_data = {
+                'title': request.data.get('title', ''),
+                'content': request.data.get('content', ''),
+                'author': 1,
+                'featured_image': featured_image_url,
+                'categories': request.data.get('categories', []),
+                'tags': request.data.get('tags', []),
+                'likes': request.data.get('likes', 0),
+                'dislikes': request.data.get('dislikes', 0),
+                'is_published': request.data.get('is_published', False),
+            }
+
+            serializer = self.get_serializer(data=blog_post_data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+    
 @authentication_classes([])
 @permission_classes([AllowAny])
 class BlogPostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = BlogPost.objects.filter(is_published=True)
     serializer_class = BlogPostSerializer
+
+
+    
 @authentication_classes([])
 @permission_classes([AllowAny])
 class CommentList(generics.ListCreateAPIView):

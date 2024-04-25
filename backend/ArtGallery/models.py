@@ -30,11 +30,13 @@ class Gallery(models.Model):
         return self.title
 
 class Image(models.Model):
-    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='images')
-    image = models.CharField(max_length=255, blank=True, null=True)
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='images',default=1)
+    image = models.URLField(max_length=2000,null=True) 
     description = models.TextField(blank=True)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    designer = models.ForeignKey(DesignerProfile, on_delete=models.CASCADE, related_name='img_desinger')
+    designer = models.ForeignKey(DesignerProfile, on_delete=models.CASCADE, related_name='img_desinger',default=1)
 
 
     def __str__(self):
