@@ -187,7 +187,7 @@ class BlogPostList(generics.ListCreateAPIView):
                 'dislikes': request.data.get('dislikes', 0),
                 'is_published': request.data.get('is_published', False),
             }
-
+            print(blog_post_data)
             serializer = self.get_serializer(data=blog_post_data)
             if serializer.is_valid():
                 serializer.save()

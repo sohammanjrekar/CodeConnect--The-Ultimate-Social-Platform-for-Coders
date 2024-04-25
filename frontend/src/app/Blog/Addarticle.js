@@ -11,7 +11,6 @@ const AddArticle = ({ galleryId }) => {
   const [showError, setShowError] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-
   const handleFormSubmit = async (event) => {
     event.preventDefault();
   
@@ -22,41 +21,23 @@ const AddArticle = ({ galleryId }) => {
   
     try {
       const formData = new FormData();
-      formData.append('featured_image', imageFile); // Change key to 'featured_image'
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('likes', 0);
+      formData.append('dislikes', 0);
+      formData.append('is_published', true);
+      formData.append('featured_image', imageFile);
   
-      const imageUploadResponse = await fetch('http://localhost:8000/blogs/blog-posts/', {
+      // Convert selectedTags and selectedCategories to JSON strings and append them to formData
+      formData.append('categories', JSON.stringify(selectedCategories));
+      formData.append('tags', JSON.stringify(selectedTags));
+  
+      const response = await fetch('http://localhost:8000/blogs/blog-posts/', {
         method: 'POST',
         body: formData,
       });
   
-      if (!imageUploadResponse.ok) {
-        setError('Failed to upload image: ' + imageUploadResponse.statusText);
-        return;
-      }
-  
-      const imageUploadData = await imageUploadResponse.json();
-      setImageUrl(imageUploadData.featured_image);
-  
-      const articleData = {
-        title: title,
-        content: content,
-        likes: 0,
-        dislikes: 0,
-        is_published: true,
-        featured_image: imageUploadData.featured_image,
-        categories: selectedCategories,
-        tags: selectedTags,
-      };
-  
-      const publishResponse = await fetch('http://localhost:8000/blogs/blog-posts/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(articleData),
-      });
-  
-      if (publishResponse.ok) {
+      if (response.ok) {
         setShowSuccess(true);
         setTitle('');
         setContent('');
@@ -65,12 +46,12 @@ const AddArticle = ({ galleryId }) => {
           setShowSuccess(false);
         }, 500);
       } else {
-        setError('Error sending data to backend: ' + publishResponse.statusText);
+        setError('Error sending data to backend: ' + response.statusText);
         setShowError(true);
         setTimeout(() => {
           setShowError(false);
         }, 500);
-        console.error('Error sending data to backend:', publishResponse.statusText);
+        console.error('Error sending data to backend:', response.statusText);
       }
     } catch (error) {
       setError('An error occurred: ' + error.message);
@@ -84,7 +65,7 @@ const AddArticle = ({ galleryId }) => {
     if (!file) return;
 
     setImageFile(file);
-    setError(null); 
+    setError(null);
     // Display image preview
     const reader = new FileReader();
     reader.onload = () => {
@@ -153,11 +134,11 @@ const AddArticle = ({ galleryId }) => {
             )}
           </div>
           <FetchTags
-              selectedTags={selectedTags}
-              setSelectedTags={setSelectedTags}
-              selectedCategories={selectedCategories}
-              setSelectedCategories={setSelectedCategories}
-            />
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+          />
           <div className="py-2 px-4 rounded-b-lg">
             <button
               type="submit"
