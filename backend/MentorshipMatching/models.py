@@ -2,9 +2,18 @@
 from django.db import models
 from account.models import User
 
+class Keyword(models.Model):
+    text = models.CharField(max_length=255, unique=True,default="")
+    relevance = models.FloatField(default=0.0)  # Relevance score of the keyword
+    frequency = models.PositiveIntegerField(default=0)  # Frequency of the keyword
+    context = models.TextField(blank=True, null=True,default="")  # Contextual analysis of the keyword
+
+    def __str__(self):
+        return self.text
 class MentorshipProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     expertise = models.TextField()
+    keyword = models.ManyToManyField(Keyword, related_name='mentorship_keyword', blank=True)
     availability = models.CharField(max_length=100, help_text="E.g., Weekdays evenings")
     mentees = models.ManyToManyField(User, related_name='mentored_by', blank=True)
     accepted_mentees = models.ManyToManyField(User, related_name='accepted_by_mentor', blank=True)
@@ -65,3 +74,14 @@ class MentorComment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.mentee.username} on {self.mentor.user.username}"
+    
+
+class UserBehavior(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="mentor_user")  # Assuming you have a User model in your 'account' app
+    post = models.ForeignKey(MentorshipProfile, on_delete=models.CASCADE)  # Assuming you have a Post model in your 'post' app
+    interaction_type = models.CharField(max_length=20,default="")  # Interaction type: e.g., like, comment, share
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.post.title} - {self.interaction_type}"
+

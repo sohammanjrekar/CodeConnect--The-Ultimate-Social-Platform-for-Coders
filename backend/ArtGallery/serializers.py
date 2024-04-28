@@ -5,6 +5,7 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
+        ref_name="arttags"
 
 class DesignerProfileSerializer(serializers.ModelSerializer):
     class Meta:

@@ -12,5 +12,7 @@ urlpatterns = [
     path('comments/', CommentList.as_view(), name='comment-list'),
     path('code-snippets/<int:post_id>/comments/', CommentListByPost.as_view(), name='comments-by-post'),
     path('comments/<int:pk>/', CommentDetail.as_view(), name='comment-detail'),
-    path('posts/<int:post_id>/comments/create/', CommentCreate.as_view(), name='create-comment'),
+    path('posts/<int:snippet_id>/comments/create/', CommentCreate.as_view(), name='create-comment'),
+    path('like/<int:snippet_id>/', LikeView.as_view(), name='like-post'),
+    path('dislike/<int:snippet_id>/', DislikeView.as_view(), name='dislike-post'),
 ]

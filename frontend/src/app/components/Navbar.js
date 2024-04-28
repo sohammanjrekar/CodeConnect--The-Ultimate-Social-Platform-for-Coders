@@ -1,34 +1,7 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-
-import userData from "@/app/UserData";
-import { useClickOutside } from "@mantine/hooks";
-
 const Navbar = () => {
-  const [isFocused, setIsFocused] = useState(false);
-  const ref = useClickOutside(() => setIsFocused(false));
-  const [searchValue, setSearchValue] = useState("");
-  const [ProfileMenu, setProfileMenu] = useState(false);
-  const [searchedUser, setSearchedUser] = useState(userData);
-  const [searchPanel, setSearchPanel] = useState(false);
-
-  const searchUsers = (value) => {
-    let searchedUser = userData.filter((user) => {
-      return user.name.toLowerCase().includes(value.toLowerCase());
-    });
-    setSearchedUser(
-      searchedUser.length === 0 ? [{ error: "User Not Found" }] : searchedUser
-    );
-  };
-
-  useEffect(() => {
-    window.addEventListener("click", (e) => {
-      if (!e.target.closest(".userProfile")) {
-        setProfileMenu(false);
-      }
-    });
-  }, []);
+  
 
   return (
     <>
@@ -37,7 +10,7 @@ const Navbar = () => {
   {/* Header */}
   <header>
     {/* navbar and menu */}
-    <nav className="shadow mb-5">
+    <nav className="shadow py-2  bg-black w-full mt-0 text-white ">
       <div className="flex justify-between items-center py-6 px-10 container mx-auto">
         <div>
           <h1 className="text-2xl font-bold bg-gradient-to-tr from-indigo-600 to-green-600 bg-clip-text text-transparent hover:cursor-pointer">
@@ -55,7 +28,7 @@ const Navbar = () => {
               <li>
                 <Link
                   href="/"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                   Home
                 </Link>
@@ -63,7 +36,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Mentorship"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                  Mentorship
                 </a>
@@ -71,7 +44,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Portfolio"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                   Portfolio
                 </a>
@@ -79,7 +52,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Aboutus"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                   About
                 </a>
@@ -87,7 +60,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Codereview"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                   Codereview
                 </a>
@@ -95,7 +68,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Contactus"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                  Contact
                 </a>
@@ -103,7 +76,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Events"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                  Events
                 </a>
@@ -111,7 +84,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Projects"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                  projects
                 </a>
@@ -119,7 +92,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Message"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                  Chats
                 </a>
@@ -129,7 +102,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Artgallary"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                 Artgallary
                 </a>
@@ -137,7 +110,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Blog"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
             Blog
                 </a>
@@ -145,7 +118,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Codechallenges"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
            Codechallenges
                 </a>
@@ -153,7 +126,7 @@ const Navbar = () => {
               <li>
                 <a
                   href="/Contactus"
-                  className="text-gray-700 hover:text-indigo-600 text-md "
+                  className="text-white hover:text-indigo-600 text-md "
                 >
                   Contact
                 </a>

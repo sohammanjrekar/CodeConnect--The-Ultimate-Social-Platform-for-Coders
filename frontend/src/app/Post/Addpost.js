@@ -1,47 +1,66 @@
-import React, { useState } from 'react';
+"use client"
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
 const AddPost = () => {
-  const [postContent, setPostContent] = useState('');
-  const [fileAttachment, setFileAttachment] = useState(null);
-  const [filename, setFilename] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [content, setContent] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [error, setError] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    if (!imageFile) {
+      setError('Please select an image file.');
+      return;
+    }
+  
     try {
-      const postData = {
-        content: postContent,
-        attach_files: filename, // Use the filename variable
-        is_active: true,
-        likes: 4294967295,
-        comment_count: 4294967295,
-        user: 0,
-        hashtags: [0],
-      };
+      const formData = new FormData();
+      formData.append('image', imageFile);
+      formData.append('content', content);
+      formData.append('likes', 0);
+      formData.append('dislikes', 0);
+      formData.append('user', 1); // Set the user dynamically
   
-      const response = await axios.post('http://127.0.0.1:8000/post/posts/', postData);
+      const publishResponse = await axios.post('http://localhost:8000/post/posts/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
   
-      if (response.status === 200) {
-        console.log('Post created successfully!');
-        setPostContent('');
-        setFileAttachment(null);
-        setFilename(''); // Reset filename after successful post
+      if (publishResponse.status === 201) {
+        setContent('');
+        setImageFile(null);
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+        }, 500);
       } else {
-        console.error('Error creating post:', response.statusText);
+        setError('Error creating post: ' + publishResponse.statusText);
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 500);
       }
     } catch (error) {
+      setError('An error occurred: ' + error.message);
       console.error('An error occurred:', error);
     }
   };
   
-  const handleFileChange = (e) => {
-    setFileAttachment(e.target.files[0]);
-    setFilename(e.target.files[0].name); // Save the filename
-  };
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
 
+    setImageFile(file);
+    setError(null);
+  };
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
-      <form onSubmit={handleSubmit}>
+    <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full fixed">
+      <form onSubmit={handleFormSubmit}>
         <div className="mb-6">
           <label htmlFor="postContent" className="block text-gray-700 text-sm font-bold mb-2">
             Post Content:
@@ -53,8 +72,8 @@ const AddPost = () => {
             className="w-full border-2 rounded-md px-4 py-2 leading-5 transition duration-150 ease-in-out sm:text-sm
               sm:leading-5 resize-none focus:outline-none focus:border-blue-500"
             placeholder="What's on your mind?"
-            value={postContent}
-            onChange={(e) => setPostContent(e.target.value)}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
         </div>
         <div className="mb-6">
@@ -62,13 +81,14 @@ const AddPost = () => {
             Attach File:
           </label>
           <input
-            type="file"
-            id="fileAttachment"
-            name="fileAttachment"
-            onChange={handleFileChange}
-            className="border-2 rounded-md px-4 py-3 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out"
+             type="file"
+             accept="image/*"
+             onChange={handleImageUpload}
+             
+             id="file-upload" className=" border-2 rounded-md px-4 py-3 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out"
           />
-          {filename && <p>Selected File: {filename}</p>}
+        {imageFile && <p>Selected File: {imageFile.name}</p>}
+
         </div>
         <button
           type="submit"
@@ -81,6 +101,16 @@ const AddPost = () => {
           </svg>
         </button>
       </form>
+      {showSuccess && (
+        <div className="bg-green-200 text-green-800 py-2 text-center">
+          <p>Post created successfully!</p>
+        </div>
+      )}
+      {showError && (
+        <div className="bg-red-200 text-red-800 py-2 text-center">
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 };

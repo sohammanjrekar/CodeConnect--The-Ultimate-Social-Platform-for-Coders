@@ -53,6 +53,14 @@ class Benefit(models.Model):
     def __str__(self):
         return self.name
 
+class Keyword(models.Model):
+    text = models.CharField(max_length=255, unique=True,default="")
+    relevance = models.FloatField(default=0.0)  # Relevance score of the keyword
+    frequency = models.PositiveIntegerField(default=0)  # Frequency of the keyword
+    context = models.TextField(blank=True, null=True,default="")  # Contextual analysis of the keyword
+
+    def __str__(self):
+        return self.text
 
 class Person(models.Model):
     ROLE_CHOICES = [
@@ -71,6 +79,7 @@ class Person(models.Model):
         return self.user.name
 
 class JobPosting(models.Model):
+    keyword = models.ManyToManyField(Keyword, related_name='job_keyword', blank=True)
     title = models.CharField(max_length=255)
     company_name = models.CharField(max_length=255)
     location = models.CharField(max_length=100)
@@ -91,8 +100,18 @@ class JobPosting(models.Model):
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
     persons = models.ManyToManyField(Person, related_name='job_postings', blank=True)
+    logo = models.URLField(max_length=2000,null=True) 
 
     def __str__(self):
         return f"{self.title} at {self.company_name}"
 
+
+class UserBehavior(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="jobs_user")  # Assuming you have a User model in your 'account' app
+    post = models.ForeignKey(JobPosting, on_delete=models.CASCADE)  # Assuming you have a Post model in your 'post' app
+    interaction_type = models.CharField(max_length=20,default="")  # Interaction type: e.g., like, comment, share
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.post.title} - {self.interaction_type}"
 

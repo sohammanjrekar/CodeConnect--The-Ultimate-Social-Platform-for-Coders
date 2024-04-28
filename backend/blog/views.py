@@ -4,7 +4,6 @@ from .models import Category, Tag, BlogPost, Comment
 from .serializers import CategorySerializer, TagSerializer, BlogPostSerializer, CommentSerializer
 from rest_framework import status
 from django.db.models import Q
-# views.py
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework.views import APIView
@@ -15,7 +14,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
 
 import cloudinary
-          
 cloudinary.config( 
   cloud_name = "dp6odhftt", 
   api_key = "834371186813391", 
@@ -23,7 +21,6 @@ cloudinary.config(
 )
 
 import cloudinary.uploader
-  
 from rest_framework.pagination import PageNumberPagination
 class TagPagination(PageNumberPagination):
     page_size = 10
@@ -138,6 +135,8 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 class TagDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+
+
 @authentication_classes([])
 @permission_classes([AllowAny])
 class BlogPostList(generics.ListCreateAPIView):

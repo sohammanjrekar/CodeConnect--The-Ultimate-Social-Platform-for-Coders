@@ -20,12 +20,12 @@ const LCard = ({ userId }) => {
   return (
     <div>
       {/* LeetCode Card */}
-      <div className="text-gray-300 rounded-lg text-sm w-[350px] bg-[#161b22] border border-[#3f3f46]">
+      <div className="text-gray-300 rounded-lg text-sm w-[550px] bg-[#161b22] border border-[#3f3f46]">
         <div className="w-full flex flex-row space-x-3 p-4">
           <img
             className="rounded-2xl border-zinc-700 w-20 h-20"
             alt={userData.username}
-            src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713680848/User/${userData.avatar}`}
+            src={userData.avatar}
           />
           <div className="w-full text-gray-500">
             <p className="w-[200px] text-lg space-x-1 inline-block overflow-hidden whitespace-nowrap text-ellipsis">

@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import JobPosting, Skill
-from account.models import ProgrammingLanguage, Keyword
+from account.models import ProgrammingLanguage
 from .ml import JobRecommendation
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes

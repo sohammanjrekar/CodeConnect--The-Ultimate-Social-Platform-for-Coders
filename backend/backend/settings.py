@@ -20,8 +20,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "account.User"
 
-AUTH__USER_MODEL="account.User"
 
 # Application definition
 
@@ -29,15 +29,24 @@ SIMPLE_JWT = {
             'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
             'REFERESH_TOKEN_LIFETIME': timedelta(days=180),
             'ROTATE_REFRESH_TOKENS': False,
-            }
+            'TOKEN_TYPE_CLS': 'account.models.CustomToken',
 
+            }
+# Django settings.py
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',),
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',  # Optional for browsable API
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',),
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'TOKEN_TYPE_CLS': 'account.models.CustomToken',  # Specify the path to your custom token model
 }
+
+# Other settings...
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,9 +56,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_simplejwt',
-    'drf_yasg',
     'corsheaders',
+    'drf_yasg',
+  'rest_framework_simplejwt',
 ]
 EXTERNAL_APPS = [
     'botchats',
@@ -78,7 +87,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -111,7 +120,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'codeconnect',
+        'NAME': 'code',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',  # Or your MySQL server IP address

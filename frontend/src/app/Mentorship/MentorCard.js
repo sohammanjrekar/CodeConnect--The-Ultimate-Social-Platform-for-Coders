@@ -23,7 +23,8 @@ const Page = () => {
         throw new Error('Failed to fetch username');
       }
       const data = await response.json();
-      return data.username;
+
+      return data
     } catch (error) {
       console.error('Error fetching username:', error);
       return null;
@@ -106,7 +107,7 @@ const Page = () => {
     const postsToRender = searchQuery.trim() !== '' ? searchResults : posts;
     
     return postsToRender.map(async(profile) => {
-      const username = await fetchUsername(profile.user);
+      const user= await fetchUsername(profile.user);
 
       return(
 
@@ -117,12 +118,12 @@ const Page = () => {
           <div className="flex items-center">
             <img
               className="mr-2 h-10 w-10 rounded-full object-cover"
-              src={`http://127.0.0.1:8000/account/users/${profile.user}/avatar/`}
+              src={user.avatar}
               alt="profile"
             />
             <div>
               <h3 className="text-base font-semibold text-gray-900">
-                {username} {/* Display username */}
+                {user.first_name}  {user.last_name} 
               </h3>
               <span className="block text-xs font-normal text-gray-500">
                 {profile.expertise}

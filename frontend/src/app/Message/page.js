@@ -204,7 +204,7 @@ const handleSearchButtonClick = () => {
       >
         <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
           <img
-            src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713866701/User/${user.avatar}`}
+            src={user.avatar}
             alt="User Avatar"
             className="w-12 h-12 rounded-full"
           />
@@ -224,7 +224,7 @@ const handleSearchButtonClick = () => {
       >
         <div className="w-12 h-12 bg-gray-300 rounded-full mr-3">
           <img
-            src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713866701/User/${user.avatar}`}
+            src={user.avatar}
             alt="User Avatar"
             className="w-12 h-12 rounded-full"
           />
@@ -245,7 +245,7 @@ const handleSearchButtonClick = () => {
               {/* Chat Header */}
               <header className="p-4 text-white bg-gradient-to-tr from-indigo-600 to-green-600 hover:shadow-lg flex items-center">
   <img
-    src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713866701/User/${selectedUser.avatar}`}
+    src={selectedUser.avatar}
     alt="User Avatar"
     className="w-12 h-12 rounded-full mr-3"
   />
@@ -266,7 +266,7 @@ const handleSearchButtonClick = () => {
                >
                  <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2">
                    <img
-                     src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713866701/User/${getUserInfo(message.sender)?.avatar}`}
+                     src={getUserInfo(message.sender)?.avatar}
                      alt="User Avatar"
                      className="w-8 h-8 rounded-full"
                    />

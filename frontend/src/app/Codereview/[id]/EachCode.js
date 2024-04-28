@@ -8,7 +8,7 @@ const EachCode = () => {
       <>
   {/* component */}
   {/* This is an example component */}
-  <div className="bg-white overflow-hidden shadow-none my-5 ">
+  <div className="bg-white shadow-none my-5 ">
     <div className="grid grid-cols-3 min-w-full">
       <div className="col-span-2 w-full">
         <Codecard/>

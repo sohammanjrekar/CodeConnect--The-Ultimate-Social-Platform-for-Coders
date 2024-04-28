@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import dateformat from 'dateformat';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCampaigns } from '@/redux/Slices/campaignslice';
 
 const Page = ({ params }) => {
   const [email, setEmail] = useState('');

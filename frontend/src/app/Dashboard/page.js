@@ -1,8 +1,83 @@
-import React from 'react'
+"use client"
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
-const dash = () => {
+const page= () => {
+  const [data, setUserData] = useState({});
+  const [friendData, setFriendData] = useState([]);
+  const [languageData, setLanguageData] = useState([]);
+  const [postData, setpostData] = useState([]);
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+  function formatTimeAgo(timestamp) {
+    const currentTime = new Date();
+    const postTime = new Date(timestamp);
+  
+    const timeDifference = currentTime.getTime() - postTime.getTime();
+    const secondsDifference = Math.floor(timeDifference / 1000);
+    const minutesDifference = Math.floor(secondsDifference / 60);
+    const hoursDifference = Math.floor(minutesDifference / 60);
+    const daysDifference = Math.floor(hoursDifference / 24);
+  
+    if (daysDifference > 30) {
+      const monthsDifference = Math.floor(daysDifference / 30);
+      if (monthsDifference > 12) {
+        const yearsDifference = Math.floor(monthsDifference / 12);
+        return `Posted ${yearsDifference} year${yearsDifference > 1 ? 's' : ''} ago`;
+      }
+      return `Posted ${monthsDifference} month${monthsDifference > 1 ? 's' : ''} ago`;
+    } else if (daysDifference > 0) {
+      return `Posted ${daysDifference} day${daysDifference > 1 ? 's' : ''} ago`;
+    } else if (hoursDifference > 0) {
+      return `Posted ${hoursDifference} hour${hoursDifference > 1 ? 's' : ''} ago`;
+    } else if (minutesDifference > 0) {
+      return `Posted ${minutesDifference} minute${minutesDifference > 1 ? 's' : ''} ago`;
+    } else {
+      return `Posted just now`;
+    }
+  }
+  const fetchData = async () => {
+    try {
+      const userResponse = await fetch('http://127.0.0.1:8000/account/users/1/');
+      const userData = await userResponse.json();
+      setUserData(userData);
+  
+      // Fetching friend data
+      const friendPromises = userData.Friendship.map(async (friendId) => {
+        const response = await fetch(`http://127.0.0.1:8000/account/users/${friendId}/`);
+        return response.json();
+      });
+      const friendsData = await Promise.all(friendPromises);
+      setFriendData(friendsData);
+  
+      // Fetching language data
+      const languagePromises = userData.languages.map(async (languageId) => {
+        const response = await fetch(`http://127.0.0.1:8000/account/language/${languageId}/`);
+        return response.json();
+      });
+      const languagesData = await Promise.all(languagePromises);
+      setLanguageData(languagesData);
+
+
+      const postResponse = await fetch('http://127.0.0.1:8000/post/user/2/posts/');
+      const postData = await postResponse.json();
+      setpostData(postData.posts);
+
+      
+  
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   return (
+    <>
+    <Navbar/>
+
     <div className="h-full bg-gray-200 p-8">
+<h1 className="text-6xl text-gray-900 font-bold text-center mt-3">Dashboard</h1>
   <div className="bg-white rounded-lg shadow-xl pb-8">
     <div
       x-data="{ openSettings: false }"
@@ -107,19 +182,19 @@ const dash = () => {
         </div>
       </div>
     </div>
-    <div className="w-full h-[250px]">
+    <div className="w-full h-[450px] -mb-20">
       <img
-        src="https://vojislavd.com/ta-template-demo/assets/img/profile-background.jpg"
+        src={data.banner}
         className="w-full h-full rounded-tl-lg rounded-tr-lg"
       />
     </div>
     <div className="flex flex-col items-center -mt-20">
       <img
-        src="https://vojislavd.com/ta-template-demo/assets/img/profile.jpg"
+        src={data.avatar}
         className="w-40 border-4 border-white rounded-full"
       />
-      <div className="flex items-center space-x-2 mt-2">
-        <p className="text-2xl">Amanda Ross</p>
+      <div className="flex items-center space-x-2">
+        <p className="text-2xl">{data.first_name} {data.last_name}</p>
         <span className="bg-blue-500 rounded-full p-1" title="Verified">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -137,8 +212,8 @@ const dash = () => {
           </svg>
         </span>
       </div>
-      <p className="text-gray-700">Senior Software Engineer at Tailwind CSS</p>
-      <p className="text-sm text-gray-500">New York, USA</p>
+      <p className="text-gray-700">{data.job_position}</p>
+      <p className="text-sm text-gray-500">{data.city},{data.Country_name}</p>
     </div>
     <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
       <div className="flex items-center space-x-4 mt-2">
@@ -178,35 +253,41 @@ const dash = () => {
         <ul className="mt-2 text-gray-700">
           <li className="flex border-y py-2">
             <span className="font-bold w-24">Full name:</span>
-            <span className="text-gray-700">Amanda S. Ross</span>
+            <span className="text-gray-700">{data.first_name} {data.last_name}</span>
           </li>
           <li className="flex border-b py-2">
             <span className="font-bold w-24">Birthday:</span>
-            <span className="text-gray-700">24 Jul, 1991</span>
+            <span className="text-gray-700">{data.date_of_birth}</span>
           </li>
           <li className="flex border-b py-2">
             <span className="font-bold w-24">Joined:</span>
-            <span className="text-gray-700">10 Jan 2022 (25 days ago)</span>
+            <span className="text-gray-700">{data.date_of_birth} (25 days ago)</span>
           </li>
           <li className="flex border-b py-2">
             <span className="font-bold w-24">Mobile:</span>
-            <span className="text-gray-700">(123) 123-1234</span>
+            <span className="text-gray-700">{data.phone_number}</span>
           </li>
           <li className="flex border-b py-2">
             <span className="font-bold w-24">Email:</span>
-            <span className="text-gray-700">amandaross@example.com</span>
+            <span className="text-gray-700">{data.email}</span>
           </li>
           <li className="flex border-b py-2">
             <span className="font-bold w-24">Location:</span>
-            <span className="text-gray-700">New York, US</span>
+            <span className="text-gray-700">{data.city},{data.Country_name}</span>
           </li>
           <li className="flex border-b py-2">
             <span className="font-bold w-24">Languages:</span>
-            <span className="text-gray-700">English, Spanish</span>
+            <span className="text-gray-700">{languageData && languageData.map((lang) => (
+              lang.name +"  "
+))}
+
+            
+            
+            </span>
           </li>
           <li className="flex items-center border-b py-2 space-x-2">
             <span className="font-bold w-24">Elsewhere:</span>
-            <a href="#" title="Facebook">
+            <a href={data.facebook} title="Facebook">
               <svg
                 className="w-5 h-5"
                 id="Layer_1"
@@ -231,7 +312,7 @@ const dash = () => {
                 />
               </svg>
             </a>
-            <a href="#" title="Twitter">
+            <a href={data.twitter} title="Twitter">
               <svg
                 className="w-5 h-5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -248,7 +329,7 @@ const dash = () => {
                 />
               </svg>
             </a>
-            <a href="#" title="LinkedIn">
+            <a href={data.linkedin} title="LinkedIn">
               <svg
                 className="w-5 h-5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +346,7 @@ const dash = () => {
                 />
               </svg>
             </a>
-            <a href="#" title="Github">
+            <a href={data.github} title="Github">
               <svg
                 className="w-5 h-5"
                 xmlns="http://www.w3.org/2000/svg"
@@ -285,133 +366,22 @@ const dash = () => {
         </ul>
       </div>
       <div className="flex-1 bg-white rounded-lg shadow-xl mt-4 p-8">
-        <h4 className="text-xl text-gray-900 font-bold">Activity log</h4>
-        <div className="relative px-4">
-          <div className="absolute h-full border border-dashed border-opacity-20 border-secondary" />
-          {/* start::Timeline item */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full" />
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm">Profile informations changed.</p>
-              <p className="text-xs text-gray-500">3 min ago</p>
-            </div>
-          </div>
-          {/* end::Timeline item */}
-          {/* start::Timeline item */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full" />
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm">
-                Connected with{" "}
-                <a href="#" className="text-blue-600 font-bold">
-                  Colby Covington
-                </a>
-                .
-              </p>
-              <p className="text-xs text-gray-500">15 min ago</p>
-            </div>
-          </div>
-          {/* end::Timeline item */}
-          {/* start::Timeline item */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full" />
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm">
-                Invoice{" "}
-                <a href="#" className="text-blue-600 font-bold">
-                  #4563
-                </a>{" "}
-                was created.
-              </p>
-              <p className="text-xs text-gray-500">57 min ago</p>
-            </div>
-          </div>
-          {/* end::Timeline item */}
-          {/* start::Timeline item */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full" />
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm">
-                Message received from{" "}
-                <a href="#" className="text-blue-600 font-bold">
-                  Cecilia Hendric
-                </a>
-                .
-              </p>
-              <p className="text-xs text-gray-500">1 hour ago</p>
-            </div>
-          </div>
-          {/* end::Timeline item */}
-          {/* start::Timeline item */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full" />
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm">
-                New order received{" "}
-                <a href="#" className="text-blue-600 font-bold">
-                  #OR9653
-                </a>
-                .
-              </p>
-              <p className="text-xs text-gray-500">2 hours ago</p>
-            </div>
-          </div>
-          {/* end::Timeline item */}
-          {/* start::Timeline item */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full" />
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm">
-                Message received from{" "}
-                <a href="#" className="text-blue-600 font-bold">
-                  Jane Stillman
-                </a>
-                .
-              </p>
-              <p className="text-xs text-gray-500">2 hours ago</p>
-            </div>
-          </div>
-          {/* end::Timeline item */}
+        <h4 className="text-xl text-gray-900 font-bold">ABout</h4>
+        
+        <p className="mt-2 text-gray-700">
+        {data.bio}
+        </p>
+      
         </div>
-      </div>
     </div>
     <div className="flex flex-col w-full 2xl:w-2/3">
       <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
-        <h4 className="text-xl text-gray-900 font-bold">About</h4>
-        <p className="mt-2 text-gray-700">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
-          voluptates obcaecati numquam error et ut fugiat asperiores. Sunt nulla
-          ad incidunt laboriosam, laudantium est unde natus cum numquam, neque
-          facere. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut,
-          magni odio magnam commodi sunt ipsum eum! Voluptas eveniet aperiam at
-          maxime, iste id dicta autem odio laudantium eligendi commodi
-          distinctio!
-        </p>
-      </div>
-      <div className="flex-1 bg-white rounded-lg shadow-xl mt-4 p-8">
+      
         <h4 className="text-xl text-gray-900 font-bold">Posts</h4>
-        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mt-4" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mt-4" style={{ maxHeight:'800px', overflowY: 'auto' }}>
 
-
-
-
-
-        <>
-  <li>
-    {/*second tweet*/}
-    <article className="bg-gray-800 transition duration-350 ease-in-out">
+        {Array.isArray(postData) && postData.map((post) => (
+    <article className="bg-gray-800 transition duration-350 ease-in-out" key={post.id}>
       <div className="flex flex-shrink-0 p-4 pb-0">
         <a href="#" className="flex-shrink-0 group block">
           <div className="flex items-center">
@@ -452,16 +422,16 @@ const dash = () => {
         </p>
         <div className="md:flex-shrink pr-6 pt-3">
           <div
-            className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
+            className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-94"
             style={{
-              height: 200,
+              height: 500,
               backgroundImage:
-                "url(https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80)"
+              `url('${post.image}')`
             }}
           >
             <img
               className="opacity-0 w-full h-full"
-              src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=448&q=80"
+              src={post.image}
               alt=""
             />
           </div>
@@ -519,9 +489,7 @@ const dash = () => {
       </div>
       <hr className="border-gray-800" />
     </article>
-  </li>
-  <li></li>
-</>
+))}
 
 
         </div>
@@ -549,39 +517,31 @@ const dash = () => {
       </a>
     </div>
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-8 mt-8">
-      <a
-        href="#"
-        className="flex flex-col items-center justify-center text-gray-800 hover:text-blue-600"
-        title="View Profile"
-      >
-        <img
-          src="https://vojislavd.com/ta-template-demo/assets/img/connections/connection1.jpg"
-          className="w-16 rounded-full"
-        />
-        <p className="text-center font-bold text-sm mt-1">Diane Aguilar</p>
-        <p className="text-xs text-gray-500 text-center">
-          UI/UX Design at Upwork
-        </p>
-      </a>
-      <a
-        href="#"
-        className="flex flex-col items-center justify-center text-gray-800 hover:text-blue-600"
-        title="View Profile"
-      >
-        <img
-          src="https://vojislavd.com/ta-template-demo/assets/img/connections/connection2.jpg"
-          className="w-16 rounded-full"
-        />
-        <p className="text-center font-bold text-sm mt-1">Frances Mather</p>
-        <p className="text-xs text-gray-500 text-center">
-          Software Engineer at Facebook
-        </p>
-      </a>
+    {friendData && friendData.map((friend) => (
+  <a
+    href="#" key={friend.id}
+    className="flex flex-col items-center justify-center text-gray-800 hover:text-blue-600"
+    title="View Profile"
+  >
+    <img
+      src={friend.avatar}
+      className="w-16 rounded-full"
+    />
+    <p className="text-center font-bold text-sm mt-1">{friend.first_name} {friend.last_name}</p>
+    <p className="text-xs text-gray-500 text-center">
+      {friend.job_position}
+    </p>
+  </a>
+))}
+
+      
+      
     </div>
   </div>
 </div>
-
+<Footer/>
+</>
   )
 }
 
-export default dash
+export default page

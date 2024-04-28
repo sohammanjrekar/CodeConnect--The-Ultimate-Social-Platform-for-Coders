@@ -6,11 +6,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
+        ref_name="projectpredlanguage"
 
 class ProgrammingLanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgrammingLanguage
         fields = '__all__'
+        ref_name="projectlanguage"
 
 class ToolSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +23,4 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
+        ref_name="projecttags"

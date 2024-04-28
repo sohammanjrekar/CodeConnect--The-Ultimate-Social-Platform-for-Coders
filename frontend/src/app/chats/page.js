@@ -40,12 +40,20 @@ const Chatbox = () => {
         user_message: userMessage,
       });
       const botResponse = response.data.bot_response;
+      const url = response.data.url;
+  
       addBotMessage(botResponse);
+  
+      if (url && url !== 'null') {
+        setTimeout(() => {
+          window.location.href = url;
+        }, 1500); // Redirect after 1.5 seconds
+      }
     } catch (error) {
       console.error('Error sending user message:', error);
     }
   };
-
+  
   const handleSend = () => {
     if (userInput.trim() !== "") {
       addUserMessage(userInput);
@@ -75,7 +83,7 @@ const Chatbox = () => {
           Chat with Admin Bot
         </button>
       </div>
-      <div id="chat-container" className={`fixed bottom-16 right-4 w-96 ${isChatboxOpen ? '' : 'hidden'}`}>
+      <div id="chat-container" className={`fixed bottom-32 right-4 w-1/4 h-1/3 ${isChatboxOpen ? '' : 'hidden'}`}>
         <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
           <div className="p-4 border-b bg-blue-500 text-white rounded-t-lg flex justify-between items-center">
             <p className="text-lg font-semibold">Admin Bot</p>

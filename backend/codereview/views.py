@@ -8,11 +8,18 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.pagination import PageNumberPagination
+class PostPagination(PageNumberPagination):
+    page_size = 12
+    page_query_param = 'page'
+    page_size_query_param = 'limit'
+    max_page_size = 1000
 @authentication_classes([])
 @permission_classes([AllowAny])
 class CodeSnippetList(generics.ListCreateAPIView):
     queryset = CodeSnippet.objects.all()
     serializer_class = CodeSnippetSerializer
+    pagination_class = PostPagination
 @authentication_classes([])
 @permission_classes([AllowAny])
 class CodeSnippetDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -23,6 +30,7 @@ class CodeSnippetDetail(generics.RetrieveUpdateDestroyAPIView):
 class TagList(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    pagination_class = PostPagination
 @authentication_classes([])
 @permission_classes([AllowAny])
 class CodeReviewList(generics.ListCreateAPIView):
@@ -57,7 +65,8 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 from .serializers import CommentSerializer
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 @authentication_classes([])
 @permission_classes([AllowAny])
 class CommentListByPost(APIView):
@@ -75,19 +84,35 @@ class CommentListByPost(APIView):
 class CommentCreate(APIView):
     serializer_class = CommentSerializer
 
-    def post(self, request, image_id):  # Update parameter name to image_id
-        try:
-            # Check if the image exists
-            image = Image.objects.get(pk=image_id)
-        except Image.DoesNotExist:
-            return Response({"error": "Image not found."}, status=status.HTTP_404_NOT_FOUND)
+    pass
 
-        # Create a new comment instance with the request data
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            # Assign the image to the comment
-            serializer.validated_data['image'] = image
-            # Save the comment
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@authentication_classes([])
+@permission_classes([AllowAny])
+class DislikeView(APIView):
+    def post(self, request, snippet_id):  # Change post_id to snippet_id
+        snippet = get_object_or_404(CodeSnippet, id=snippet_id)  # Use CodeSnippet instead of Post
+        snippet.likes += 1  # Increment likes count
+        snippet.save()  # Save the updated snippet
+
+        response_data = {
+            'likes': snippet.likes,
+            'message': 'Snippet liked successfully.',
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+    
+
+@authentication_classes([])
+@permission_classes([AllowAny])
+class LikeView(APIView):
+    def post(self, request, snippet_id):  # Change post_id to snippet_id
+        snippet = get_object_or_404(CodeSnippet, id=snippet_id)  # Use CodeSnippet instead of Post
+        snippet.dislikes += 1  # Increment likes count
+        snippet.save()  # Save the updated snippet
+
+        response_data = {
+            'dislikes': snippet.dislikes,
+            'message': 'Snippet disliked successfully.',
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)

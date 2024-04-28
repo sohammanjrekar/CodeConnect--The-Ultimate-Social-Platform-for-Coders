@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Keyword, ProgrammingLanguage, Friendship
+from .models import User, UserKeyword, ProgrammingLanguage, Friendship
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -8,11 +8,6 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_staff', 'groups', 'user_permissions')
     filter_horizontal = ('Keyword', 'ProgrammingLanguage', 'Friendship')
 
-@admin.register(Keyword)
-class KeywordAdmin(admin.ModelAdmin):
-    list_display = ('name', 'created_at', 'updated_at', 'is_active')
-    search_fields = ('name',)
-    list_filter = ('is_active',)
 
 @admin.register(ProgrammingLanguage)
 class ProgrammingLanguageAdmin(admin.ModelAdmin):

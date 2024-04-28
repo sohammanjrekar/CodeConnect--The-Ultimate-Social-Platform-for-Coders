@@ -1,4 +1,4 @@
-# views.py
+import re
 import torch
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,6 +16,13 @@ class ChatMessageListCreateView(APIView):
     MODEL_PATH = "gpt2"  # Change this to your desired model path
     MAX_TOKENS = 100
     RESPONSE_FILTER_THRESHOLD = 0.5  # Adjust as needed
+    KEYWORDS = [
+        'aboutus', 'artgallary', 'blog', 'chats', 'codechallenges', 'codereview', 
+        'comments', 'components', 'contactus', 'courses', 'dashboard', 'events', 
+        'faq', 'home', 'jobportal', 'login', 'logout', 'mentorship', 'message', 
+        'portfolio', 'post', 'projectrecommadation', 'signup', 'user'
+    ]
+    BASE_URL = "http://localhost:3000/"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,44 +32,74 @@ class ChatMessageListCreateView(APIView):
     def post(self, request, *args, **kwargs):
         user_message = request.data.get('user_message', '')
 
-        # Check if a similar user message exists in the database
-        similar_messages = ChatMessage.objects.filter(Q(user_message__icontains=user_message))
+        try:
+            # Check if an exact user message exists in the database
+            exact_match_message = ChatMessage.objects.filter(user_message__iexact=user_message).first()
 
-        if similar_messages.exists():
-            # If similar message found, retrieve a response from the database
-            bot_response = similar_messages.order_by('?').first().bot_response
-        else:
-            # If no similar message, generate a response using the GPT-2 model
-            bot_response = self.generate_bot_response(user_message)
+            if exact_match_message:
+                # If exact message found, retrieve a response from the database
+                bot_response = exact_match_message.bot_response
+            else:
+                # Clean the user message to remove punctuation and convert to lowercase
+                cleaned_user_message = re.sub(r'[^\w\s]', '', user_message).lower()
 
-            # Save the chat message to the database
-            ChatMessage.objects.create(user_message=user_message, bot_response=bot_response)
+                # Check if any keyword of the user message is present in the database
+                keyword_matches = ChatMessage.objects.filter(Q(user_message__icontains=cleaned_user_message))
+                if keyword_matches.exists():
+                    # Add possible responses from the database
+                    bot_response += "\n".join([message.bot_response for message in keyword_matches])
+                else:
+                    # If no matching keyword found, generate a response using the GPT-2 model
+                    bot_response = self.generate_bot_response(user_message)
+                    # Save the chat message to the database
+                    ChatMessage.objects.create(user_message=user_message, bot_response=bot_response)
+        except Exception as e:
+            # Handle database or other errors
+            bot_response = "An error occurred while processing your request."
 
         # Apply post-processing or filtering to the response
-        bot_response = self.post_process_response(bot_response)
+        bot_response_with_urls = self.post_process_response(bot_response, user_message)
 
-        return Response({'bot_response': bot_response})
+        # Separate the response and URL
+        response_data = {
+            'bot_response': bot_response_with_urls['response'],
+            'url': bot_response_with_urls['url']
+        }
 
-    def generate_bot_response(self, user_message):
-        inputs = self.tokenizer.encode("User: " + user_message, return_tensors="pt", max_length=self.MAX_TOKENS, truncation=True)
+        return Response(response_data)
 
-        outputs = self.model.generate(
-            input_ids=inputs,
-            max_length=150,  # Adjust max_length based on your needs
-            num_beams=5,
-            no_repeat_ngram_size=2,
-            top_k=50,
-            top_p=0.95,
-            pad_token_id=self.tokenizer.eos_token_id,
-            do_sample=True,
-            temperature=0.8  # Experiment with temperature values
-        )
 
-        bot_response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-        print(bot_response)
-        return bot_response
+    def post_process_response(self, bot_response, user_message):
+        # Check if the bot's response contains any keywords
+        # and send URLs separately with the response
+        bot_response_with_urls = {'response': bot_response, 'url': None}
+        for keyword in self.KEYWORDS:
+            if keyword.lower() in user_message.lower():
+                bot_response_with_urls['url'] = f"{self.BASE_URL + keyword.capitalize()}"
+        
+        return bot_response_with_urls
 
-    def post_process_response(self, bot_response):
-        # Implement post-processing or filtering logic here
-        # This could include thresholding based on a score or any other criteria
-        return bot_response
+    def fine_tune_model(self):
+        try:
+            # Get the ID of the last processed question from the database
+            last_processed_id = ChatMessage.objects.latest('id').id
+        except ChatMessage.DoesNotExist:
+            # If no previous questions exist, start from the first question
+            last_processed_id = 0
+
+        # Retrieve questions with IDs greater than the last processed ID
+        new_questions = ChatMessage.objects.filter(id__gt=last_processed_id)
+
+        if new_questions.exists():
+            # Fine-tune the model using the new questions and answers
+            for question in new_questions:
+                # Implement fine-tuning logic here
+                # Example: fine_tuned_model.fine_tune(question.user_message, question.bot_response)
+                pass
+
+            # Update the last processed ID to the latest question ID
+            last_processed_id = new_questions.latest('id').id
+
+        # Return the last processed ID for reference
+        return last_processed_id
+

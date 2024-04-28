@@ -2,7 +2,7 @@ import React from 'react'
 
 const IndexHeroNav = () => {
   return (
-    <div>
+    <div className=' pt-24'>
       <main>{/* section hero */}
     <section>
       <div className="bg-gray-100 sm:grid grid-cols-5  px-4  pb-5 space-y-2 sm:space-y-0 sm:gap-4">

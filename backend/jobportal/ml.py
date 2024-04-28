@@ -2,7 +2,6 @@ import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 from jobportal.models import JobPosting
-from account.models import ProgrammingLanguage, Keyword
 import joblib
 import numpy as np
 

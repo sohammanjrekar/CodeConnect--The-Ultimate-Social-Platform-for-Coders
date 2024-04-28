@@ -11,10 +11,11 @@ const Page = () => {
   return (
     <>
       <Navbar />
-      <div className='m-3'>
-        <Addcode />
+      <div className='my-5 pt-8 '>
+      
         
         <Codecard /> 
+        <Addcode />
         </div>
      
       <Footer />

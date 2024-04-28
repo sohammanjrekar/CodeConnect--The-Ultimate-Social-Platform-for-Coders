@@ -28,6 +28,7 @@ const Page = () => {
           throw new Error('Failed to fetch');
         }
         const data = await response.json();
+        console.log(data)
         setPosts(prevPosts => [...prevPosts, ...data.results]);
         setTotalCounts(prevCounts => ({
           ...prevCounts,
@@ -101,7 +102,7 @@ const Page = () => {
           <div className="mx-auto max-w-md overflow-hidden rounded-lg bg-white shadow my-4">
          
           <img
-  src={`https://res.cloudinary.com/dp6odhftt/image/upload/v1713679707/Blogs/${post.featured_image}`}
+  src={post.featured_image}
   className="aspect-video w-full object-cover"
   alt={post.featured_image}
 />

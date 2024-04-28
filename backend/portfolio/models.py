@@ -34,14 +34,14 @@ class Project(models.Model):
 
 class ProjectImage(models.Model):
     project = models.ForeignKey(Project, related_name='project_image', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='project_images/')
+    image = models.URLField(max_length=2000,null=True) 
 
     def __str__(self):
         return f"Image for {self.project.title}"
 
 class Resume(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    resume_file = models.FileField(upload_to='resumes/')
+    resume_file = models.URLField(max_length=2000,null=True) 
     education = models.TextField(blank=True)
     work_experience = models.TextField(blank=True)
     skills = models.TextField(blank=True)

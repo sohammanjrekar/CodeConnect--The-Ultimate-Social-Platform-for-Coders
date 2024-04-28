@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Footer = () => {
@@ -5,12 +6,12 @@ const Footer = () => {
     <>
       <>
   {/* component */}
-  <footer className="bg-blue-100/80 font-sans dark:bg-gray-900">
+  <div className="bg-blue-100/80 font-sans dark:bg-gray-900 mt-auto">
     <div className="container px-6 py-12 mx-auto">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
         <div className="sm:col-span-2">
           <h1 className="max-w-lg text-xl font-semibold tracking-tight text-gray-800 xl:text-2xl dark:text-white">
-            Subscribe our newsletter to get an update.
+            Subscribe our Website to get an update.
           </h1>
           <div className="flex flex-col mx-auto mt-6 space-y-3 md:space-y-0 md:flex-row">
             <input
@@ -29,31 +30,43 @@ const Footer = () => {
             Quick Link
           </p>
           <div className="flex flex-col items-start mt-5 space-y-2">
+            <Link href={"/"}>
             <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
               Home
             </p>
+            </Link>
+            <Link href={"/Blog"}>
             <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-              Who We Are
+              Blogs
             </p>
+            </Link>
+            <Link href={"/Dashboard"}>
             <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-              Our Philosophy
+              Dashboard
             </p>
+            </Link>
           </div>
         </div>
         <div>
           <p className="font-semibold text-gray-800 dark:text-white">
-            Industries
+          Services
           </p>
           <div className="flex flex-col items-start mt-5 space-y-2">
+          <Link href={"/Codechallenges"}>
             <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-              Retail &amp; E-Commerce
+             Coding Challenge
             </p>
+            </Link>
+            <Link href={"/Messages"}>
             <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-              Information Technology
+              Messages
             </p>
+            </Link>
+            <Link href={"/ArtGallary"}>
             <p className="text-gray-600 transition-colors duration-300 dark:text-gray-300 dark:hover:text-blue-400 hover:underline hover:cursor-pointer hover:text-blue-500">
-              Finance &amp; Insurance
+             ArtGallary
             </p>
+            </Link>
           </div>
         </div>
       </div>
@@ -120,11 +133,11 @@ const Footer = () => {
           />
         </div>
       </div>
-      <p className="font-sans p-8 text-start md:text-center md:text-lg md:p-4">
-        © 2023 You Company Inc. All rights reserved.
+      <p className="font-sans p-8 text-start text-white md:text-center md:text-lg md:p-4">
+        © 2024 Codeconnect Inc. All rights reserved.
       </p>
     </div>
-  </footer>
+  </div>
 </>
 
     </>

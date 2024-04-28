@@ -9,7 +9,6 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import MentorshipProfile, User
-from .ml import MentorMatching
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.pagination import PageNumberPagination

@@ -150,28 +150,42 @@ def handle_request(request, pk, status):
 
     return JsonResponse({'message': 'friendship request updated'})
 
+from django.http import JsonResponse
+from .models import User  # Import your User model
+
 def get_user_data(request, pk):
     try:
         user = User.objects.get(pk=pk)
         user_data = {
-             'id': user.id,
+            'id': user.id,
             'username': user.username,
-            'avatar': user.avatar.url if user.avatar else None,  # Assuming 'avatar' is a FileField in your User model
+            'avatar': user.avatar if user.avatar else None,
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
             'bio': user.bio,
-            'Keyword': list(user.Keyword.values_list('id', flat=True)),  # Assuming 'Keyword' is a ManyToManyField
-            'ProgrammingLanguage': list(user.ProgrammingLanguage.values_list('id', flat=True)),  # Assuming 'ProgrammingLanguage' is a ManyToManyField
-            'Friendship': list(user.Friendship.values_list('id', flat=True)),  # Assuming 'Friendship' is a ManyToManyField
+            'Keyword': list(user.Keyword.values_list('id', flat=True)),
+            'ProgrammingLanguage': list(user.ProgrammingLanguage.values_list('id', flat=True)),
+            'Friendship': list(user.Friendship.values_list('id', flat=True)),
             'date_of_birth': user.date_of_birth.strftime('%Y-%m-%d') if user.date_of_birth else None,
             'phone_number': user.phone_number,
             'Country_name': user.Country_name,
-            'User_points':user.User_points,
+            'User_points': user.User_points,
+            'city': user.city,
+            'languages': list(user.languages.values_list('id', flat=True)),
+            'twitter': user.twitter,
+            'linkedin': user.linkedin,
+            'github': user.github,
+            'portfolio': user.portfolio,
+            'facebook': user.facebook,
+            'job_position': user.job_position,
+            'is_active': user.is_active,
+            'is_superuser': user.is_superuser,
+            'is_staff': user.is_staff,
+            'banner':user.banner
+            
         }
         return JsonResponse(user_data)
     except User.DoesNotExist:
         return JsonResponse({'error': 'User not found'}, status=404)
-    
-    
 
