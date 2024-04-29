@@ -26,6 +26,7 @@ class Post(BaseModel):
     dislikes = models.PositiveIntegerField(default=0)
     image = models.URLField(max_length=2000,null=True) 
     comment_count = models.PositiveIntegerField(default=0)  # New field for comment count
+    is_active= models.BooleanField(default=0)
 
     def update_comment_count(self):
         self.comment_count = self.comments.filter(is_active=True).count()
