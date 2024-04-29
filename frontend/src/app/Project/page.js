@@ -2,12 +2,14 @@ import React from 'react'
 import Projectcards from '../components/Projectcards'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import Addproject from './Addproject'
 
 const page = () => {
   return (
     
       <>
       <Navbar/>
+   
   {/* component */}
   <Projectcards/>
   

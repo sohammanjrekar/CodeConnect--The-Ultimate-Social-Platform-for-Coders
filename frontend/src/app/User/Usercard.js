@@ -4,13 +4,7 @@ const Usercard = () => {
   return (
     <div>
       <>
-  {/* component */}
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,100&display=swap"
-    rel="stylesheet"
-  />
+ 
   <style
     dangerouslySetInnerHTML={{
       __html:

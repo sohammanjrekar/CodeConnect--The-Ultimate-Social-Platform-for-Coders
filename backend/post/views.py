@@ -78,44 +78,35 @@ import cloudinary.uploader
 
 @authentication_classes([])
 @permission_classes([AllowAny])
-
-class PostListView(generics.ListCreateAPIView):
-    queryset = Post.objects.all()  # Update the queryset as per your requirement
-    serializer_class = PostSerializer  # Define the serializer class for Post
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
     def post(self, request, *args, **kwargs):
-        image_file = request.data.get('image')
-        print(image_file)
-
-        if not image_file:
-            return Response({"error": "Please provide an image."}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
-            print("Request body:", request.data)  # Print request body
-            print("Image file name:", image_file.name)  # Print image file name
+            image_file = request.data.get('image')
 
-            # Assuming 'image' is the key for the image file in the request data
+            if not image_file:
+                return Response({"error": "Please provide an image."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Handle image upload to Cloudinary
             if isinstance(image_file, str):
                 # If 'image' is a string, assume it's a URL
                 image_url = image_file
             else:
-                # Otherwise, it's an image file, upload it
-                # You can handle image upload to cloud storage like Cloudinary here
-                # Example code:
+                # Otherwise, it's an image file, upload it to Cloudinary
                 cloudinary_response = cloudinary.uploader.upload(
                     image_file,
                     folder="PostImages",
                 )
-                if cloudinary_response['secure_url']:
+                if cloudinary_response.get('secure_url'):
                     image_url = cloudinary_response['secure_url']
                 else:
                     return Response({"error": "Failed to upload image."}, status=status.HTTP_400_BAD_REQUEST)
 
-            print("Uploaded image URL:", image_url)  # Print uploaded image URL
-
-            # Assuming you have implemented the Post model
+            # Create post data dictionary
             post_data = {
-                'user': request.data.get('user',1),
+                'user': request.data.get('user', 1),
                 'content': request.data.get('content', ''),
                 'attach_files': request.data.get('attach_files', ''),
                 'likes': request.data.get('likes', 0),
@@ -123,33 +114,44 @@ class PostListView(generics.ListCreateAPIView):
                 'image': image_url,
                 'comment_count': 0,  # Initialize comment count to 0
             }
-            print(post_data)
+
+            # Serialize data and save post
             serializer = self.get_serializer(data=post_data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
             return Response({"error": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
 class CustomPagination(PageNumberPagination):
-    page_size = 10  # Set the number of items per page
-    page_size_query_param = 'limit'  # Allow client to override the page size using query parameter
+    page_size = 10
+    page_query_param = 'page'
+    page_size_query_param = 'limit'
+    max_page_size = 100  # Allow client to override the page size using query parameter
+from rest_framework.response import Response
+from rest_framework import status
 @authentication_classes([])
 @permission_classes([AllowAny])
 class PostsListView(ListAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.all().order_by('-created_at')  # No need to redefine queryset here
     serializer_class = PostSerializer
     pagination_class = CustomPagination
 
     def list(self, request, *args, **kwargs):
-        queryset = Post.objects.all().order_by('-created_at')
-        page = self.paginate_queryset(queryset)  # Paginate the queryset
-        serializer = self.get_serializer(page, many=True)
+        queryset = self.get_queryset()  # Use get_queryset() instead
+        page = self.paginate_queryset(queryset)
 
-        return self.get_paginated_response(serializer.data)
-    
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        else:
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({
+                'results': serializer.data,
+                'count': queryset.count()
+            })
 
 
 @authentication_classes([])

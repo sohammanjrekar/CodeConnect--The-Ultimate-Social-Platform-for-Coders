@@ -43,12 +43,13 @@ const Post = forwardRef((props, ref) => {
       setLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:8000/post/posts/?page=${page}&limit=${limit}`
+          `http://localhost:8000/post/posts/?page=${page}&limit=10`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch");
         }
         const responseData = await response.json();
+        console.log(responseData)
         const { results: fetchedPosts } = responseData; // Extracting the 'results' array from the response
 
         // Fetch post and user data sequentially for each post

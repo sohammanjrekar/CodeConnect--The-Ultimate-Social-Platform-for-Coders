@@ -50,7 +50,7 @@ export default function () {
   return (
     <>
       <Navbar />
-      <div className='py-16 my-8'>
+      <div className='py-36 my-36'>
         <div className="bg-white shadow-none sm:shadow-lg px-8 sm:px-12 w-full mx-auto xs:w-full sm:w-8/12 md:w-7/12 lg:w-7/12 xl:w-2/6 h-screen sm:h-auto py-8">
           <div className="text-center w-full font-bold text-3xl text-gray-600 p-4">
             LOGIN

@@ -12,12 +12,7 @@ const ResumeCard = () => {
     href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
     rel="stylesheet"
   />
-  <style
-    dangerouslySetInnerHTML={{
-      __html:
-        "\n        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');\n\n        body {\n            font-family: 'Roboto', sans-serif;\n        }\n    "
-    }}
-  />
+ 
   <div className="container mx-auto py-10 px-5">
     <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-4 sm:p-6">

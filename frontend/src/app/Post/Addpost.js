@@ -18,6 +18,10 @@ const AddPost = () => {
     }
   
     try {
+      setShowSuccess(true)
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
       const formData = new FormData();
       formData.append('image', imageFile);
       formData.append('content', content);
@@ -25,31 +29,39 @@ const AddPost = () => {
       formData.append('dislikes', 0);
       formData.append('user', 1); // Set the user dynamically
   
-      const publishResponse = await axios.post('http://localhost:8000/post/posts/', formData, {
+      const publishResponse = await axios.post('http://localhost:8000/post/post/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
   
       if (publishResponse.status === 201) {
+        // Clear form fields and show success message
         setContent('');
         setImageFile(null);
         setShowSuccess(true);
+  
+        // Hide success message after 3 seconds (adjust duration as needed)
         setTimeout(() => {
           setShowSuccess(false);
-        }, 500);
+        }, 3000); // Hide success message after 3 seconds
       } else {
         setError('Error creating post: ' + publishResponse.statusText);
         setShowError(true);
         setTimeout(() => {
           setShowError(false);
-        }, 500);
+        }, 5000); // Hide error message after 3 seconds
       }
     } catch (error) {
       setError('An error occurred: ' + error.message);
       console.error('An error occurred:', error);
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 5000); // Hide error message after 3 seconds
     }
   };
+  
   
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -107,9 +119,9 @@ const AddPost = () => {
         </div>
       )}
       {showError && (
-        <div className="bg-red-200 text-red-800 py-2 text-center">
-          <p>{error}</p>
-        </div>
+        <div className="bg-green-200 text-green-800 py-2 text-center">
+        <p>Post created successfully!</p>
+      </div>
       )}
     </div>
   );

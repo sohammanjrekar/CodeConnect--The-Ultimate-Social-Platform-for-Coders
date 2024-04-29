@@ -1,6 +1,15 @@
 from django.db import models
 from account.models import User, BaseModel
 from django.utils import timezone
+import re
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import spacy
+
+# Load spaCy model
+nlp = spacy.load("en_core_web_sm")
+# Initialize VADER sentiment analyzer
+analyzer = SentimentIntensityAnalyzer()
+
 
 class Hashtag(BaseModel):
     name = models.CharField(max_length=50, unique=True)
@@ -27,6 +36,33 @@ class Post(BaseModel):
     image = models.URLField(max_length=2000,null=True) 
     comment_count = models.PositiveIntegerField(default=0)  # New field for comment count
     is_active= models.BooleanField(default=0)
+    
+    def update_sentiment(self):
+        # Rule-based sentiment analysis
+        if re.search(r'good|excellent|positive', self.content, re.IGNORECASE):
+            self.is_active = True
+        elif re.search(r'bad|poor|negative', self.content, re.IGNORECASE):
+            self.is_active = False
+        else:
+            # Lexicon-based sentiment analysis
+            lexicon_score = analyzer.polarity_scores(self.content)["compound"]
+            if lexicon_score >= 0.05:  # Tweak threshold based on your requirements
+                self.is_active = True
+            elif lexicon_score <= -0.05:
+                self.is_active = False
+            else:
+                # Machine learning-based sentiment analysis with spaCy
+                doc = nlp(self.content)
+                sentiment_score = sum([token.sentiment for token in doc]) / len(doc)
+                if sentiment_score > 0.1:
+                    self.is_active = True
+                elif sentiment_score < -0.1:
+                    self.is_active = False
+                else:
+                    self.is_active = True  # Default to active if sentiment is neutral
+        self.save()
+    
+    
 
     def update_comment_count(self):
         self.comment_count = self.comments.filter(is_active=True).count()
@@ -52,6 +88,37 @@ class Comment(BaseModel):
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
     
+   
+
+    def update_sentiment(self):
+        # Rule-based sentiment analysis
+        if re.search(r'good|excellent|positive', self.content, re.IGNORECASE):
+            self.is_active = True
+        elif re.search(r'bad|poor|negative', self.content, re.IGNORECASE):
+            self.is_active = False
+        else:
+            # Lexicon-based sentiment analysis
+            lexicon_score = analyzer.polarity_scores(self.content)["compound"]
+            if lexicon_score >= 0.05:  # Tweak threshold based on your requirements
+                self.is_active = True
+            elif lexicon_score <= -0.05:
+                self.is_active = False
+            else:
+                # Machine learning-based sentiment analysis with spaCy
+                doc = nlp(self.content)
+                sentiment_score = sum([token.sentiment for token in doc]) / len(doc)
+                if sentiment_score > 0.1:
+                    self.is_active = True
+                elif sentiment_score < -0.1:
+                    self.is_active = False
+                else:
+                    self.is_active = True  # Default to active if sentiment is neutral
+        self.save()
+
+
+    def update_sentiment(self):
+        # Similar logic as Post.update_sentiment()
+        pass
 
     def __str__(self):
         return f"Comment by {self.user.username} on Post {self.post.id} (ID: {self.id})"

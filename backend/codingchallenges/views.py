@@ -106,3 +106,4 @@ class SolutionUserList(generics.ListAPIView):
             queryset = queryset.filter(challenge__id=challenge_id)
         
         return queryset
+    

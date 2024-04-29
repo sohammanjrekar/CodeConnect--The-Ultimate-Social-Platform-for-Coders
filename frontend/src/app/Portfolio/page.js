@@ -1,11 +1,13 @@
 import React from 'react'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const page = () => {
   return (
     <div>
       <>
   {/* component */}
-  {/* header section */}
+  {/* header section */}<Navbar/>
   <header>
     <div className="container mx-auto">
       <nav className="sm:hidden pt-3 pb-2">
@@ -767,5 +769,6 @@ const page = () => {
       </div>
     </section>
   </footer>
+  <Footer/>
 </>
 export default page
