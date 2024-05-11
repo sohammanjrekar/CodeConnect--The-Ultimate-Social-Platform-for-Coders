@@ -5,17 +5,11 @@ from rest_framework.response import Response
 from .models import Conversation, Message
 from .serializers import ConversationListSerializer, MessageSerializer
 from account.models import User
-import pusher
+
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import authentication_classes, permission_classes
 
-pusher_client = pusher.Pusher(
-    app_id = "1789564",
-key = "26812a12625161ccf9dd",
-secret = "8a2c23108dbf9359d39c",
-cluster = "ap2",
-ssl=True
-)
+
 from django.db.models import F
 from rest_framework.response import Response
 
